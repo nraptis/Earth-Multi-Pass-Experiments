@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct Sprite2DVertex {
+struct Sprite2DVertex: PositionConforming, TextureCoordinateConforming {
     var x: Float
     var y: Float
     var u: Float
     var v: Float
 }
 
-struct Sprite3DVertex {
+struct Sprite3DVertex: PositionConforming, TextureCoordinateConforming {
     var x: Float
     var y: Float
     var z: Float
@@ -22,7 +22,7 @@ struct Sprite3DVertex {
     var v: Float
 }
 
-struct Sprite3DLightedVertex {
+struct Sprite3DLightedVertex: PositionConforming, TextureCoordinateConforming {
     var x: Float
     var y: Float
     var z: Float
@@ -33,7 +33,7 @@ struct Sprite3DLightedVertex {
     var normalZ: Float
 }
 
-struct Sprite3DLightedColoredVertex {
+struct Sprite3DLightedColoredVertex: PositionConforming, TextureCoordinateConforming {
     var x: Float
     var y: Float
     var z: Float

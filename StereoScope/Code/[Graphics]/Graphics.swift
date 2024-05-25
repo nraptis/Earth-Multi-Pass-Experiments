@@ -24,6 +24,8 @@ protocol GraphicsDelegate: AnyObject {
     
     //5th (repeats)
     
+    func draw3DBloom(renderEncoder: MTLRenderCommandEncoder)
+    
     func draw3DStereoscopicLeft(renderEncoder: MTLRenderCommandEncoder)
     func draw3DStereoscopicRight(renderEncoder: MTLRenderCommandEncoder)
     
@@ -125,6 +127,15 @@ class Graphics {
         case spriteNodeColoredWhiteIndexed3DAlphaBlending
         case spriteNodeColoredWhiteIndexed3DAdditiveBlending
         case spriteNodeColoredWhiteIndexed3DPremultipliedBlending
+        
+        
+        case gaussianBlurHorizontalIndexedNoBlending
+        case gaussianBlurVerticalIndexedNoBlending
+        case gaussianBlurHorizontalColoredIndexedNoBlending
+        case gaussianBlurVerticalColoredIndexedNoBlending
+        
+        case gaussianBlurSpriteStampNoBlending
+
     }
     
     enum SamplerState {
@@ -363,6 +374,20 @@ class Graphics {
             renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeColoredWhiteIndexed3DAdditiveBlending)
         case .spriteNodeColoredWhiteIndexed3DPremultipliedBlending:
             renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeColoredWhiteIndexed3DPremultipliedBlending)
+         
+            
+            
+        case .gaussianBlurHorizontalIndexedNoBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateGaussianBlurHorizontalIndexedNoBlending)
+        case .gaussianBlurVerticalIndexedNoBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateGaussianBlurVerticalIndexedNoBlending)
+        case .gaussianBlurHorizontalColoredIndexedNoBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateGaussianBlurHorizontalColoredIndexedNoBlending)
+        case .gaussianBlurVerticalColoredIndexedNoBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateGaussianBlurVerticalColoredIndexedNoBlending)
+            
+        case .gaussianBlurSpriteStampNoBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateGaussianBlurSpriteStampNoBlending)
             
         }
     }
@@ -456,7 +481,14 @@ class Graphics {
                 .spriteNodeColoredWhiteIndexed3DNoBlending,
                 .spriteNodeColoredWhiteIndexed3DAlphaBlending,
                 .spriteNodeColoredWhiteIndexed3DAdditiveBlending,
-                .spriteNodeColoredWhiteIndexed3DPremultipliedBlending:
+                .spriteNodeColoredWhiteIndexed3DPremultipliedBlending,
+            
+                .gaussianBlurHorizontalIndexedNoBlending,
+                .gaussianBlurVerticalIndexedNoBlending,
+                .gaussianBlurHorizontalColoredIndexedNoBlending,
+                .gaussianBlurVerticalColoredIndexedNoBlending,
+            
+                .gaussianBlurSpriteStampNoBlending:
             renderEncoder.setFragmentSamplerState(metalSamplerState, index: MetalPipeline.spriteNodeIndexedFragmentIndexSampler)
             
         default:
@@ -556,7 +588,14 @@ class Graphics {
                     .spriteNodeColoredWhiteIndexed3DNoBlending,
                     .spriteNodeColoredWhiteIndexed3DAlphaBlending,
                     .spriteNodeColoredWhiteIndexed3DAdditiveBlending,
-                    .spriteNodeColoredWhiteIndexed3DPremultipliedBlending:
+                    .spriteNodeColoredWhiteIndexed3DPremultipliedBlending,
+                
+                    .gaussianBlurHorizontalIndexedNoBlending,
+                    .gaussianBlurVerticalIndexedNoBlending,
+                    .gaussianBlurHorizontalColoredIndexedNoBlending,
+                    .gaussianBlurVerticalColoredIndexedNoBlending,
+                    
+                    .gaussianBlurSpriteStampNoBlending:
                 renderEncoder.setVertexBuffer(uniformsBuffer, offset: 0, index: MetalPipeline.spriteNodeIndexedVertexIndexUniforms)
                 
             default:
@@ -654,7 +693,14 @@ class Graphics {
                     .spriteNodeColoredWhiteIndexed3DNoBlending,
                     .spriteNodeColoredWhiteIndexed3DAlphaBlending,
                     .spriteNodeColoredWhiteIndexed3DAdditiveBlending,
-                    .spriteNodeColoredWhiteIndexed3DPremultipliedBlending:
+                    .spriteNodeColoredWhiteIndexed3DPremultipliedBlending,
+                
+                    .gaussianBlurHorizontalIndexedNoBlending,
+                    .gaussianBlurVerticalIndexedNoBlending,
+                    .gaussianBlurHorizontalColoredIndexedNoBlending,
+                    .gaussianBlurVerticalColoredIndexedNoBlending,
+                
+                    .gaussianBlurSpriteStampNoBlending:
                 renderEncoder.setFragmentBuffer(uniformsBuffer, offset: 0, index: MetalPipeline.spriteNodeIndexedFragmentIndexUniforms)
                 
             default:
@@ -735,7 +781,14 @@ class Graphics {
                     .spriteNodeColoredWhiteIndexed3DNoBlending,
                     .spriteNodeColoredWhiteIndexed3DAlphaBlending,
                     .spriteNodeColoredWhiteIndexed3DAdditiveBlending,
-                    .spriteNodeColoredWhiteIndexed3DPremultipliedBlending:
+                    .spriteNodeColoredWhiteIndexed3DPremultipliedBlending,
+                
+                    .gaussianBlurHorizontalIndexedNoBlending,
+                    .gaussianBlurVerticalIndexedNoBlending,
+                    .gaussianBlurHorizontalColoredIndexedNoBlending,
+                    .gaussianBlurVerticalColoredIndexedNoBlending,
+                
+                    .gaussianBlurSpriteStampNoBlending:
                 renderEncoder.setVertexBuffer(dataBuffer, offset: 0, index: MetalPipeline.spriteNodeIndexedVertexIndexData)
                 
             default:
@@ -850,7 +903,14 @@ class Graphics {
                     .spriteNodeColoredWhiteIndexed3DNoBlending,
                     .spriteNodeColoredWhiteIndexed3DAlphaBlending,
                     .spriteNodeColoredWhiteIndexed3DAdditiveBlending,
-                    .spriteNodeColoredWhiteIndexed3DPremultipliedBlending:
+                    .spriteNodeColoredWhiteIndexed3DPremultipliedBlending,
+                
+                    .gaussianBlurHorizontalIndexedNoBlending,
+                    .gaussianBlurVerticalIndexedNoBlending,
+                    .gaussianBlurHorizontalColoredIndexedNoBlending,
+                    .gaussianBlurVerticalColoredIndexedNoBlending,
+                
+                    .gaussianBlurSpriteStampNoBlending:
                 renderEncoder.setFragmentTexture(texture, index: MetalPipeline.spriteNodeIndexedFragmentIndexTexture)
             default:
                 break

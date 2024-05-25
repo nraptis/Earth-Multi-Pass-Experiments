@@ -23,6 +23,10 @@ class EarthModelDataStrip {
                                                                UniformsSpriteNodeIndexedLightsVertex,
                                                                UniformsSpriteNodeIndexedDiffuseFragment>()
     
+    let texturedTriangleBloomBuffer = IndexedTexturedTriangleBuffer<Sprite3DVertex,
+                                                                    UniformsSpriteNodeIndexedVertex,
+                                                                    UniformsSpriteNodeIndexedFragment>()
+    
     init(earthModelData: EarthModelData,
          indexV: Int) {
         
@@ -72,6 +76,24 @@ class EarthModelDataStrip {
                                                                             b: Float.random(in: 0.0...1.0),
                                                                             a: Float.random(in: 0.5...1.0)))
             
+            
+            texturedTriangleBloomBuffer.add(index: UInt32(indexH * 2))
+            texturedTriangleBloomBuffer.add(index: UInt32(indexH * 2 + 1))
+            
+            /*
+             
+             */
+            
+            texturedTriangleBloomBuffer.add(vertex: Sprite3DVertex(x: x1,
+                                                                   y: y1,
+                                                                   z: z1,
+                                                                   u: u1,
+                                                                   v: v1))
+            texturedTriangleBloomBuffer.add(vertex: Sprite3DVertex(x: x2,
+                                                                   y: y2,
+                                                                   z: z2,
+                                                                   u: u2,
+                                                                   v: v2))
         }
     }
     
@@ -80,6 +102,26 @@ class EarthModelDataStrip {
         self.texture = texture
         texturedTriangleBuffer.load(graphics: graphics,
                                     texture: texture)
+        texturedTriangleBloomBuffer.load(graphics: graphics,
+                                         texture: texture)
+    }
+    
+    func draw3DBloom(renderEncoder: MTLRenderCommandEncoder,
+                     projectionMatrix: matrix_float4x4,
+                     modelViewMatrix: matrix_float4x4,
+                     pipelineState: Graphics.PipelineState) {
+        
+        texturedTriangleBloomBuffer.uniformsVertex.projectionMatrix = projectionMatrix
+        texturedTriangleBloomBuffer.uniformsVertex.modelViewMatrix = modelViewMatrix
+        
+        texturedTriangleBloomBuffer.setDirty(isVertexBufferDirty: false,
+                                        isIndexBufferDirty: false,
+                                        isUniformsVertexBufferDirty: true,
+                                        isUniformsFragmentBufferDirty: true)
+        
+        texturedTriangleBloomBuffer.render(renderEncoder: renderEncoder,
+                                      pipelineState: pipelineState)
+        
     }
     
     func draw3D(renderEncoder: MTLRenderCommandEncoder,

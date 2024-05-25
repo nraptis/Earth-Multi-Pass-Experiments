@@ -30,15 +30,15 @@ typedef struct {
 } SpriteFragmentUniforms;
 
 typedef struct {
-    packed_float3 position [[]];
+    packed_float2 position [[]];
     packed_float2 textureCoord [[]];
-} SpriteNodeIndexedVertex3D;
+} SpriteNodeIndexedVertex;
 
 typedef struct {
-    packed_float3 position [[]];
+    packed_float2 position [[]];
     packed_float2 textureCoord [[]];
     packed_float4 color [[]];
-} SpriteNodeColoredIndexedVertex3D;
+} SpriteNodeColoredIndexedVertex;
 
 typedef struct {
     float4 position [[position]];
@@ -51,7 +51,7 @@ typedef struct {
     float4 color;
 } SpriteNodeColoredIndexedColorInOut;
 
-vertex SpriteNodeIndexedColorInOut gaussian_blur_indexed_3d_vertex(constant SpriteNodeIndexedVertex3D *verts [[buffer(SpriteNodeIndexedVertexIndexData)]],
+vertex SpriteNodeIndexedColorInOut gaussian_blur_indexed_vertex(constant SpriteNodeIndexedVertex *verts [[buffer(SpriteNodeIndexedVertexIndexData)]],
                                                 uint vid [[vertex_id]],
                                                 constant SpriteVertexUniforms & uniforms [[ buffer(SpriteNodeIndexedVertexIndexUniforms) ]]) {
     SpriteNodeIndexedColorInOut out;
@@ -61,7 +61,7 @@ vertex SpriteNodeIndexedColorInOut gaussian_blur_indexed_3d_vertex(constant Spri
     return out;
 }
 
-vertex SpriteNodeColoredIndexedColorInOut gaussian_blur_indexed_colored_3d_vertex(constant SpriteNodeColoredIndexedVertex3D *verts [[buffer(SpriteNodeIndexedVertexIndexData)]],
+vertex SpriteNodeColoredIndexedColorInOut gaussian_blur_indexed_colored_vertex(constant SpriteNodeColoredIndexedVertex *verts [[buffer(SpriteNodeIndexedVertexIndexData)]],
                                                 uint vid [[vertex_id]],
                                                 constant SpriteVertexUniforms & uniforms [[ buffer(SpriteNodeIndexedVertexIndexUniforms) ]]) {
     SpriteNodeColoredIndexedColorInOut out;
@@ -72,7 +72,7 @@ vertex SpriteNodeColoredIndexedColorInOut gaussian_blur_indexed_colored_3d_verte
     return out;
 }
 
-fragment float4 gaussian_blur_indexed_3d_horizontal_fragment(SpriteNodeIndexedColorInOut in [[stage_in]],
+fragment float4 gaussian_blur_indexed_horizontal_fragment(SpriteNodeIndexedColorInOut in [[stage_in]],
                                                      constant SpriteFragmentUniforms & uniforms [[ buffer(SpriteNodeIndexedFragmentIndexUniforms) ]],
                                                      texture2d<half> colorMap [[ texture(SpriteNodeIndexedFragmentIndexTexture) ]],
                                                      sampler colorSampler [[ sampler(SpriteNodeIndexedFragmentIndexSampler) ]]) {
@@ -91,7 +91,7 @@ fragment float4 gaussian_blur_indexed_3d_horizontal_fragment(SpriteNodeIndexedCo
     return float4(r, g, b, 1.0);
 }
 
-fragment float4 gaussian_blur_indexed_3d_vertical_fragment (SpriteNodeIndexedColorInOut in [[stage_in]],
+fragment float4 gaussian_blur_indexed_vertical_fragment(SpriteNodeIndexedColorInOut in [[stage_in]],
                                                     constant SpriteFragmentUniforms & uniforms [[ buffer(SpriteNodeIndexedFragmentIndexUniforms) ]],
                                                     texture2d<half> colorMap [[ texture(SpriteNodeIndexedFragmentIndexTexture) ]],
                                                     sampler colorSampler [[ sampler(SpriteNodeIndexedFragmentIndexSampler) ]]) {
@@ -110,7 +110,7 @@ fragment float4 gaussian_blur_indexed_3d_vertical_fragment (SpriteNodeIndexedCol
     return float4(r, g, b, 1.0);
 }
 
-fragment float4 gaussian_blur_indexed_colored_indexed_3d_horizontal_fragment(SpriteNodeColoredIndexedColorInOut in [[stage_in]],
+fragment float4 gaussian_blur_indexed_colored_indexed_horizontal_fragment(SpriteNodeColoredIndexedColorInOut in [[stage_in]],
                                                      constant SpriteFragmentUniforms & uniforms [[ buffer(SpriteNodeIndexedFragmentIndexUniforms) ]],
                                                      texture2d<half> colorMap [[ texture(SpriteNodeIndexedFragmentIndexTexture) ]],
                                                      sampler colorSampler [[ sampler(SpriteNodeIndexedFragmentIndexSampler) ]]) {
@@ -129,7 +129,7 @@ fragment float4 gaussian_blur_indexed_colored_indexed_3d_horizontal_fragment(Spr
     return float4(r, g, b, 1.0 * in.color[3]);
 }
 
-fragment float4 gaussian_blur_indexed_colored_indexed_3d_vertical_fragment (SpriteNodeColoredIndexedColorInOut in [[stage_in]],
+fragment float4 gaussian_blur_indexed_colored_indexed_vertical_fragment (SpriteNodeColoredIndexedColorInOut in [[stage_in]],
                                                                     constant SpriteFragmentUniforms & uniforms [[ buffer(SpriteNodeIndexedFragmentIndexUniforms) ]],
                                                     texture2d<half> colorMap [[ texture(SpriteNodeIndexedFragmentIndexTexture) ]],
                                                     sampler colorSampler [[ sampler(SpriteNodeIndexedFragmentIndexSampler) ]]) {

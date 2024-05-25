@@ -100,9 +100,13 @@ class EarthScene: GraphicsDelegate {
         */
     }
     
-    func draw3D(renderEncoder: MTLRenderCommandEncoder) {
-        
-        
+    struct MatrixPack {
+        let projectionMatrix: matrix_float4x4
+        let modelViewMatrix: matrix_float4x4
+        let normalMatrix: matrix_float4x4
+    }
+    
+    func getMatrixPack() -> MatrixPack {
         let aspect = graphics.width / graphics.height
         var perspective = matrix_float4x4()
         perspective.perspective(fovy: Float.pi * 0.125, aspect: aspect, nearZ: 0.01, farZ: 255.0)
@@ -119,15 +123,33 @@ class EarthScene: GraphicsDelegate {
         normalMatrix = simd_inverse(normalMatrix)
         normalMatrix = simd_transpose(normalMatrix)
         
+        let result = MatrixPack(projectionMatrix: projectionMatrix,
+                                modelViewMatrix: modelViewMatrix,
+                                normalMatrix: normalMatrix)
+        return result
+    }
+    
+    func draw3DBloom(renderEncoder: MTLRenderCommandEncoder) {
+        let matrixPack = getMatrixPack()
+        graphics.set(depthState: .lessThan, renderEncoder: renderEncoder)
+        earth.draw3DBloom(renderEncoder: renderEncoder,
+                          projectionMatrix: matrixPack.projectionMatrix,
+                          modelViewMatrix: matrixPack.modelViewMatrix)
+    }
+    
+    func draw3D(renderEncoder: MTLRenderCommandEncoder) {
+        
+        
+        let matrixPack = getMatrixPack()
+        
         
         
         
         graphics.set(depthState: .lessThan, renderEncoder: renderEncoder)
-        
         earth.draw3D(renderEncoder: renderEncoder,
-                     projectionMatrix: projectionMatrix,
-                     modelViewMatrix: modelViewMatrix,
-                     normalMatrix: normalMatrix,
+                     projectionMatrix: matrixPack.projectionMatrix,
+                     modelViewMatrix: matrixPack.modelViewMatrix,
+                     normalMatrix: matrixPack.normalMatrix,
                      lightDirX: sin(lightRotation),
                      lightDirY: 0.0,
                      lightDirZ: -cosf(lightRotation),

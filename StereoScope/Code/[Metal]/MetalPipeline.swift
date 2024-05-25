@@ -107,12 +107,12 @@ class MetalPipeline {
     
     
     
-    private var gaussianBlurIndexed3DVertexProgram: MTLFunction!
-    private var gaussianBlurIndexedColored3DVertexProgram: MTLFunction!
-    private var gaussianBlurIndexed3DHorizontalFragmentProgram: MTLFunction!
-    private var gaussianBlurIndexed3DVerticalFragmentProgram: MTLFunction!
-    private var gaussianBlurIndexedColoredIndexed3DHorizontalFragmentProgram: MTLFunction!
-    private var gaussianBlurIndexedColoredIndexed3DVerticalFragmentProgram: MTLFunction!
+    private var gaussianBlurIndexedVertexProgram: MTLFunction!
+    private var gaussianBlurIndexedColoredVertexProgram: MTLFunction!
+    private var gaussianBlurIndexedHorizontalFragmentProgram: MTLFunction!
+    private var gaussianBlurIndexedVerticalFragmentProgram: MTLFunction!
+    private var gaussianBlurIndexedColoredIndexedHorizontalFragmentProgram: MTLFunction!
+    private var gaussianBlurIndexedColoredIndexedVerticalFragmentProgram: MTLFunction!
     
     
     
@@ -200,13 +200,16 @@ class MetalPipeline {
     private(set) var pipelineStateSpriteNodeColoredWhiteIndexed3DAdditiveBlending: MTLRenderPipelineState!
     private(set) var pipelineStateSpriteNodeColoredWhiteIndexed3DPremultipliedBlending: MTLRenderPipelineState!
     
+    private(set) var pipelineStateGaussianBlurHorizontalIndexedNoBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateGaussianBlurVerticalIndexedNoBlending: MTLRenderPipelineState!
+    
+    private(set) var pipelineStateGaussianBlurHorizontalColoredIndexedNoBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateGaussianBlurVerticalColoredIndexedNoBlending: MTLRenderPipelineState!
     
     
-    private(set) var pipelineStateGaussianBlurHorizontalIndexed3DNoBlending: MTLRenderPipelineState!
-    private(set) var pipelineStateGaussianBlurVerticalIndexed3DNoBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateGaussianBlurSpriteStampNoBlending: MTLRenderPipelineState!
     
-    private(set) var pipelineStateGaussianBlurHorizontalColoredIndexed3DNoBlending: MTLRenderPipelineState!
-    private(set) var pipelineStateGaussianBlurVerticalColoredIndexed3DNoBlending: MTLRenderPipelineState!
+    
     
     func load() {
         buildFunctions()
@@ -317,14 +320,14 @@ class MetalPipeline {
         spriteNodeStereoLeftColoredIndexed3DFragmentProgram = metalLibrary.makeFunction(name: "sprite_node_stereo_left_colored_indexed_3d_fragment")
         
         
-        gaussianBlurIndexed3DVertexProgram = metalLibrary.makeFunction(name: "gaussian_blur_indexed_3d_vertex")
-        gaussianBlurIndexedColored3DVertexProgram = metalLibrary.makeFunction(name: "gaussian_blur_indexed_colored_3d_vertex")
+        gaussianBlurIndexedVertexProgram = metalLibrary.makeFunction(name: "gaussian_blur_indexed_vertex")
+        gaussianBlurIndexedColoredVertexProgram = metalLibrary.makeFunction(name: "gaussian_blur_indexed_colored_vertex")
         
-        gaussianBlurIndexed3DHorizontalFragmentProgram = metalLibrary.makeFunction(name: "gaussian_blur_indexed_3d_horizontal_fragment")
-        gaussianBlurIndexed3DVerticalFragmentProgram = metalLibrary.makeFunction(name: "gaussian_blur_indexed_3d_vertical_fragment")
+        gaussianBlurIndexedHorizontalFragmentProgram = metalLibrary.makeFunction(name: "gaussian_blur_indexed_horizontal_fragment")
+        gaussianBlurIndexedVerticalFragmentProgram = metalLibrary.makeFunction(name: "gaussian_blur_indexed_vertical_fragment")
         
-        gaussianBlurIndexedColoredIndexed3DHorizontalFragmentProgram = metalLibrary.makeFunction(name: "gaussian_blur_indexed_colored_indexed_3d_horizontal_fragment")
-        gaussianBlurIndexedColoredIndexed3DVerticalFragmentProgram = metalLibrary.makeFunction(name: "gaussian_blur_indexed_colored_indexed_3d_vertical_fragment")
+        gaussianBlurIndexedColoredIndexedHorizontalFragmentProgram = metalLibrary.makeFunction(name: "gaussian_blur_indexed_colored_indexed_horizontal_fragment")
+        gaussianBlurIndexedColoredIndexedVerticalFragmentProgram = metalLibrary.makeFunction(name: "gaussian_blur_indexed_colored_indexed_vertical_fragment")
         
     }
     
@@ -685,33 +688,39 @@ class MetalPipeline {
     private func buildPipelineStatesGaussianBlur() {
         
         let pipelineDescriptorHorizontal = MTLRenderPipelineDescriptor()
-        pipelineDescriptorHorizontal.vertexFunction = gaussianBlurIndexed3DVertexProgram
-        pipelineDescriptorHorizontal.fragmentFunction = gaussianBlurIndexed3DHorizontalFragmentProgram
+        pipelineDescriptorHorizontal.vertexFunction = gaussianBlurIndexedVertexProgram
+        pipelineDescriptorHorizontal.fragmentFunction = gaussianBlurIndexedHorizontalFragmentProgram
         pipelineDescriptorHorizontal.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
-        pipelineDescriptorHorizontal.depthAttachmentPixelFormat = .depth32Float
-        pipelineStateGaussianBlurHorizontalIndexed3DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptorHorizontal)
+        pipelineStateGaussianBlurHorizontalIndexedNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptorHorizontal)
         
         let pipelineDescriptorVertical = MTLRenderPipelineDescriptor()
-        pipelineDescriptorVertical.vertexFunction = gaussianBlurIndexed3DVertexProgram
-        pipelineDescriptorVertical.fragmentFunction = gaussianBlurIndexed3DVerticalFragmentProgram
+        pipelineDescriptorVertical.vertexFunction = gaussianBlurIndexedVertexProgram
+        pipelineDescriptorVertical.fragmentFunction = gaussianBlurIndexedVerticalFragmentProgram
         pipelineDescriptorVertical.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
-        pipelineDescriptorVertical.depthAttachmentPixelFormat = .depth32Float
-        pipelineStateGaussianBlurVerticalIndexed3DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptorVertical)
+        pipelineStateGaussianBlurVerticalIndexedNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptorVertical)
         
         let pipelineDescriptorHorizontalColored = MTLRenderPipelineDescriptor()
-        pipelineDescriptorHorizontalColored.vertexFunction = gaussianBlurIndexed3DVertexProgram
-        pipelineDescriptorHorizontalColored.fragmentFunction = gaussianBlurIndexedColoredIndexed3DHorizontalFragmentProgram
+        pipelineDescriptorHorizontalColored.vertexFunction = gaussianBlurIndexedVertexProgram
+        pipelineDescriptorHorizontalColored.fragmentFunction = gaussianBlurIndexedColoredIndexedHorizontalFragmentProgram
         pipelineDescriptorHorizontalColored.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
-        pipelineDescriptorHorizontalColored.depthAttachmentPixelFormat = .depth32Float
-        pipelineStateGaussianBlurHorizontalColoredIndexed3DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptorHorizontalColored)
+        pipelineStateGaussianBlurHorizontalColoredIndexedNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptorHorizontalColored)
         
         let pipelineDescriptorVerticalColored = MTLRenderPipelineDescriptor()
-        pipelineDescriptorVerticalColored.vertexFunction = gaussianBlurIndexed3DVertexProgram
-        pipelineDescriptorVerticalColored.fragmentFunction = gaussianBlurIndexedColoredIndexed3DVerticalFragmentProgram
+        pipelineDescriptorVerticalColored.vertexFunction = gaussianBlurIndexedVertexProgram
+        pipelineDescriptorVerticalColored.fragmentFunction = gaussianBlurIndexedColoredIndexedVerticalFragmentProgram
         pipelineDescriptorVerticalColored.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
-        pipelineDescriptorVerticalColored.depthAttachmentPixelFormat = .depth32Float
-        pipelineStateGaussianBlurVerticalColoredIndexed3DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptorVerticalColored)
+        pipelineStateGaussianBlurVerticalColoredIndexedNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptorVerticalColored)
+        
+        
+        let pipelineDescriptorStamp = MTLRenderPipelineDescriptor()
+        pipelineDescriptorStamp.vertexFunction = spriteNodeIndexed2DVertexProgram
+        pipelineDescriptorStamp.fragmentFunction = spriteNodeIndexed2DFragmentProgram
+        pipelineDescriptorStamp.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
+        pipelineStateGaussianBlurSpriteStampNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptorStamp)
     }
+    
+    
+    
     
     private func configAlphaBlending(pipelineDescriptor: MTLRenderPipelineDescriptor) {
         pipelineDescriptor.colorAttachments[0].isBlendingEnabled = true
