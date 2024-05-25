@@ -48,15 +48,15 @@ class MetalEngine {
     private var tileSpriteHeight: Float = 0.0
     
     private var tileStereoscopicSpritePositions: [Float] = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-        private var tileStereoscopicSpriteTextureCoords: [Float] = [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0]
-        private var tileStereoscopicUniformVertex = UniformsSpriteVertex()
-        private var tileStereoscopicUniformFragment = UniformsSpriteFragment()
-        private var tileStereoscopicSpritePositionsBuffer: MTLBuffer!
-        private var tileStereoscopicSpriteTextureCoordsBuffer: MTLBuffer!
-        private var tileStereoscopicUniformVertexBuffer: MTLBuffer!
-        private var tileStereoscopicUniformFragmentBuffer: MTLBuffer!
-        private var tileStereoscopicSpriteWidth: Float = 0.0
-        private var tileStereoscopicSpriteHeight: Float = 0.0
+    private var tileStereoscopicSpriteTextureCoords: [Float] = [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0]
+    private var tileStereoscopicUniformVertex = UniformsSpriteVertex()
+    private var tileStereoscopicUniformFragment = UniformsSpriteFragment()
+    private var tileStereoscopicSpritePositionsBuffer: MTLBuffer!
+    private var tileStereoscopicSpriteTextureCoordsBuffer: MTLBuffer!
+    private var tileStereoscopicUniformVertexBuffer: MTLBuffer!
+    private var tileStereoscopicUniformFragmentBuffer: MTLBuffer!
+    private var tileStereoscopicSpriteWidth: Float = 0.0
+    private var tileStereoscopicSpriteHeight: Float = 0.0
     
     required init(metalLayer: CAMetalLayer,
                   width: Float,

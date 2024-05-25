@@ -11,8 +11,86 @@ import simd
 typealias UniformsSpriteNodeIndexedVertex = UniformsShapeVertex
 typealias UniformsSpriteNodeIndexedFragment = UniformsShapeFragment
 
+struct UniformsSpriteNodeIndexedDiffuseFragment: UniformsFragment {
+    
+    var red: Float
+    var green: Float
+    var blue: Float
+    var alpha: Float
+    
+    var lightRed: Float
+    var lightGreen: Float
+    var lightBlue: Float
+    
+    var lightAmbientIntensity: Float
+    var lightDiffuseIntensity: Float
+    
+    var lightDirX: Float
+    var lightDirY: Float
+    var lightDirZ: Float
+    
+    init() {
+        red = 1.0
+        green = 1.0
+        blue = 1.0
+        alpha = 1.0
+        
+        lightRed = 1.0
+        lightGreen = 1.0
+        lightBlue = 1.0
+        
+        lightAmbientIntensity = 0.0
+        lightDiffuseIntensity = 1.0
+        
+        lightDirX = 0.0
+        lightDirY = 0.0
+        lightDirZ = -1.0
+    }
+    
+    mutating func set(red: Float, green: Float, blue: Float) {
+        self.red = red
+        self.green = green
+        self.blue = blue
+        self.alpha = 1.0
+    }
+    
+    mutating func set(red: Float, green: Float, blue: Float, alpha: Float) {
+        self.red = red
+        self.green = green
+        self.blue = blue
+        self.alpha = alpha
+    }
+    
+    var size: Int {
+        var result = 0
+        result += (MemoryLayout<Float>.size * 12)
+        return result
+    }
+    
+    var data: [Float] {
+        var result = [Float]()
+        result.reserveCapacity(size)
+        result.append(red)
+        result.append(green)
+        result.append(blue)
+        result.append(alpha)
+        
+        result.append(lightRed)
+        result.append(lightGreen)
+        result.append(lightBlue)
+        
+        result.append(lightAmbientIntensity)
+        result.append(lightDiffuseIntensity)
+        
+        result.append(lightDirX)
+        result.append(lightDirY)
+        result.append(lightDirZ)
+        
+        return result
+    }
+}
 
-struct UniformsSpriteNodeIndexedLightsFragment: UniformsFragment {
+struct UniformsSpriteNodeIndexedPhongFragment: UniformsFragment {
     
     var red: Float
     var green: Float

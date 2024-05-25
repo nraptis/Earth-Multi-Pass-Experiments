@@ -64,7 +64,7 @@ class Earth {
                                        
                                        lightShininess: lightShininess,
                                        
-                                       pipelineState: .spriteNodeIndexedPhongColored3DNoBlending)
+                                       pipelineState: .spriteNodeIndexedDiffuseColored3DNoBlending)
         }
     }
 }

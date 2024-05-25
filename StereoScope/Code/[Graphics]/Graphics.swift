@@ -89,8 +89,10 @@ class Graphics {
         case spriteNodeIndexed3DAdditiveBlending
         case spriteNodeIndexed3DPremultipliedBlending
         
-        case spriteNodeIndexedPhong3DNoBlending
+        case spriteNodeIndexedDiffuse3DNoBlending
+        case spriteNodeIndexedDiffuseColored3DNoBlending
         
+        case spriteNodeIndexedPhong3DNoBlending
         case spriteNodeIndexedPhongColored3DNoBlending
         
         case spriteNodeWhiteIndexed2DNoBlending
@@ -312,11 +314,17 @@ class Graphics {
         case .spriteNodeColoredIndexed2DPremultipliedBlending:
             renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeColoredIndexed2DPremultipliedBlending)
        
+        case .spriteNodeIndexedDiffuse3DNoBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeIndexedDiffuse3DNoBlending)
+            
+        case .spriteNodeIndexedDiffuseColored3DNoBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeIndexedDiffuseColored3DNoBlending)
+            
         case .spriteNodeIndexedPhong3DNoBlending:
             renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeIndexedPhong3DNoBlending)
             
         case .spriteNodeIndexedPhongColored3DNoBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpritePhongColoredIndexed3DNoBlending)
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeIndexedPhongColored3DNoBlending)
         
             
        
@@ -425,6 +433,9 @@ class Graphics {
                 .spriteNodeIndexed3DAdditiveBlending,
                 .spriteNodeIndexed3DPremultipliedBlending,
             
+                .spriteNodeIndexedDiffuse3DNoBlending,
+                .spriteNodeIndexedDiffuseColored3DNoBlending,
+            
                 .spriteNodeIndexedPhong3DNoBlending,
                 .spriteNodeIndexedPhongColored3DNoBlending,
             
@@ -522,6 +533,9 @@ class Graphics {
                     .spriteNodeIndexed3DAdditiveBlending,
                     .spriteNodeIndexed3DPremultipliedBlending,
                 
+                    .spriteNodeIndexedDiffuse3DNoBlending,
+                    .spriteNodeIndexedDiffuseColored3DNoBlending,
+                
                     .spriteNodeIndexedPhong3DNoBlending,
                     .spriteNodeIndexedPhongColored3DNoBlending,
                 
@@ -618,6 +632,9 @@ class Graphics {
                     .spriteNodeIndexed3DAdditiveBlending,
                     .spriteNodeIndexed3DPremultipliedBlending,
                 
+                    .spriteNodeIndexedDiffuse3DNoBlending,
+                    .spriteNodeIndexedDiffuseColored3DNoBlending,
+                
                     .spriteNodeIndexedPhong3DNoBlending,
                     .spriteNodeIndexedPhongColored3DNoBlending,
                 
@@ -694,6 +711,9 @@ class Graphics {
                     .spriteNodeIndexed3DAlphaBlending,
                     .spriteNodeIndexed3DAdditiveBlending,
                     .spriteNodeIndexed3DPremultipliedBlending,
+                
+                    .spriteNodeIndexedDiffuse3DNoBlending,
+                    .spriteNodeIndexedDiffuseColored3DNoBlending,
                 
                     .spriteNodeIndexedPhong3DNoBlending,
                     .spriteNodeIndexedPhongColored3DNoBlending,
@@ -806,6 +826,9 @@ class Graphics {
                     .spriteNodeIndexed3DAlphaBlending,
                     .spriteNodeIndexed3DAdditiveBlending,
                     .spriteNodeIndexed3DPremultipliedBlending,
+                
+                    .spriteNodeIndexedDiffuse3DNoBlending,
+                    .spriteNodeIndexedDiffuseColored3DNoBlending,
                 
                     .spriteNodeIndexedPhong3DNoBlending,
                     .spriteNodeIndexedPhongColored3DNoBlending,

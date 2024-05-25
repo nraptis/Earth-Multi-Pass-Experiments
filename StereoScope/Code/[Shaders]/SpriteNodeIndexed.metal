@@ -52,6 +52,7 @@ typedef struct {
     float lightDirX;
     float lightDirY;
     float lightDirZ;
+    
 } SpriteNodeIndexedDiffuseFragmentUniforms;
 
 typedef struct {
@@ -92,8 +93,21 @@ typedef struct {
     float4 position [[position]];
     float2 textureCoord;
     float3 normal;
+} SpriteNodeDiffuseIndexedColorInOut;
+
+typedef struct {
+    float4 position [[position]];
+    float2 textureCoord;
+    float3 normal;
     float3 eye;
 } SpriteNodePhongIndexedColorInOut;
+
+typedef struct {
+    float4 position [[position]];
+    float2 textureCoord;
+    float3 normal;
+    float4 color;
+} SpriteNodeDiffuseColoredIndexedColorInOut;
 
 typedef struct {
     float4 position [[position]];
@@ -239,7 +253,68 @@ fragment float4 sprite_node_indexed_3d_fragment(SpriteNodeIndexedColorInOut in [
     return result;
 }
 
+vertex SpriteNodeDiffuseIndexedColorInOut sprite_node_indexed_diffuse_3d_vertex(constant SpriteNodeLightsIndexedVertex3D *verts [[buffer(SpriteNodeIndexedVertexIndexData)]],
+                                                                   uint vid [[vertex_id]],
+                                                                   constant SpriteNodeIndexedLightsVertexUniforms & uniforms [[ buffer(SpriteNodeIndexedVertexIndexUniforms) ]]) {
+    SpriteNodeDiffuseIndexedColorInOut out;
+    float4 position = float4(verts[vid].position, 1.0);
+    float4 normal = float4(verts[vid].normal, 1.0);
+    out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
+    out.textureCoord = verts[vid].textureCoord;
+    out.normal = float3(uniforms.normalMatrix * normal);
+    return out;
+}
 
+fragment float4 sprite_node_indexed_diffuse_3d_fragment(SpriteNodeDiffuseIndexedColorInOut in [[stage_in]],
+                                                constant SpriteNodeIndexedDiffuseFragmentUniforms & uniforms [[buffer(SpriteNodeIndexedFragmentIndexUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SpriteNodeIndexedFragmentIndexTexture) ]],
+                                                sampler colorSampler [[ sampler(SpriteNodeIndexedFragmentIndexSampler) ]]) {
+    float3 inNormalized = normalize(in.normal);
+    float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
+    float ambientIntensity = uniforms.lightAmbientIntensity;
+    ambientIntensity = clamp(ambientIntensity, 0.0, 1.0);
+    float diffuseIntensity = max(dot(inNormalized, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
+    diffuseIntensity = clamp(diffuseIntensity, 0.0, 1.0);
+    float combinedLightIntensity = ambientIntensity + diffuseIntensity;
+    half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
+    float4 result = float4(colorSample.r * uniforms.r * uniforms.lightR * combinedLightIntensity,
+                           colorSample.g * uniforms.g * uniforms.lightG * combinedLightIntensity,
+                           colorSample.b * uniforms.b * uniforms.lightB * combinedLightIntensity,
+                           colorSample.a * uniforms.a);
+    return result;
+}
+
+vertex SpriteNodeDiffuseColoredIndexedColorInOut sprite_node_indexed_diffuse_colored_3d_vertex(constant SpriteNodeLightsColoredIndexedVertex3D *verts [[buffer(SpriteNodeIndexedVertexIndexData)]],
+                                                                   uint vid [[vertex_id]],
+                                                                   constant SpriteNodeIndexedLightsVertexUniforms & uniforms [[ buffer(SpriteNodeIndexedVertexIndexUniforms) ]]) {
+    SpriteNodeDiffuseColoredIndexedColorInOut out;
+    float4 position = float4(verts[vid].position, 1.0);
+    float4 normal = float4(verts[vid].normal, 1.0);
+    out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
+    out.textureCoord = verts[vid].textureCoord;
+    out.normal = float3(uniforms.normalMatrix * normal);
+    out.color = verts[vid].color;
+    return out;
+}
+
+fragment float4 sprite_node_indexed_diffuse_colored_3d_fragment(SpriteNodeDiffuseColoredIndexedColorInOut in [[stage_in]],
+                                                constant SpriteNodeIndexedDiffuseFragmentUniforms & uniforms [[buffer(SpriteNodeIndexedFragmentIndexUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SpriteNodeIndexedFragmentIndexTexture) ]],
+                                                sampler colorSampler [[ sampler(SpriteNodeIndexedFragmentIndexSampler) ]]) {
+    float3 inNormalized = normalize(in.normal);
+    float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
+    float ambientIntensity = uniforms.lightAmbientIntensity;
+    ambientIntensity = clamp(ambientIntensity, 0.0, 1.0);
+    float diffuseIntensity = max(dot(inNormalized, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
+    diffuseIntensity = clamp(diffuseIntensity, 0.0, 1.0);
+    float combinedLightIntensity = ambientIntensity + diffuseIntensity;
+    half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
+    float4 result = float4(colorSample.r * uniforms.r * uniforms.lightR * combinedLightIntensity * in.color[0],
+                           colorSample.g * uniforms.g * uniforms.lightG * combinedLightIntensity * in.color[1],
+                           colorSample.b * uniforms.b * uniforms.lightB * combinedLightIntensity * in.color[2],
+                           colorSample.a * uniforms.a * in.color[3]);
+    return result;
+}
 
 vertex SpriteNodePhongIndexedColorInOut sprite_node_indexed_phong_3d_vertex(constant SpriteNodeLightsIndexedVertex3D *verts [[buffer(SpriteNodeIndexedVertexIndexData)]],
                                                                    uint vid [[vertex_id]],
@@ -253,6 +328,7 @@ vertex SpriteNodePhongIndexedColorInOut sprite_node_indexed_phong_3d_vertex(cons
     out.eye = float3(uniforms.normalMatrix * position);
     return out;
 }
+
 
 fragment float4 sprite_node_indexed_phong_3d_fragment(SpriteNodePhongIndexedColorInOut in [[stage_in]],
                                                 constant SpriteNodeIndexedPhongFragmentUniforms & uniforms [[buffer(SpriteNodeIndexedFragmentIndexUniforms)]],
@@ -313,9 +389,6 @@ fragment float4 sprite_node_indexed_phong_colored_3d_fragment(SpriteNodePhongCol
                            colorSample.a * uniforms.a * in.color[3]);
     return result;
 }
-//
-//SpriteNodePhongColoredIndexedColorInOut
-
 
 fragment float4 sprite_node_white_indexed_3d_fragment(SpriteNodeIndexedColorInOut in [[stage_in]],
                                                 constant SpriteNodeIndexedFragmentUniforms & uniforms [[buffer(SpriteNodeIndexedFragmentIndexUniforms)]],
