@@ -22,7 +22,7 @@ class MetalViewController: UIViewController {
     private var _isMetalEngineLoaded = false
     
     var isStereoscopicEnabled = false
-    var isBloomEnabled = false
+    var isBloomEnabled = true
     
     let metalView: MetalView
     required init(delegate: GraphicsDelegate,

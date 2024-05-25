@@ -39,6 +39,9 @@ class MetalEngine {
     
     var blurTexture1: MTLTexture!
     var blurTexture2: MTLTexture!
+    //var blurTexture3: MTLTexture!
+    //var blurTexture4: MTLTexture!
+    
     
     private var tileSpritePositions: [Float] = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     private var tileSpriteTextureCoords: [Float] = [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0]
@@ -140,6 +143,10 @@ class MetalEngine {
                                                   height: drawable.texture.height >> 2)
             blurTexture2 = createStorageTexture(width: drawable.texture.width >> 2,
                                                   height: drawable.texture.height >> 2)
+            //blurTexture3 = createStorageTexture(width: drawable.texture.width >> 2,
+            //                                      height: drawable.texture.height >> 2)
+            //blurTexture4 = createStorageTexture(width: drawable.texture.width >> 2,
+            //                                      height: drawable.texture.height >> 2)
             
         }
         
@@ -273,10 +280,13 @@ class MetalEngine {
         renderPassDescriptorBloom.depthAttachment.clearDepth = 1.0
         renderPassDescriptorBloom.depthAttachment.texture = depthTexture
         
-        graphics.renderTargetWidth = storageTexture.width
-        graphics.renderTargetHeight = storageTexture.height
+        
         
         if let renderEncoderBloom = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorBloom) {
+            
+            graphics.renderTargetWidth = storageTexture.width
+            graphics.renderTargetHeight = storageTexture.height
+            
             delegate.draw3DBloom(renderEncoder: renderEncoderBloom)
             renderEncoderBloom.endEncoding()
             
@@ -300,6 +310,8 @@ class MetalEngine {
             renderPassDescriptorHorizontal1.colorAttachments[0].loadAction = .clear
             renderPassDescriptorHorizontal1.colorAttachments[0].storeAction = .store
             renderPassDescriptorHorizontal1.colorAttachments[0].clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
+            graphics.renderTargetWidth = blurTexture1.width
+            graphics.renderTargetHeight = blurTexture1.height
             if let renderEncoderHorizontal1 = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorHorizontal1) {
                 blurSprite.texture = storageTexture
                 blurSprite.render(renderEncoder: renderEncoderHorizontal1, pipelineState: .gaussianBlurHorizontalIndexedNoBlending)
@@ -310,6 +322,8 @@ class MetalEngine {
             renderPassDescriptorVertical1.colorAttachments[0].texture = blurTexture2
             renderPassDescriptorVertical1.colorAttachments[0].loadAction = .load
             renderPassDescriptorVertical1.colorAttachments[0].storeAction = .store
+            graphics.renderTargetWidth = blurTexture2.width
+            graphics.renderTargetHeight = blurTexture2.height
             if let renderEncoderVertical1 = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorVertical1) {
                 blurSprite.texture = blurTexture1
                 blurSprite.render(renderEncoder: renderEncoderVertical1, pipelineState: .gaussianBlurVerticalIndexedNoBlending)
@@ -318,8 +332,11 @@ class MetalEngine {
             
             let renderPassDescriptorHorizontal2 = MTLRenderPassDescriptor()
             renderPassDescriptorHorizontal2.colorAttachments[0].texture = blurTexture1
-            renderPassDescriptorHorizontal2.colorAttachments[0].loadAction = .load
+            renderPassDescriptorHorizontal2.colorAttachments[0].loadAction = .clear
             renderPassDescriptorHorizontal2.colorAttachments[0].storeAction = .store
+            renderPassDescriptorHorizontal2.colorAttachments[0].clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
+            graphics.renderTargetWidth = blurTexture1.width
+            graphics.renderTargetHeight = blurTexture1.height
             if let renderEncoderHorizontal2 = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorHorizontal2) {
                 blurSprite.texture = blurTexture2
                 blurSprite.render(renderEncoder: renderEncoderHorizontal2, pipelineState: .gaussianBlurHorizontalIndexedNoBlending)
@@ -330,11 +347,41 @@ class MetalEngine {
             renderPassDescriptorVertical2.colorAttachments[0].texture = blurTexture2
             renderPassDescriptorVertical2.colorAttachments[0].loadAction = .load
             renderPassDescriptorVertical2.colorAttachments[0].storeAction = .store
+            graphics.renderTargetWidth = blurTexture1.width
+            graphics.renderTargetHeight = blurTexture1.height
             if let renderEncoderVertical2 = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorVertical2) {
                 blurSprite.texture = blurTexture1
                 blurSprite.render(renderEncoder: renderEncoderVertical2, pipelineState: .gaussianBlurVerticalIndexedNoBlending)
                 renderEncoderVertical2.endEncoding()
             }
+            
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                let renderPassDescriptorHorizontal3 = MTLRenderPassDescriptor()
+                renderPassDescriptorHorizontal3.colorAttachments[0].texture = blurTexture1
+                renderPassDescriptorHorizontal3.colorAttachments[0].loadAction = .clear
+                renderPassDescriptorHorizontal3.colorAttachments[0].storeAction = .store
+                renderPassDescriptorHorizontal3.colorAttachments[0].clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
+                graphics.renderTargetWidth = blurTexture1.width
+                graphics.renderTargetHeight = blurTexture1.height
+                if let renderEncoderHorizontal3 = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorHorizontal3) {
+                    blurSprite.texture = blurTexture2
+                    blurSprite.render(renderEncoder: renderEncoderHorizontal3, pipelineState: .gaussianBlurHorizontalIndexedNoBlending)
+                    renderEncoderHorizontal3.endEncoding()
+                }
+                
+                let renderPassDescriptorVertical3 = MTLRenderPassDescriptor()
+                renderPassDescriptorVertical3.colorAttachments[0].texture = blurTexture2
+                renderPassDescriptorVertical3.colorAttachments[0].loadAction = .load
+                renderPassDescriptorVertical3.colorAttachments[0].storeAction = .store
+                graphics.renderTargetWidth = blurTexture1.width
+                graphics.renderTargetHeight = blurTexture1.height
+                if let renderEncoderVertical3 = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorVertical3) {
+                    blurSprite.texture = blurTexture1
+                    blurSprite.render(renderEncoder: renderEncoderVertical3, pipelineState: .gaussianBlurVerticalIndexedNoBlending)
+                    renderEncoderVertical3.endEncoding()
+                }
+            }
+            
         }
     }
     

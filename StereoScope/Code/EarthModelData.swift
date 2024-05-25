@@ -10,8 +10,8 @@ import simd
 
 class EarthModelData {
     
-    static let tileCountV = 32
-    static let tileCountH = 24
+    static let tileCountV = 64
+    static let tileCountH = 32
     
     let points: [[simd_float3]]
     let textureCoords: [[simd_float2]]

@@ -21,7 +21,7 @@ struct StereoScopeApp: App {
     }
     
     @State private var selectedStereoscopicMode = StereoscopicModes.normal
-    @State private var selectedBloomMode = BloomModes.normal
+    @State private var selectedBloomMode = BloomModes.bloom
     
     var body: some Scene {
         WindowGroup {

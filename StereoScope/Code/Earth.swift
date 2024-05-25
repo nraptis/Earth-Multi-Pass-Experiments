@@ -43,7 +43,7 @@ class Earth {
         for earthModelDataStrip in earthModelDataStrips {
             earthModelDataStrip.draw3DBloom(renderEncoder: renderEncoder,
                                             projectionMatrix: projectionMatrix,
-                                            modelViewMatrix: modelViewMatrix, pipelineState: .spriteNodeIndexed3DNoBlending)
+                                            modelViewMatrix: modelViewMatrix, pipelineState: .shapeNodeIndexed3DNoBlending)
         }
     }
     

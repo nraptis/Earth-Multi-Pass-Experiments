@@ -14,12 +14,23 @@ struct Sprite2DVertex: PositionConforming, TextureCoordinateConforming {
     var v: Float
 }
 
+struct Shape2DVertex: PositionConforming {
+    var x: Float
+    var y: Float
+}
+
 struct Sprite3DVertex: PositionConforming, TextureCoordinateConforming {
     var x: Float
     var y: Float
     var z: Float
     var u: Float
     var v: Float
+}
+
+struct Shape3DVertex: PositionConforming {
+    var x: Float
+    var y: Float
+    var z: Float
 }
 
 struct Sprite3DLightedVertex: PositionConforming, TextureCoordinateConforming {

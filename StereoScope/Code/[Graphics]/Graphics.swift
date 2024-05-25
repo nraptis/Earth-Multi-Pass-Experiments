@@ -128,14 +128,8 @@ class Graphics {
         case spriteNodeColoredWhiteIndexed3DAdditiveBlending
         case spriteNodeColoredWhiteIndexed3DPremultipliedBlending
         
-        
         case gaussianBlurHorizontalIndexedNoBlending
         case gaussianBlurVerticalIndexedNoBlending
-        case gaussianBlurHorizontalColoredIndexedNoBlending
-        case gaussianBlurVerticalColoredIndexedNoBlending
-        
-        case gaussianBlurSpriteStampNoBlending
-
     }
     
     enum SamplerState {
@@ -374,21 +368,11 @@ class Graphics {
             renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeColoredWhiteIndexed3DAdditiveBlending)
         case .spriteNodeColoredWhiteIndexed3DPremultipliedBlending:
             renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeColoredWhiteIndexed3DPremultipliedBlending)
-         
-            
             
         case .gaussianBlurHorizontalIndexedNoBlending:
             renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateGaussianBlurHorizontalIndexedNoBlending)
         case .gaussianBlurVerticalIndexedNoBlending:
             renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateGaussianBlurVerticalIndexedNoBlending)
-        case .gaussianBlurHorizontalColoredIndexedNoBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateGaussianBlurHorizontalColoredIndexedNoBlending)
-        case .gaussianBlurVerticalColoredIndexedNoBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateGaussianBlurVerticalColoredIndexedNoBlending)
-            
-        case .gaussianBlurSpriteStampNoBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateGaussianBlurSpriteStampNoBlending)
-            
         }
     }
     
@@ -484,13 +468,8 @@ class Graphics {
                 .spriteNodeColoredWhiteIndexed3DPremultipliedBlending,
             
                 .gaussianBlurHorizontalIndexedNoBlending,
-                .gaussianBlurVerticalIndexedNoBlending,
-                .gaussianBlurHorizontalColoredIndexedNoBlending,
-                .gaussianBlurVerticalColoredIndexedNoBlending,
-            
-                .gaussianBlurSpriteStampNoBlending:
+                .gaussianBlurVerticalIndexedNoBlending:
             renderEncoder.setFragmentSamplerState(metalSamplerState, index: MetalPipeline.spriteNodeIndexedFragmentIndexSampler)
-            
         default:
             break
         }
@@ -591,11 +570,8 @@ class Graphics {
                     .spriteNodeColoredWhiteIndexed3DPremultipliedBlending,
                 
                     .gaussianBlurHorizontalIndexedNoBlending,
-                    .gaussianBlurVerticalIndexedNoBlending,
-                    .gaussianBlurHorizontalColoredIndexedNoBlending,
-                    .gaussianBlurVerticalColoredIndexedNoBlending,
-                    
-                    .gaussianBlurSpriteStampNoBlending:
+                    .gaussianBlurVerticalIndexedNoBlending:
+                
                 renderEncoder.setVertexBuffer(uniformsBuffer, offset: 0, index: MetalPipeline.spriteNodeIndexedVertexIndexUniforms)
                 
             default:
@@ -665,7 +641,6 @@ class Graphics {
                     .spriteNodeColoredWhiteIndexed2DAdditiveBlending,
                     .spriteNodeColoredWhiteIndexed2DPremultipliedBlending,
                 
-                
                     .spriteNodeIndexed3DNoBlending,
                     .spriteNodeIndexed3DAlphaBlending,
                     .spriteNodeIndexed3DAdditiveBlending,
@@ -696,11 +671,8 @@ class Graphics {
                     .spriteNodeColoredWhiteIndexed3DPremultipliedBlending,
                 
                     .gaussianBlurHorizontalIndexedNoBlending,
-                    .gaussianBlurVerticalIndexedNoBlending,
-                    .gaussianBlurHorizontalColoredIndexedNoBlending,
-                    .gaussianBlurVerticalColoredIndexedNoBlending,
+                    .gaussianBlurVerticalIndexedNoBlending:
                 
-                    .gaussianBlurSpriteStampNoBlending:
                 renderEncoder.setFragmentBuffer(uniformsBuffer, offset: 0, index: MetalPipeline.spriteNodeIndexedFragmentIndexUniforms)
                 
             default:
@@ -729,7 +701,6 @@ class Graphics {
                     .shapeNodeColoredIndexed3DAdditiveBlending,
                     .shapeNodeColoredIndexed3DPremultipliedBlending:
                 renderEncoder.setVertexBuffer(dataBuffer, offset: 0, index: MetalPipeline.shapeNodeIndexedVertexIndexData)
-                
                 
             case .spriteNodeIndexed2DNoBlending,
                     .spriteNodeIndexed2DAlphaBlending,
@@ -784,11 +755,8 @@ class Graphics {
                     .spriteNodeColoredWhiteIndexed3DPremultipliedBlending,
                 
                     .gaussianBlurHorizontalIndexedNoBlending,
-                    .gaussianBlurVerticalIndexedNoBlending,
-                    .gaussianBlurHorizontalColoredIndexedNoBlending,
-                    .gaussianBlurVerticalColoredIndexedNoBlending,
+                    .gaussianBlurVerticalIndexedNoBlending:
                 
-                    .gaussianBlurSpriteStampNoBlending:
                 renderEncoder.setVertexBuffer(dataBuffer, offset: 0, index: MetalPipeline.spriteNodeIndexedVertexIndexData)
                 
             default:
@@ -906,11 +874,7 @@ class Graphics {
                     .spriteNodeColoredWhiteIndexed3DPremultipliedBlending,
                 
                     .gaussianBlurHorizontalIndexedNoBlending,
-                    .gaussianBlurVerticalIndexedNoBlending,
-                    .gaussianBlurHorizontalColoredIndexedNoBlending,
-                    .gaussianBlurVerticalColoredIndexedNoBlending,
-                
-                    .gaussianBlurSpriteStampNoBlending:
+                    .gaussianBlurVerticalIndexedNoBlending:
                 renderEncoder.setFragmentTexture(texture, index: MetalPipeline.spriteNodeIndexedFragmentIndexTexture)
             default:
                 break
