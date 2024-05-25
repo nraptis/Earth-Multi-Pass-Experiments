@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "lights_texture.jpg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

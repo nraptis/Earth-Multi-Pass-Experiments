@@ -1,0 +1,491 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E8CD72B42C00E59E00D13962 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8CD72B32C00E59E00D13962 /* Assets.xcassets */; };
+		E8CD72B72C00E59E00D13962 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8CD72B62C00E59E00D13962 /* Preview Assets.xcassets */; };
+		E8CD75E72C00E6AE00D13962 /* Graphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD738F2C00E6AE00D13962 /* Graphics.swift */; };
+		E8CD75E92C00E6AE00D13962 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD73912C00E6AE00D13962 /* Math.swift */; };
+		E8CD75EA2C00E6AE00D13962 /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD73922C00E6AE00D13962 /* Matrix.swift */; };
+		E8CD760C2C00E6AE00D13962 /* MetalEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD73B92C00E6AE00D13962 /* MetalEngine.swift */; };
+		E8CD760D2C00E6AE00D13962 /* MetalPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD73BA2C00E6AE00D13962 /* MetalPipeline.swift */; };
+		E8CD760E2C00E6AE00D13962 /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD73BB2C00E6AE00D13962 /* MetalView.swift */; };
+		E8CD760F2C00E6AE00D13962 /* MetalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD73BC2C00E6AE00D13962 /* MetalViewController.swift */; };
+		E8CD76102C00E6AE00D13962 /* Shape.metal in Sources */ = {isa = PBXBuildFile; fileRef = E8CD73BE2C00E6AE00D13962 /* Shape.metal */; };
+		E8CD76112C00E6AE00D13962 /* ShapeNodeIndexed.metal in Sources */ = {isa = PBXBuildFile; fileRef = E8CD73BF2C00E6AE00D13962 /* ShapeNodeIndexed.metal */; };
+		E8CD76122C00E6AE00D13962 /* Sprite.metal in Sources */ = {isa = PBXBuildFile; fileRef = E8CD73C02C00E6AE00D13962 /* Sprite.metal */; };
+		E8CD76132C00E6AE00D13962 /* SpriteNodeIndexed.metal in Sources */ = {isa = PBXBuildFile; fileRef = E8CD73C12C00E6AE00D13962 /* SpriteNodeIndexed.metal */; };
+		E8CD77432C00E6AF00D13962 /* Uniforms.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD750C2C00E6AE00D13962 /* Uniforms.swift */; };
+		E8CD77442C00E6AF00D13962 /* UniformsShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD750D2C00E6AE00D13962 /* UniformsShape.swift */; };
+		E8CD77452C00E6AF00D13962 /* UniformsShapeNodeIndexed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD750E2C00E6AE00D13962 /* UniformsShapeNodeIndexed.swift */; };
+		E8CD77462C00E6AF00D13962 /* UniformsSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD750F2C00E6AE00D13962 /* UniformsSprite.swift */; };
+		E8CD77472C00E6AF00D13962 /* UniformsSpriteNodeIndexed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD75102C00E6AE00D13962 /* UniformsSpriteNodeIndexed.swift */; };
+		E8CD77602C011AB100D13962 /* StereoScopeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD775E2C011AB100D13962 /* StereoScopeApp.swift */; };
+		E8CD77632C011ADA00D13962 /* EarthSceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD77622C011ADA00D13962 /* EarthSceneView.swift */; };
+		E8CD77652C011B2A00D13962 /* EarthScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD77642C011B2A00D13962 /* EarthScene.swift */; };
+		E8CD77672C01259500D13962 /* SpriteInstance2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD77662C01259500D13962 /* SpriteInstance2D.swift */; };
+		E8CD77692C012D3200D13962 /* EarthModelData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD77682C012D3200D13962 /* EarthModelData.swift */; };
+		E8CD776B2C012F2C00D13962 /* Earth.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD776A2C012F2C00D13962 /* Earth.swift */; };
+		E8CD776D2C01303E00D13962 /* EarthModelDataStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD776C2C01303E00D13962 /* EarthModelDataStrip.swift */; };
+		E8CD776F2C0131DC00D13962 /* SpriteInstance3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD776E2C0131DC00D13962 /* SpriteInstance3D.swift */; };
+		E8CD77712C01349A00D13962 /* IndexedTexturedTriangleBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD77702C01349A00D13962 /* IndexedTexturedTriangleBuffer.swift */; };
+		E8CD77752C016BAC00D13962 /* UniformsPhong.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD77742C016BAC00D13962 /* UniformsPhong.swift */; };
+		E8CD77772C016E2700D13962 /* Primitives.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD77762C016E2700D13962 /* Primitives.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		E8CD72AC2C00E59D00D13962 /* StereoScope.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StereoScope.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8CD72B32C00E59E00D13962 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E8CD72B62C00E59E00D13962 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		E8CD738F2C00E6AE00D13962 /* Graphics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Graphics.swift; sourceTree = "<group>"; };
+		E8CD73912C00E6AE00D13962 /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
+		E8CD73922C00E6AE00D13962 /* Matrix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Matrix.swift; sourceTree = "<group>"; };
+		E8CD73B92C00E6AE00D13962 /* MetalEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalEngine.swift; sourceTree = "<group>"; };
+		E8CD73BA2C00E6AE00D13962 /* MetalPipeline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalPipeline.swift; sourceTree = "<group>"; };
+		E8CD73BB2C00E6AE00D13962 /* MetalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
+		E8CD73BC2C00E6AE00D13962 /* MetalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalViewController.swift; sourceTree = "<group>"; };
+		E8CD73BE2C00E6AE00D13962 /* Shape.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shape.metal; sourceTree = "<group>"; };
+		E8CD73BF2C00E6AE00D13962 /* ShapeNodeIndexed.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = ShapeNodeIndexed.metal; sourceTree = "<group>"; };
+		E8CD73C02C00E6AE00D13962 /* Sprite.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Sprite.metal; sourceTree = "<group>"; };
+		E8CD73C12C00E6AE00D13962 /* SpriteNodeIndexed.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = SpriteNodeIndexed.metal; sourceTree = "<group>"; };
+		E8CD750C2C00E6AE00D13962 /* Uniforms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Uniforms.swift; sourceTree = "<group>"; };
+		E8CD750D2C00E6AE00D13962 /* UniformsShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniformsShape.swift; sourceTree = "<group>"; };
+		E8CD750E2C00E6AE00D13962 /* UniformsShapeNodeIndexed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniformsShapeNodeIndexed.swift; sourceTree = "<group>"; };
+		E8CD750F2C00E6AE00D13962 /* UniformsSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniformsSprite.swift; sourceTree = "<group>"; };
+		E8CD75102C00E6AE00D13962 /* UniformsSpriteNodeIndexed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniformsSpriteNodeIndexed.swift; sourceTree = "<group>"; };
+		E8CD775E2C011AB100D13962 /* StereoScopeApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StereoScopeApp.swift; sourceTree = "<group>"; };
+		E8CD77622C011ADA00D13962 /* EarthSceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EarthSceneView.swift; sourceTree = "<group>"; };
+		E8CD77642C011B2A00D13962 /* EarthScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EarthScene.swift; sourceTree = "<group>"; };
+		E8CD77662C01259500D13962 /* SpriteInstance2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteInstance2D.swift; sourceTree = "<group>"; };
+		E8CD77682C012D3200D13962 /* EarthModelData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EarthModelData.swift; sourceTree = "<group>"; };
+		E8CD776A2C012F2C00D13962 /* Earth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Earth.swift; sourceTree = "<group>"; };
+		E8CD776C2C01303E00D13962 /* EarthModelDataStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EarthModelDataStrip.swift; sourceTree = "<group>"; };
+		E8CD776E2C0131DC00D13962 /* SpriteInstance3D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteInstance3D.swift; sourceTree = "<group>"; };
+		E8CD77702C01349A00D13962 /* IndexedTexturedTriangleBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexedTexturedTriangleBuffer.swift; sourceTree = "<group>"; };
+		E8CD77742C016BAC00D13962 /* UniformsPhong.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniformsPhong.swift; sourceTree = "<group>"; };
+		E8CD77762C016E2700D13962 /* Primitives.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Primitives.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E8CD72A92C00E59D00D13962 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E8CD72A32C00E59D00D13962 = {
+			isa = PBXGroup;
+			children = (
+				E8CD72AE2C00E59D00D13962 /* StereoScope */,
+				E8CD72AD2C00E59D00D13962 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E8CD72AD2C00E59D00D13962 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E8CD72AC2C00E59D00D13962 /* StereoScope.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E8CD72AE2C00E59D00D13962 /* StereoScope */ = {
+			isa = PBXGroup;
+			children = (
+				E8CD75292C00E6AE00D13962 /* Code */,
+				E8CD72B32C00E59E00D13962 /* Assets.xcassets */,
+				E8CD72B52C00E59E00D13962 /* Preview Content */,
+			);
+			path = StereoScope;
+			sourceTree = "<group>";
+		};
+		E8CD72B52C00E59E00D13962 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				E8CD72B62C00E59E00D13962 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		E8CD73992C00E6AE00D13962 /* [Graphics] */ = {
+			isa = PBXGroup;
+			children = (
+				E8CD738F2C00E6AE00D13962 /* Graphics.swift */,
+				E8CD73912C00E6AE00D13962 /* Math.swift */,
+				E8CD73922C00E6AE00D13962 /* Matrix.swift */,
+			);
+			path = "[Graphics]";
+			sourceTree = "<group>";
+		};
+		E8CD73BD2C00E6AE00D13962 /* [Metal] */ = {
+			isa = PBXGroup;
+			children = (
+				E8CD73B92C00E6AE00D13962 /* MetalEngine.swift */,
+				E8CD73BA2C00E6AE00D13962 /* MetalPipeline.swift */,
+				E8CD73BB2C00E6AE00D13962 /* MetalView.swift */,
+				E8CD73BC2C00E6AE00D13962 /* MetalViewController.swift */,
+			);
+			path = "[Metal]";
+			sourceTree = "<group>";
+		};
+		E8CD73C22C00E6AE00D13962 /* [Shaders] */ = {
+			isa = PBXGroup;
+			children = (
+				E8CD73BE2C00E6AE00D13962 /* Shape.metal */,
+				E8CD73BF2C00E6AE00D13962 /* ShapeNodeIndexed.metal */,
+				E8CD73C02C00E6AE00D13962 /* Sprite.metal */,
+				E8CD73C12C00E6AE00D13962 /* SpriteNodeIndexed.metal */,
+			);
+			path = "[Shaders]";
+			sourceTree = "<group>";
+		};
+		E8CD75112C00E6AE00D13962 /* [Uniforms] */ = {
+			isa = PBXGroup;
+			children = (
+				E8CD750C2C00E6AE00D13962 /* Uniforms.swift */,
+				E8CD750D2C00E6AE00D13962 /* UniformsShape.swift */,
+				E8CD750E2C00E6AE00D13962 /* UniformsShapeNodeIndexed.swift */,
+				E8CD750F2C00E6AE00D13962 /* UniformsSprite.swift */,
+				E8CD75102C00E6AE00D13962 /* UniformsSpriteNodeIndexed.swift */,
+				E8CD77742C016BAC00D13962 /* UniformsPhong.swift */,
+			);
+			path = "[Uniforms]";
+			sourceTree = "<group>";
+		};
+		E8CD75292C00E6AE00D13962 /* Code */ = {
+			isa = PBXGroup;
+			children = (
+				E8CD77642C011B2A00D13962 /* EarthScene.swift */,
+				E8CD775E2C011AB100D13962 /* StereoScopeApp.swift */,
+				E8CD73992C00E6AE00D13962 /* [Graphics] */,
+				E8CD73BD2C00E6AE00D13962 /* [Metal] */,
+				E8CD73C22C00E6AE00D13962 /* [Shaders] */,
+				E8CD75112C00E6AE00D13962 /* [Uniforms] */,
+				E8CD77622C011ADA00D13962 /* EarthSceneView.swift */,
+				E8CD77662C01259500D13962 /* SpriteInstance2D.swift */,
+				E8CD776E2C0131DC00D13962 /* SpriteInstance3D.swift */,
+				E8CD77682C012D3200D13962 /* EarthModelData.swift */,
+				E8CD776C2C01303E00D13962 /* EarthModelDataStrip.swift */,
+				E8CD776A2C012F2C00D13962 /* Earth.swift */,
+				E8CD77702C01349A00D13962 /* IndexedTexturedTriangleBuffer.swift */,
+				E8CD77762C016E2700D13962 /* Primitives.swift */,
+			);
+			path = Code;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E8CD72AB2C00E59D00D13962 /* StereoScope */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E8CD72BA2C00E59E00D13962 /* Build configuration list for PBXNativeTarget "StereoScope" */;
+			buildPhases = (
+				E8CD72A82C00E59D00D13962 /* Sources */,
+				E8CD72A92C00E59D00D13962 /* Frameworks */,
+				E8CD72AA2C00E59D00D13962 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = StereoScope;
+			productName = StereoScope;
+			productReference = E8CD72AC2C00E59D00D13962 /* StereoScope.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E8CD72A42C00E59D00D13962 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
+				TargetAttributes = {
+					E8CD72AB2C00E59D00D13962 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+				};
+			};
+			buildConfigurationList = E8CD72A72C00E59D00D13962 /* Build configuration list for PBXProject "StereoScope" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E8CD72A32C00E59D00D13962;
+			productRefGroup = E8CD72AD2C00E59D00D13962 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E8CD72AB2C00E59D00D13962 /* StereoScope */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E8CD72AA2C00E59D00D13962 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E8CD72B72C00E59E00D13962 /* Preview Assets.xcassets in Resources */,
+				E8CD72B42C00E59E00D13962 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E8CD72A82C00E59D00D13962 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E8CD75E92C00E6AE00D13962 /* Math.swift in Sources */,
+				E8CD76132C00E6AE00D13962 /* SpriteNodeIndexed.metal in Sources */,
+				E8CD77442C00E6AF00D13962 /* UniformsShape.swift in Sources */,
+				E8CD77602C011AB100D13962 /* StereoScopeApp.swift in Sources */,
+				E8CD776F2C0131DC00D13962 /* SpriteInstance3D.swift in Sources */,
+				E8CD776B2C012F2C00D13962 /* Earth.swift in Sources */,
+				E8CD76122C00E6AE00D13962 /* Sprite.metal in Sources */,
+				E8CD77652C011B2A00D13962 /* EarthScene.swift in Sources */,
+				E8CD77752C016BAC00D13962 /* UniformsPhong.swift in Sources */,
+				E8CD77672C01259500D13962 /* SpriteInstance2D.swift in Sources */,
+				E8CD77712C01349A00D13962 /* IndexedTexturedTriangleBuffer.swift in Sources */,
+				E8CD77452C00E6AF00D13962 /* UniformsShapeNodeIndexed.swift in Sources */,
+				E8CD77472C00E6AF00D13962 /* UniformsSpriteNodeIndexed.swift in Sources */,
+				E8CD77692C012D3200D13962 /* EarthModelData.swift in Sources */,
+				E8CD77432C00E6AF00D13962 /* Uniforms.swift in Sources */,
+				E8CD760F2C00E6AE00D13962 /* MetalViewController.swift in Sources */,
+				E8CD76102C00E6AE00D13962 /* Shape.metal in Sources */,
+				E8CD75E72C00E6AE00D13962 /* Graphics.swift in Sources */,
+				E8CD75EA2C00E6AE00D13962 /* Matrix.swift in Sources */,
+				E8CD77462C00E6AF00D13962 /* UniformsSprite.swift in Sources */,
+				E8CD776D2C01303E00D13962 /* EarthModelDataStrip.swift in Sources */,
+				E8CD76112C00E6AE00D13962 /* ShapeNodeIndexed.metal in Sources */,
+				E8CD77632C011ADA00D13962 /* EarthSceneView.swift in Sources */,
+				E8CD760E2C00E6AE00D13962 /* MetalView.swift in Sources */,
+				E8CD760D2C00E6AE00D13962 /* MetalPipeline.swift in Sources */,
+				E8CD760C2C00E6AE00D13962 /* MetalEngine.swift in Sources */,
+				E8CD77772C016E2700D13962 /* Primitives.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		E8CD72B82C00E59E00D13962 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		E8CD72B92C00E59E00D13962 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E8CD72BB2C00E59E00D13962 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"StereoScope/Preview Content\"";
+				DEVELOPMENT_TEAM = 2GG555KD5G;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nick.raptis.stereo.StereoScope;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E8CD72BC2C00E59E00D13962 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"StereoScope/Preview Content\"";
+				DEVELOPMENT_TEAM = 2GG555KD5G;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nick.raptis.stereo.StereoScope;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E8CD72A72C00E59D00D13962 /* Build configuration list for PBXProject "StereoScope" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E8CD72B82C00E59E00D13962 /* Debug */,
+				E8CD72B92C00E59E00D13962 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E8CD72BA2C00E59E00D13962 /* Build configuration list for PBXNativeTarget "StereoScope" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E8CD72BB2C00E59E00D13962 /* Debug */,
+				E8CD72BC2C00E59E00D13962 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E8CD72A42C00E59D00D13962 /* Project object */;
+}
