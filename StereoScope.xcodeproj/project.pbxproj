@@ -17,9 +17,7 @@
 		E8CD760D2C00E6AE00D13962 /* MetalPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD73BA2C00E6AE00D13962 /* MetalPipeline.swift */; };
 		E8CD760E2C00E6AE00D13962 /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD73BB2C00E6AE00D13962 /* MetalView.swift */; };
 		E8CD760F2C00E6AE00D13962 /* MetalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD73BC2C00E6AE00D13962 /* MetalViewController.swift */; };
-		E8CD76102C00E6AE00D13962 /* Shape.metal in Sources */ = {isa = PBXBuildFile; fileRef = E8CD73BE2C00E6AE00D13962 /* Shape.metal */; };
 		E8CD76112C00E6AE00D13962 /* ShapeNodeIndexed.metal in Sources */ = {isa = PBXBuildFile; fileRef = E8CD73BF2C00E6AE00D13962 /* ShapeNodeIndexed.metal */; };
-		E8CD76122C00E6AE00D13962 /* Sprite.metal in Sources */ = {isa = PBXBuildFile; fileRef = E8CD73C02C00E6AE00D13962 /* Sprite.metal */; };
 		E8CD76132C00E6AE00D13962 /* SpriteNodeIndexed.metal in Sources */ = {isa = PBXBuildFile; fileRef = E8CD73C12C00E6AE00D13962 /* SpriteNodeIndexed.metal */; };
 		E8CD77432C00E6AF00D13962 /* Uniforms.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD750C2C00E6AE00D13962 /* Uniforms.swift */; };
 		E8CD77442C00E6AF00D13962 /* UniformsShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD750D2C00E6AE00D13962 /* UniformsShape.swift */; };
@@ -37,6 +35,7 @@
 		E8CD77712C01349A00D13962 /* IndexedTexturedTriangleBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD77702C01349A00D13962 /* IndexedTexturedTriangleBuffer.swift */; };
 		E8CD77772C016E2700D13962 /* Primitives.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD77762C016E2700D13962 /* Primitives.swift */; };
 		E8E53AB82C019D9400A96922 /* IndexedSpriteInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E53AB72C019D9400A96922 /* IndexedSpriteInstance.swift */; };
+		E8E53ABA2C02BD4E00A96922 /* IndexedShapeInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E53AB92C02BD4E00A96922 /* IndexedShapeInstance.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,9 +50,7 @@
 		E8CD73BA2C00E6AE00D13962 /* MetalPipeline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalPipeline.swift; sourceTree = "<group>"; };
 		E8CD73BB2C00E6AE00D13962 /* MetalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
 		E8CD73BC2C00E6AE00D13962 /* MetalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalViewController.swift; sourceTree = "<group>"; };
-		E8CD73BE2C00E6AE00D13962 /* Shape.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shape.metal; sourceTree = "<group>"; };
 		E8CD73BF2C00E6AE00D13962 /* ShapeNodeIndexed.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = ShapeNodeIndexed.metal; sourceTree = "<group>"; };
-		E8CD73C02C00E6AE00D13962 /* Sprite.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Sprite.metal; sourceTree = "<group>"; };
 		E8CD73C12C00E6AE00D13962 /* SpriteNodeIndexed.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = SpriteNodeIndexed.metal; sourceTree = "<group>"; };
 		E8CD750C2C00E6AE00D13962 /* Uniforms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Uniforms.swift; sourceTree = "<group>"; };
 		E8CD750D2C00E6AE00D13962 /* UniformsShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniformsShape.swift; sourceTree = "<group>"; };
@@ -71,6 +68,7 @@
 		E8CD77702C01349A00D13962 /* IndexedTexturedTriangleBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexedTexturedTriangleBuffer.swift; sourceTree = "<group>"; };
 		E8CD77762C016E2700D13962 /* Primitives.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Primitives.swift; sourceTree = "<group>"; };
 		E8E53AB72C019D9400A96922 /* IndexedSpriteInstance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexedSpriteInstance.swift; sourceTree = "<group>"; };
+		E8E53AB92C02BD4E00A96922 /* IndexedShapeInstance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexedShapeInstance.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,9 +140,7 @@
 		E8CD73C22C00E6AE00D13962 /* [Shaders] */ = {
 			isa = PBXGroup;
 			children = (
-				E8CD73BE2C00E6AE00D13962 /* Shape.metal */,
 				E8CD73BF2C00E6AE00D13962 /* ShapeNodeIndexed.metal */,
-				E8CD73C02C00E6AE00D13962 /* Sprite.metal */,
 				E8CD73C12C00E6AE00D13962 /* SpriteNodeIndexed.metal */,
 				E816ACF52C018D3E0096F4FA /* GaussianBlur.metal */,
 			);
@@ -180,6 +176,7 @@
 				E8CD776A2C012F2C00D13962 /* Earth.swift */,
 				E8CD77702C01349A00D13962 /* IndexedTexturedTriangleBuffer.swift */,
 				E8E53AB72C019D9400A96922 /* IndexedSpriteInstance.swift */,
+				E8E53AB92C02BD4E00A96922 /* IndexedShapeInstance.swift */,
 				E8CD77762C016E2700D13962 /* Primitives.swift */,
 			);
 			path = Code;
@@ -261,7 +258,6 @@
 				E8CD77602C011AB100D13962 /* StereoScopeApp.swift in Sources */,
 				E8CD776F2C0131DC00D13962 /* SpriteInstance3D.swift in Sources */,
 				E8CD776B2C012F2C00D13962 /* Earth.swift in Sources */,
-				E8CD76122C00E6AE00D13962 /* Sprite.metal in Sources */,
 				E8CD77652C011B2A00D13962 /* EarthScene.swift in Sources */,
 				E8CD77672C01259500D13962 /* SpriteInstance2D.swift in Sources */,
 				E8CD77712C01349A00D13962 /* IndexedTexturedTriangleBuffer.swift in Sources */,
@@ -269,8 +265,8 @@
 				E8CD77472C00E6AF00D13962 /* UniformsSpriteNodeIndexed.swift in Sources */,
 				E8CD77692C012D3200D13962 /* EarthModelData.swift in Sources */,
 				E8CD77432C00E6AF00D13962 /* Uniforms.swift in Sources */,
+				E8E53ABA2C02BD4E00A96922 /* IndexedShapeInstance.swift in Sources */,
 				E8CD760F2C00E6AE00D13962 /* MetalViewController.swift in Sources */,
-				E8CD76102C00E6AE00D13962 /* Shape.metal in Sources */,
 				E8CD75E72C00E6AE00D13962 /* Graphics.swift in Sources */,
 				E8CD75EA2C00E6AE00D13962 /* Matrix.swift in Sources */,
 				E8CD77462C00E6AF00D13962 /* UniformsSprite.swift in Sources */,

@@ -43,16 +43,9 @@ class MetalEngine {
     //var blurTexture4: MTLTexture!
     
     
-    private var tileSpritePositions: [Float] = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-    private var tileSpriteTextureCoords: [Float] = [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0]
-    private var tileUniformVertex = UniformsSpriteVertex()
-    private var tileUniformFragment = UniformsSpriteFragment()
-    private var tileSpritePositionsBuffer: MTLBuffer!
-    private var tileSpriteTextureCoordsBuffer: MTLBuffer!
-    private var tileUniformVertexBuffer: MTLBuffer!
-    private var tileUniformFragmentBuffer: MTLBuffer!
-    private var tileSpriteWidth: Float = 0.0
-    private var tileSpriteHeight: Float = 0.0
+    private var tileSprite = IndexedSpriteInstance<Sprite2DVertex,
+                                                   UniformsSpriteVertex,
+                                                   UniformsSpriteFragment>(sentinelNode: Sprite2DVertex(x: 0.0, y: 0.0, u: 0.0, v: 0.0))
     
     private var tileStereoscopicSpritePositions: [Float] = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     private var tileStereoscopicSpriteTextureCoords: [Float] = [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0]
@@ -71,7 +64,6 @@ class MetalEngine {
     private var blurStampSprite3D = IndexedSpriteInstance<Sprite3DVertex,
                                                           UniformsSpriteVertex,
                                                           UniformsSpriteFragment>(sentinelNode: Sprite3DVertex(x: 0.0, y: 0.0, z: 0.0, u: 0.0, v: 0.0))
-    
     
     required init(metalLayer: CAMetalLayer,
                   width: Float,
@@ -102,15 +94,12 @@ class MetalEngine {
         buildSamplerStates()
         buildDepthStates()
         
-        tileSpritePositionsBuffer = graphics.buffer(array: tileSpritePositions)
-        tileSpriteTextureCoordsBuffer = graphics.buffer(array: tileSpriteTextureCoords)
-        tileUniformVertexBuffer = graphics.buffer(uniform: tileUniformVertex)
-        tileUniformFragmentBuffer = graphics.buffer(uniform: tileUniformFragment)
-        
         tileStereoscopicSpritePositionsBuffer = graphics.buffer(array: tileStereoscopicSpritePositions)
         tileStereoscopicSpriteTextureCoordsBuffer = graphics.buffer(array: tileStereoscopicSpriteTextureCoords)
         tileStereoscopicUniformVertexBuffer = graphics.buffer(uniform: tileStereoscopicUniformVertex)
         tileStereoscopicUniformFragmentBuffer = graphics.buffer(uniform: tileStereoscopicUniformFragment)
+        
+        tileSprite.load(graphics: graphics, texture: nil)
         
         blurSprite.load(graphics: graphics, texture: nil)
         blurStampSprite3D.load(graphics: graphics, texture: nil)
@@ -143,11 +132,6 @@ class MetalEngine {
                                                   height: drawable.texture.height >> 2)
             blurTexture2 = createStorageTexture(width: drawable.texture.width >> 2,
                                                   height: drawable.texture.height >> 2)
-            //blurTexture3 = createStorageTexture(width: drawable.texture.width >> 2,
-            //                                      height: drawable.texture.height >> 2)
-            //blurTexture4 = createStorageTexture(width: drawable.texture.width >> 2,
-            //                                      height: drawable.texture.height >> 2)
-            
         }
         
         if isStereoscopicEnabled {
@@ -225,7 +209,6 @@ class MetalEngine {
                 
             } else {
                 
-                
                 let renderPassDescriptor3D = MTLRenderPassDescriptor()
                 renderPassDescriptor3D.colorAttachments[0].texture = storageTexture
                 renderPassDescriptor3D.colorAttachments[0].loadAction = .clear
@@ -241,12 +224,7 @@ class MetalEngine {
                     renderEncoder3D.endEncoding()
                 }
             }
-            
-            
-            
         }
-        
-    
         
         let renderPassDescriptor2D = MTLRenderPassDescriptor()
         renderPassDescriptor2D.colorAttachments[0].texture = antialiasingTexture
@@ -279,8 +257,6 @@ class MetalEngine {
         renderPassDescriptorBloom.depthAttachment.loadAction = .clear
         renderPassDescriptorBloom.depthAttachment.clearDepth = 1.0
         renderPassDescriptorBloom.depthAttachment.texture = depthTexture
-        
-        
         
         if let renderEncoderBloom = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorBloom) {
             
@@ -386,39 +362,29 @@ class MetalEngine {
     }
     
     func drawTile(renderEncoder: MTLRenderCommandEncoder) {
-        if (tileSpriteWidth != graphics.width) || (tileSpriteHeight != graphics.height) {
-            tileSpriteWidth = graphics.width
-            tileSpriteHeight = graphics.height
-            
-            tileSpritePositions[0] = 0.0
-            tileSpritePositions[1] = 0.0
-            tileSpritePositions[2] = graphics.width
-            tileSpritePositions[3] = 0.0
-            tileSpritePositions[4] = 0.0
-            tileSpritePositions[5] = graphics.height
-            tileSpritePositions[6] = graphics.width
-            tileSpritePositions[7] = graphics.height
-            graphics.write(buffer: tileSpritePositionsBuffer, array: tileSpritePositions)
-            
-            tileUniformVertex.projectionMatrix.ortho(width: graphics.width,
-                                                     height: graphics.height)
-            graphics.write(buffer: tileUniformVertexBuffer,
-                           uniform: tileUniformVertex)
-        }
         
-        graphics.set(pipelineState: .sprite2DNoBlending, renderEncoder: renderEncoder)
-        graphics.set(samplerState: .linearClamp, renderEncoder: renderEncoder)
         
-        graphics.setVertexPositionsBuffer(tileSpritePositionsBuffer, renderEncoder: renderEncoder)
-        graphics.setVertexTextureCoordsBuffer(tileSpriteTextureCoordsBuffer, renderEncoder: renderEncoder)
-
-        graphics.setVertexUniformsBuffer(tileUniformVertexBuffer, renderEncoder: renderEncoder)
-        graphics.setFragmentUniformsBuffer(tileUniformFragmentBuffer, renderEncoder: renderEncoder)
-        graphics.setFragmentTexture(storageTexture, renderEncoder: renderEncoder)
-        renderEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
+        let width = Float(storageTexture.width)
+        let height =  Float(storageTexture.height)
+        
+        tileSprite.uniformsVertex.projectionMatrix.ortho(width: width,
+                                                         height: height)
+        tileSprite.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
+        tileSprite.setPositionQuad(x1: 0.0, y1: 0.0,
+                                   x2: width, y2: 0.0,
+                                   x3: 0.0, y3: height,
+                                   x4: width, y4: height)
+        tileSprite.setTextureCoordQuad(u1: 0.0, v1: 0.0,
+                                       u2: 1.0, v2: 0.0,
+                                       u3: 0.0, v3: 1.0,
+                                       u4: 1.0, v4: 1.0)
+        
+        tileSprite.texture = storageTexture
+        tileSprite.render(renderEncoder: renderEncoder, pipelineState: .spriteNodeIndexed2DNoBlending)
     }
     
     func drawTileStereoscopic(renderEncoder: MTLRenderCommandEncoder) {
+        /*
         if (tileStereoscopicSpriteWidth != graphics.width) || (tileStereoscopicSpriteHeight != graphics.height) {
             tileStereoscopicSpriteWidth = graphics.width
             tileStereoscopicSpriteHeight = graphics.height
@@ -451,6 +417,7 @@ class MetalEngine {
         graphics.setFragmentTexture(storageTextureStereoscopic, renderEncoder: renderEncoder)
         
         renderEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
+        */
     }
     
     private func buildSamplerStates() {

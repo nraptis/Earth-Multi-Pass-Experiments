@@ -7,19 +7,49 @@
 
 import Foundation
 
-struct Sprite2DVertex: PositionConforming, TextureCoordinateConforming {
+protocol ColorConforming {
+    var r: Float { set get }
+    var g: Float { set get }
+    var b: Float { set get }
+    var a: Float { set get }
+}
+
+protocol PositionConforming2D {
+    var x: Float { set get }
+    var y: Float { set get }
+}
+
+protocol PositionConforming3D: PositionConforming2D {
+    var z: Float { set get }
+}
+
+protocol TextureCoordinateConforming {
+    var u: Float { set get }
+    var v: Float { set get }
+}
+
+struct Shape2DVertex: PositionConforming2D {
+    var x: Float
+    var y: Float
+}
+
+struct Shape2DColoredVertex: PositionConforming2D, ColorConforming {
+    var x: Float
+    var y: Float
+    var r: Float
+    var g: Float
+    var b: Float
+    var a: Float
+}
+
+struct Sprite2DVertex: PositionConforming2D, TextureCoordinateConforming {
     var x: Float
     var y: Float
     var u: Float
     var v: Float
 }
 
-struct Shape2DVertex: PositionConforming {
-    var x: Float
-    var y: Float
-}
-
-struct Sprite3DVertex: PositionConforming, TextureCoordinateConforming {
+struct Sprite3DVertex: PositionConforming3D, TextureCoordinateConforming {
     var x: Float
     var y: Float
     var z: Float
@@ -27,13 +57,23 @@ struct Sprite3DVertex: PositionConforming, TextureCoordinateConforming {
     var v: Float
 }
 
-struct Shape3DVertex: PositionConforming {
+struct Shape3DVertex: PositionConforming3D {
     var x: Float
     var y: Float
     var z: Float
 }
 
-struct Sprite3DLightedVertex: PositionConforming, TextureCoordinateConforming {
+struct Shape3DColoredVertex: PositionConforming3D, ColorConforming {
+    var x: Float
+    var y: Float
+    var z: Float
+    var r: Float
+    var g: Float
+    var b: Float
+    var a: Float
+}
+
+struct Sprite3DLightedVertex: PositionConforming3D, TextureCoordinateConforming {
     var x: Float
     var y: Float
     var z: Float
@@ -44,12 +84,34 @@ struct Sprite3DLightedVertex: PositionConforming, TextureCoordinateConforming {
     var normalZ: Float
 }
 
-struct Sprite3DLightedColoredVertex: PositionConforming, TextureCoordinateConforming {
+struct Shape3DLightedVertex: PositionConforming3D {
+    var x: Float
+    var y: Float
+    var z: Float
+    var normalX: Float
+    var normalY: Float
+    var normalZ: Float
+}
+
+struct Sprite3DLightedColoredVertex: PositionConforming3D, TextureCoordinateConforming {
     var x: Float
     var y: Float
     var z: Float
     var u: Float
     var v: Float
+    var normalX: Float
+    var normalY: Float
+    var normalZ: Float
+    var r: Float
+    var g: Float
+    var b: Float
+    var a: Float
+}
+
+struct Shape3DLightedColoredVertex: PositionConforming3D {
+    var x: Float
+    var y: Float
+    var z: Float
     var normalX: Float
     var normalY: Float
     var normalZ: Float

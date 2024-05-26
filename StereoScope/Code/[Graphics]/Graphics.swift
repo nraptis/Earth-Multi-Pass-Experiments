@@ -46,15 +46,7 @@ class Graphics {
     enum PipelineState {
         case invalid
         
-        case shape2DNoBlending
-        case shape2DAlphaBlending
-        case shape2DAdditiveBlending
-        case shape2DPremultipliedBlending
-        case shape3DNoBlending
-        case shape3DAlphaBlending
-        case shape3DAdditiveBlending
-        case shape3DPremultipliedBlending
-        
+
         case shapeNodeIndexed2DNoBlending
         case shapeNodeIndexed2DAlphaBlending
         case shapeNodeIndexed2DAdditiveBlending
@@ -62,25 +54,21 @@ class Graphics {
         case shapeNodeIndexed3DNoBlending
         case shapeNodeIndexed3DAlphaBlending
         case shapeNodeIndexed3DAdditiveBlending
-        case shapeNodeIndexed3DPremultipliedBlending
+                case shapeNodeIndexed3DPremultipliedBlending
+                case shapeNodeIndexedDiffuse3DNoBlending
+                case shapeNodeIndexedDiffuseColored3DNoBlending
+                case shapeNodeIndexedPhong3DNoBlending
+                case shapeNodeIndexedPhongColored3DNoBlending
         
-        case shapeNodeColoredIndexed2DNoBlending
-        case shapeNodeColoredIndexed2DAlphaBlending
-        case shapeNodeColoredIndexed2DAdditiveBlending
-        case shapeNodeColoredIndexed2DPremultipliedBlending
-        case shapeNodeColoredIndexed3DNoBlending
-        case shapeNodeColoredIndexed3DAlphaBlending
-        case shapeNodeColoredIndexed3DAdditiveBlending
-        case shapeNodeColoredIndexed3DPremultipliedBlending
+                case shapeNodeColoredIndexed2DNoBlending
+                case shapeNodeColoredIndexed2DAlphaBlending
+                case shapeNodeColoredIndexed2DAdditiveBlending
+                case shapeNodeColoredIndexed2DPremultipliedBlending
+                case shapeNodeColoredIndexed3DNoBlending
+                case shapeNodeColoredIndexed3DAlphaBlending
+                case shapeNodeColoredIndexed3DAdditiveBlending
+                case shapeNodeColoredIndexed3DPremultipliedBlending
         
-        case sprite2DNoBlending
-        case sprite2DAlphaBlending
-        case sprite2DAdditiveBlending
-        case sprite2DPremultipliedBlending
-        case sprite3DNoBlending
-        case sprite3DAlphaBlending
-        case sprite3DAdditiveBlending
-        case sprite3DPremultipliedBlending
         
         case spriteNodeIndexed2DNoBlending
         case spriteNodeIndexed2DAlphaBlending
@@ -90,13 +78,10 @@ class Graphics {
         case spriteNodeIndexed3DAlphaBlending
         case spriteNodeIndexed3DAdditiveBlending
         case spriteNodeIndexed3DPremultipliedBlending
-        
         case spriteNodeIndexedDiffuse3DNoBlending
         case spriteNodeIndexedDiffuseColored3DNoBlending
-        
         case spriteNodeIndexedPhong3DNoBlending
         case spriteNodeIndexedPhongColored3DNoBlending
-        
         case spriteNodeWhiteIndexed2DNoBlending
         case spriteNodeWhiteIndexed2DAlphaBlending
         case spriteNodeWhiteIndexed2DAdditiveBlending
@@ -105,19 +90,14 @@ class Graphics {
         case spriteNodeWhiteIndexed3DAlphaBlending
         case spriteNodeWhiteIndexed3DAdditiveBlending
         case spriteNodeWhiteIndexed3DPremultipliedBlending
-        
         case spriteNodeColoredIndexed2DNoBlending
         case spriteNodeColoredIndexed2DAlphaBlending
         case spriteNodeColoredIndexed2DAdditiveBlending
         case spriteNodeColoredIndexed2DPremultipliedBlending
-        
         case spriteNodeColoredIndexed3DNoBlending
         case spriteNodeColoredIndexed3DAlphaBlending
         case spriteNodeColoredIndexed3DAdditiveBlending
         case spriteNodeColoredIndexed3DPremultipliedBlending
-        
-        case spriteNodeStereoscopicLeftColoredIndexed3DNoBlending
-        case spriteNodeStereoscopicRightColoredIndexed3DNoBlending
         
         case spriteNodeColoredWhiteIndexed2DNoBlending
         case spriteNodeColoredWhiteIndexed2DAlphaBlending
@@ -127,6 +107,9 @@ class Graphics {
         case spriteNodeColoredWhiteIndexed3DAlphaBlending
         case spriteNodeColoredWhiteIndexed3DAdditiveBlending
         case spriteNodeColoredWhiteIndexed3DPremultipliedBlending
+        
+        case spriteNodeStereoscopicLeftColoredIndexed3DNoBlending
+        case spriteNodeStereoscopicRightColoredIndexed3DNoBlending
         
         case gaussianBlurHorizontalIndexedNoBlending
         case gaussianBlurVerticalIndexedNoBlending
@@ -199,77 +182,63 @@ class Graphics {
         switch pipelineState {
         case .invalid:
             break
-        case .shape2DNoBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShape2DNoBlending)
-        case .shape2DAlphaBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShape2DAlphaBlending)
-        case .shape2DAdditiveBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShape2DAdditiveBlending)
-        case .shape2DPremultipliedBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShape2DPremultipliedBlending)
             
-        case .shape3DNoBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShape3DNoBlending)
-        case .shape3DAlphaBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShape3DAlphaBlending)
-        case .shape3DAdditiveBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShape3DAdditiveBlending)
-        case .shape3DPremultipliedBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShape3DPremultipliedBlending)
+            
             
         case .shapeNodeIndexed2DNoBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeIndexed2DNoBlending)
-        case .shapeNodeIndexed2DAlphaBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeIndexed2DAlphaBlending)
-        case .shapeNodeIndexed2DAdditiveBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeIndexed2DAdditiveBlending)
-        case .shapeNodeIndexed2DPremultipliedBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeIndexed2DPremultipliedBlending)
+                    renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeIndexed2DNoBlending)
+                case .shapeNodeIndexed2DAlphaBlending:
+                    renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeIndexed2DAlphaBlending)
+                case .shapeNodeIndexed2DAdditiveBlending:
+                    renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeIndexed2DAdditiveBlending)
+                case .shapeNodeIndexed2DPremultipliedBlending:
+                    renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeIndexed2DPremultipliedBlending)
+                case .shapeNodeIndexed3DNoBlending:
+                    renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeIndexed3DNoBlending)
+                case .shapeNodeIndexed3DAlphaBlending:
+                    renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeIndexed3DAlphaBlending)
+                case .shapeNodeIndexed3DAdditiveBlending:
+                    renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeIndexed3DAdditiveBlending)
+                case .shapeNodeIndexed3DPremultipliedBlending:
+                    renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeIndexed3DPremultipliedBlending)
+                    
+
+                    
+                case .shapeNodeColoredIndexed2DNoBlending:
+                    renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeColoredIndexed2DNoBlending)
+                case .shapeNodeColoredIndexed2DAlphaBlending:
+                    renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeColoredIndexed2DAlphaBlending)
+                case .shapeNodeColoredIndexed2DAdditiveBlending:
+                    renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeColoredIndexed2DAdditiveBlending)
+                case .shapeNodeColoredIndexed2DPremultipliedBlending:
+                    renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeColoredIndexed2DPremultipliedBlending)
+               
+                case .shapeNodeIndexedDiffuse3DNoBlending:
+                    renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeIndexedDiffuse3DNoBlending)
+                    
+                case .shapeNodeIndexedDiffuseColored3DNoBlending:
+                    renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeIndexedDiffuseColored3DNoBlending)
+                    
+                case .shapeNodeIndexedPhong3DNoBlending:
+                    renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeIndexedPhong3DNoBlending)
+                    
+                case .shapeNodeIndexedPhongColored3DNoBlending:
+                    renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeIndexedPhongColored3DNoBlending)
+                
+                    
+               
             
-        case .shapeNodeIndexed3DNoBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeIndexed3DNoBlending)
-        case .shapeNodeIndexed3DAlphaBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeIndexed3DAlphaBlending)
-        case .shapeNodeIndexed3DAdditiveBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeIndexed3DAdditiveBlending)
-        case .shapeNodeIndexed3DPremultipliedBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeIndexed3DPremultipliedBlending)
-            
-        case .shapeNodeColoredIndexed2DNoBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeColoredIndexed2DNoBlending)
-        case .shapeNodeColoredIndexed2DAlphaBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeColoredIndexed2DAlphaBlending)
-        case .shapeNodeColoredIndexed2DAdditiveBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeColoredIndexed2DAdditiveBlending)
-        case .shapeNodeColoredIndexed2DPremultipliedBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeColoredIndexed2DPremultipliedBlending)
-            
-        case .shapeNodeColoredIndexed3DNoBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeColoredIndexed3DNoBlending)
-        case .shapeNodeColoredIndexed3DAlphaBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeColoredIndexed3DAlphaBlending)
-        case .shapeNodeColoredIndexed3DAdditiveBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeColoredIndexed3DAdditiveBlending)
-        case .shapeNodeColoredIndexed3DPremultipliedBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeColoredIndexed3DPremultipliedBlending)
-            
-        case .sprite2DNoBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNoBlending)
-        case .sprite2DAlphaBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteAlphaBlending)
-        case .sprite2DAdditiveBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteAdditiveBlending)
-        case .sprite2DPremultipliedBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpritePremultipliedBlending)
-            
-        case .sprite3DNoBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSprite3DNoBlending)
-        case .sprite3DAlphaBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSprite3DAlphaBlending)
-        case .sprite3DAdditiveBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSprite3DAdditiveBlending)
-        case .sprite3DPremultipliedBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSprite3DPremultipliedBlending)
+                    
+                case .shapeNodeColoredIndexed3DNoBlending:
+                    renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeColoredIndexed3DNoBlending)
+                case .shapeNodeColoredIndexed3DAlphaBlending:
+                    renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeColoredIndexed3DAlphaBlending)
+                case .shapeNodeColoredIndexed3DAdditiveBlending:
+                    renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeColoredIndexed3DAdditiveBlending)
+                case .shapeNodeColoredIndexed3DPremultipliedBlending:
+                    renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeColoredIndexed3DPremultipliedBlending)
+                    
+                  
             
             
         case .spriteNodeIndexed2DNoBlending:
@@ -407,478 +376,36 @@ class Graphics {
         default:
             break
         }
-        
-        switch pipelineState {
-        case .sprite2DNoBlending,
-                .sprite2DAlphaBlending,
-                .sprite2DAdditiveBlending,
-                .sprite2DPremultipliedBlending,
-                .sprite3DNoBlending,
-                .sprite3DAlphaBlending,
-                .sprite3DAdditiveBlending,
-                .sprite3DPremultipliedBlending:
-            renderEncoder.setFragmentSamplerState(metalSamplerState, index: MetalPipeline.spriteFragmentIndexSampler)
-        case .spriteNodeIndexed2DNoBlending,
-                .spriteNodeIndexed2DAlphaBlending,
-                .spriteNodeIndexed2DAdditiveBlending,
-                .spriteNodeIndexed2DPremultipliedBlending,
-            
-                .spriteNodeWhiteIndexed2DNoBlending,
-                .spriteNodeWhiteIndexed2DAlphaBlending,
-                .spriteNodeWhiteIndexed2DAdditiveBlending,
-                .spriteNodeWhiteIndexed2DPremultipliedBlending,
-            
-                .spriteNodeColoredIndexed2DNoBlending,
-                .spriteNodeColoredIndexed2DAlphaBlending,
-                .spriteNodeColoredIndexed2DAdditiveBlending,
-                .spriteNodeColoredIndexed2DPremultipliedBlending,
-                .spriteNodeColoredWhiteIndexed2DNoBlending,
-                .spriteNodeColoredWhiteIndexed2DAlphaBlending,
-                .spriteNodeColoredWhiteIndexed2DAdditiveBlending,
-                .spriteNodeColoredWhiteIndexed2DPremultipliedBlending,
-            
-                .spriteNodeIndexed3DNoBlending,
-                .spriteNodeIndexed3DAlphaBlending,
-                .spriteNodeIndexed3DAdditiveBlending,
-                .spriteNodeIndexed3DPremultipliedBlending,
-            
-                .spriteNodeIndexedDiffuse3DNoBlending,
-                .spriteNodeIndexedDiffuseColored3DNoBlending,
-            
-                .spriteNodeIndexedPhong3DNoBlending,
-                .spriteNodeIndexedPhongColored3DNoBlending,
-            
-                .spriteNodeWhiteIndexed3DNoBlending,
-                .spriteNodeWhiteIndexed3DAlphaBlending,
-                .spriteNodeWhiteIndexed3DAdditiveBlending,
-                .spriteNodeWhiteIndexed3DPremultipliedBlending,
-            
-                .spriteNodeColoredIndexed3DNoBlending,
-                .spriteNodeColoredIndexed3DAlphaBlending,
-                .spriteNodeColoredIndexed3DAdditiveBlending,
-                .spriteNodeColoredIndexed3DPremultipliedBlending,
-            
-                .spriteNodeStereoscopicLeftColoredIndexed3DNoBlending,
-            
-                .spriteNodeStereoscopicRightColoredIndexed3DNoBlending,
-            
-                .spriteNodeColoredWhiteIndexed3DNoBlending,
-                .spriteNodeColoredWhiteIndexed3DAlphaBlending,
-                .spriteNodeColoredWhiteIndexed3DAdditiveBlending,
-                .spriteNodeColoredWhiteIndexed3DPremultipliedBlending,
-            
-                .gaussianBlurHorizontalIndexedNoBlending,
-                .gaussianBlurVerticalIndexedNoBlending:
-            renderEncoder.setFragmentSamplerState(metalSamplerState, index: MetalPipeline.spriteNodeIndexedFragmentIndexSampler)
-        default:
-            break
-        }
+        renderEncoder.setFragmentSamplerState(metalSamplerState, index: MetalPipeline.slotFragmentSampler)
     }
     
     func setVertexUniformsBuffer(_ uniformsBuffer: MTLBuffer?, renderEncoder: MTLRenderCommandEncoder) {
         if let uniformsBuffer = uniformsBuffer {
-            switch pipelineState {
-            case .shape2DNoBlending,
-                    .shape2DAlphaBlending,
-                    .shape2DAdditiveBlending,
-                    .shape2DPremultipliedBlending,
-                    .shape3DNoBlending,
-                    .shape3DAlphaBlending,
-                    .shape3DAdditiveBlending,
-                    .shape3DPremultipliedBlending:
-                renderEncoder.setVertexBuffer(uniformsBuffer, offset: 0, index: MetalPipeline.shapeVertexIndexUniforms)
-                
-            case .shapeNodeIndexed2DNoBlending,
-                    .shapeNodeIndexed2DAlphaBlending,
-                    .shapeNodeIndexed2DAdditiveBlending,
-                    .shapeNodeIndexed2DPremultipliedBlending,
-                    .shapeNodeColoredIndexed2DNoBlending,
-                    .shapeNodeColoredIndexed2DAlphaBlending,
-                    .shapeNodeColoredIndexed2DAdditiveBlending,
-                    .shapeNodeColoredIndexed2DPremultipliedBlending,
-                    .shapeNodeIndexed3DNoBlending,
-                    .shapeNodeIndexed3DAlphaBlending,
-                    .shapeNodeIndexed3DAdditiveBlending,
-                    .shapeNodeIndexed3DPremultipliedBlending,
-                    .shapeNodeColoredIndexed3DNoBlending,
-                    .shapeNodeColoredIndexed3DAlphaBlending,
-                    .shapeNodeColoredIndexed3DAdditiveBlending,
-                    .shapeNodeColoredIndexed3DPremultipliedBlending:
-                
-                renderEncoder.setVertexBuffer(uniformsBuffer, offset: 0, index: MetalPipeline.shapeNodeIndexedVertexIndexUniforms)
-                
-            case .sprite2DNoBlending,
-                    .sprite2DAlphaBlending,
-                    .sprite2DAdditiveBlending,
-                    .sprite2DPremultipliedBlending,
-                    .sprite3DNoBlending,
-                    .sprite3DAlphaBlending,
-                    .sprite3DAdditiveBlending,
-                    .sprite3DPremultipliedBlending:
-                renderEncoder.setVertexBuffer(uniformsBuffer, offset: 0, index: MetalPipeline.spriteVertexIndexUniforms)
-                
-            case .spriteNodeIndexed2DNoBlending,
-                    .spriteNodeIndexed2DAlphaBlending,
-                    .spriteNodeIndexed2DAdditiveBlending,
-                    .spriteNodeIndexed2DPremultipliedBlending,
-                
-                    .spriteNodeWhiteIndexed2DNoBlending,
-                    .spriteNodeWhiteIndexed2DAlphaBlending,
-                    .spriteNodeWhiteIndexed2DAdditiveBlending,
-                    .spriteNodeWhiteIndexed2DPremultipliedBlending,
-                
-                
-                    .spriteNodeColoredIndexed2DNoBlending,
-                    .spriteNodeColoredIndexed2DAlphaBlending,
-                    .spriteNodeColoredIndexed2DAdditiveBlending,
-                    .spriteNodeColoredIndexed2DPremultipliedBlending,
-                
-                    .spriteNodeColoredWhiteIndexed2DNoBlending,
-                    .spriteNodeColoredWhiteIndexed2DAlphaBlending,
-                    .spriteNodeColoredWhiteIndexed2DAdditiveBlending,
-                    .spriteNodeColoredWhiteIndexed2DPremultipliedBlending,
-                
-                
-                    .spriteNodeIndexed3DNoBlending,
-                    .spriteNodeIndexed3DAlphaBlending,
-                    .spriteNodeIndexed3DAdditiveBlending,
-                    .spriteNodeIndexed3DPremultipliedBlending,
-                
-                    .spriteNodeIndexedDiffuse3DNoBlending,
-                    .spriteNodeIndexedDiffuseColored3DNoBlending,
-                
-                    .spriteNodeIndexedPhong3DNoBlending,
-                    .spriteNodeIndexedPhongColored3DNoBlending,
-                
-                    .spriteNodeWhiteIndexed3DNoBlending,
-                    .spriteNodeWhiteIndexed3DAlphaBlending,
-                    .spriteNodeWhiteIndexed3DAdditiveBlending,
-                    .spriteNodeWhiteIndexed3DPremultipliedBlending,
-                
-                    .spriteNodeColoredIndexed3DNoBlending,
-                    .spriteNodeColoredIndexed3DAlphaBlending,
-                    .spriteNodeColoredIndexed3DAdditiveBlending,
-                    .spriteNodeColoredIndexed3DPremultipliedBlending,
-                
-                    .spriteNodeStereoscopicLeftColoredIndexed3DNoBlending,
-                
-                    .spriteNodeStereoscopicRightColoredIndexed3DNoBlending,
-                
-                    .spriteNodeColoredWhiteIndexed3DNoBlending,
-                    .spriteNodeColoredWhiteIndexed3DAlphaBlending,
-                    .spriteNodeColoredWhiteIndexed3DAdditiveBlending,
-                    .spriteNodeColoredWhiteIndexed3DPremultipliedBlending,
-                
-                    .gaussianBlurHorizontalIndexedNoBlending,
-                    .gaussianBlurVerticalIndexedNoBlending:
-                
-                renderEncoder.setVertexBuffer(uniformsBuffer, offset: 0, index: MetalPipeline.spriteNodeIndexedVertexIndexUniforms)
-                
-            default:
-                break
-            }
+            renderEncoder.setVertexBuffer(uniformsBuffer, offset: 0, index: MetalPipeline.slotVertexUniforms)
         }
     }
     
     func setFragmentUniformsBuffer(_ uniformsBuffer: MTLBuffer?, renderEncoder: MTLRenderCommandEncoder) {
         if let uniformsBuffer = uniformsBuffer {
-            switch pipelineState {
-            case .shape2DNoBlending,
-                    .shape2DAlphaBlending,
-                    .shape2DAdditiveBlending,
-                    .shape2DPremultipliedBlending,
-                    .shape3DNoBlending,
-                    .shape3DAlphaBlending,
-                    .shape3DAdditiveBlending,
-                    .shape3DPremultipliedBlending:
-                renderEncoder.setFragmentBuffer(uniformsBuffer, offset: 0, index: MetalPipeline.shapeFragmentIndexUniforms)
-                
-            case .shapeNodeIndexed2DNoBlending,
-                    .shapeNodeIndexed2DAlphaBlending,
-                    .shapeNodeIndexed2DAdditiveBlending,
-                    .shapeNodeIndexed2DPremultipliedBlending,
-                    .shapeNodeColoredIndexed2DNoBlending,
-                    .shapeNodeColoredIndexed2DAlphaBlending,
-                    .shapeNodeColoredIndexed2DAdditiveBlending,
-                    .shapeNodeColoredIndexed2DPremultipliedBlending,
-                    .shapeNodeIndexed3DNoBlending,
-                    .shapeNodeIndexed3DAlphaBlending,
-                    .shapeNodeIndexed3DAdditiveBlending,
-                    .shapeNodeIndexed3DPremultipliedBlending,
-                    .shapeNodeColoredIndexed3DNoBlending,
-                    .shapeNodeColoredIndexed3DAlphaBlending,
-                    .shapeNodeColoredIndexed3DAdditiveBlending,
-                    .shapeNodeColoredIndexed3DPremultipliedBlending:
-                renderEncoder.setFragmentBuffer(uniformsBuffer, offset: 0, index: MetalPipeline.shapeNodeIndexedFragmentIndexUniforms)
-                
-            case .sprite2DNoBlending,
-                    .sprite2DAlphaBlending,
-                    .sprite2DAdditiveBlending,
-                    .sprite2DPremultipliedBlending,
-                    .sprite3DNoBlending,
-                    .sprite3DAlphaBlending,
-                    .sprite3DAdditiveBlending,
-                    .sprite3DPremultipliedBlending:
-                renderEncoder.setFragmentBuffer(uniformsBuffer, offset: 0, index: MetalPipeline.spriteFragmentIndexUniforms)
-                
-            case .spriteNodeIndexed2DNoBlending,
-                    .spriteNodeIndexed2DAlphaBlending,
-                    .spriteNodeIndexed2DAdditiveBlending,
-                    .spriteNodeIndexed2DPremultipliedBlending,
-                
-                    .spriteNodeWhiteIndexed2DNoBlending,
-                    .spriteNodeWhiteIndexed2DAlphaBlending,
-                    .spriteNodeWhiteIndexed2DAdditiveBlending,
-                    .spriteNodeWhiteIndexed2DPremultipliedBlending,
-                
-                    .spriteNodeColoredIndexed2DNoBlending,
-                    .spriteNodeColoredIndexed2DAlphaBlending,
-                    .spriteNodeColoredIndexed2DAdditiveBlending,
-                    .spriteNodeColoredIndexed2DPremultipliedBlending,
-                
-                    .spriteNodeColoredWhiteIndexed2DNoBlending,
-                    .spriteNodeColoredWhiteIndexed2DAlphaBlending,
-                    .spriteNodeColoredWhiteIndexed2DAdditiveBlending,
-                    .spriteNodeColoredWhiteIndexed2DPremultipliedBlending,
-                
-                    .spriteNodeIndexed3DNoBlending,
-                    .spriteNodeIndexed3DAlphaBlending,
-                    .spriteNodeIndexed3DAdditiveBlending,
-                    .spriteNodeIndexed3DPremultipliedBlending,
-                
-                    .spriteNodeIndexedDiffuse3DNoBlending,
-                    .spriteNodeIndexedDiffuseColored3DNoBlending,
-                
-                    .spriteNodeIndexedPhong3DNoBlending,
-                    .spriteNodeIndexedPhongColored3DNoBlending,
-                
-                    .spriteNodeWhiteIndexed3DNoBlending,
-                    .spriteNodeWhiteIndexed3DAlphaBlending,
-                    .spriteNodeWhiteIndexed3DAdditiveBlending,
-                    .spriteNodeWhiteIndexed3DPremultipliedBlending,
-                
-                    .spriteNodeColoredIndexed3DNoBlending,
-                    .spriteNodeColoredIndexed3DAlphaBlending,
-                    .spriteNodeColoredIndexed3DAdditiveBlending,
-                    .spriteNodeColoredIndexed3DPremultipliedBlending,
-                
-                    .spriteNodeStereoscopicLeftColoredIndexed3DNoBlending,
-                    .spriteNodeStereoscopicRightColoredIndexed3DNoBlending,
-                
-                    .spriteNodeColoredWhiteIndexed3DNoBlending,
-                    .spriteNodeColoredWhiteIndexed3DAlphaBlending,
-                    .spriteNodeColoredWhiteIndexed3DAdditiveBlending,
-                    .spriteNodeColoredWhiteIndexed3DPremultipliedBlending,
-                
-                    .gaussianBlurHorizontalIndexedNoBlending,
-                    .gaussianBlurVerticalIndexedNoBlending:
-                
-                renderEncoder.setFragmentBuffer(uniformsBuffer, offset: 0, index: MetalPipeline.spriteNodeIndexedFragmentIndexUniforms)
-                
-            default:
-                break
-            }
+            renderEncoder.setFragmentBuffer(uniformsBuffer, offset: 0, index: MetalPipeline.slotFragmentUniforms)
         }
     }
     
     func setVertexDataBuffer(_ dataBuffer: MTLBuffer?, renderEncoder: MTLRenderCommandEncoder) {
         if let dataBuffer = dataBuffer {
-            switch pipelineState {
-            case .shapeNodeIndexed2DNoBlending,
-                    .shapeNodeIndexed2DAlphaBlending,
-                    .shapeNodeIndexed2DAdditiveBlending,
-                    .shapeNodeIndexed2DPremultipliedBlending,
-                    .shapeNodeColoredIndexed2DNoBlending,
-                    .shapeNodeColoredIndexed2DAlphaBlending,
-                    .shapeNodeColoredIndexed2DAdditiveBlending,
-                    .shapeNodeColoredIndexed2DPremultipliedBlending,
-                    .shapeNodeIndexed3DNoBlending,
-                    .shapeNodeIndexed3DAlphaBlending,
-                    .shapeNodeIndexed3DAdditiveBlending,
-                    .shapeNodeIndexed3DPremultipliedBlending,
-                    .shapeNodeColoredIndexed3DNoBlending,
-                    .shapeNodeColoredIndexed3DAlphaBlending,
-                    .shapeNodeColoredIndexed3DAdditiveBlending,
-                    .shapeNodeColoredIndexed3DPremultipliedBlending:
-                renderEncoder.setVertexBuffer(dataBuffer, offset: 0, index: MetalPipeline.shapeNodeIndexedVertexIndexData)
-                
-            case .spriteNodeIndexed2DNoBlending,
-                    .spriteNodeIndexed2DAlphaBlending,
-                    .spriteNodeIndexed2DAdditiveBlending,
-                    .spriteNodeIndexed2DPremultipliedBlending,
-                
-                    .spriteNodeWhiteIndexed2DNoBlending,
-                    .spriteNodeWhiteIndexed2DAlphaBlending,
-                    .spriteNodeWhiteIndexed2DAdditiveBlending,
-                    .spriteNodeWhiteIndexed2DPremultipliedBlending,
-                
-                
-                    .spriteNodeColoredIndexed2DNoBlending,
-                    .spriteNodeColoredIndexed2DAlphaBlending,
-                    .spriteNodeColoredIndexed2DAdditiveBlending,
-                    .spriteNodeColoredIndexed2DPremultipliedBlending,
-                
-                    .spriteNodeColoredWhiteIndexed2DNoBlending,
-                    .spriteNodeColoredWhiteIndexed2DAlphaBlending,
-                    .spriteNodeColoredWhiteIndexed2DAdditiveBlending,
-                    .spriteNodeColoredWhiteIndexed2DPremultipliedBlending,
-                
-                
-                    .spriteNodeIndexed3DNoBlending,
-                    .spriteNodeIndexed3DAlphaBlending,
-                    .spriteNodeIndexed3DAdditiveBlending,
-                    .spriteNodeIndexed3DPremultipliedBlending,
-                
-                    .spriteNodeIndexedDiffuse3DNoBlending,
-                    .spriteNodeIndexedDiffuseColored3DNoBlending,
-                
-                    .spriteNodeIndexedPhong3DNoBlending,
-                    .spriteNodeIndexedPhongColored3DNoBlending,
-                
-                    .spriteNodeWhiteIndexed3DNoBlending,
-                    .spriteNodeWhiteIndexed3DAlphaBlending,
-                    .spriteNodeWhiteIndexed3DAdditiveBlending,
-                    .spriteNodeWhiteIndexed3DPremultipliedBlending,
-                
-                    .spriteNodeColoredIndexed3DNoBlending,
-                    .spriteNodeColoredIndexed3DAlphaBlending,
-                    .spriteNodeColoredIndexed3DAdditiveBlending,
-                    .spriteNodeColoredIndexed3DPremultipliedBlending,
-                
-                    .spriteNodeStereoscopicLeftColoredIndexed3DNoBlending,
-                
-                    .spriteNodeStereoscopicRightColoredIndexed3DNoBlending,
-                
-                    .spriteNodeColoredWhiteIndexed3DNoBlending,
-                    .spriteNodeColoredWhiteIndexed3DAlphaBlending,
-                    .spriteNodeColoredWhiteIndexed3DAdditiveBlending,
-                    .spriteNodeColoredWhiteIndexed3DPremultipliedBlending,
-                
-                    .gaussianBlurHorizontalIndexedNoBlending,
-                    .gaussianBlurVerticalIndexedNoBlending:
-                
-                renderEncoder.setVertexBuffer(dataBuffer, offset: 0, index: MetalPipeline.spriteNodeIndexedVertexIndexData)
-                
-            default:
-                break
-            }
-        }
-    }
-    
-    func setVertexPositionsBuffer(_ positionsBuffer: MTLBuffer?, renderEncoder: MTLRenderCommandEncoder) {
-        if let positionsBuffer = positionsBuffer {
-            switch pipelineState {
-            case .shape2DNoBlending,
-                    .shape2DAlphaBlending,
-                    .shape2DAdditiveBlending,
-                    .shape2DPremultipliedBlending,
-                    .shape3DNoBlending,
-                    .shape3DAlphaBlending,
-                    .shape3DAdditiveBlending,
-                    .shape3DPremultipliedBlending:
-                renderEncoder.setVertexBuffer(positionsBuffer, offset: 0, index: MetalPipeline.shapeVertexIndexPosition)
-            case .sprite2DNoBlending,
-                    .sprite2DAlphaBlending,
-                    .sprite2DAdditiveBlending,
-                    .sprite2DPremultipliedBlending,
-                    .sprite3DNoBlending,
-                    .sprite3DAlphaBlending,
-                    .sprite3DAdditiveBlending,
-                    .sprite3DPremultipliedBlending:
-                renderEncoder.setVertexBuffer(positionsBuffer, offset: 0, index: MetalPipeline.spriteVertexIndexPosition)
-            default:
-                break
-            }
-        }
-    }
-    
-    func setVertexTextureCoordsBuffer(_ textureCoordsBuffer: MTLBuffer?, renderEncoder: MTLRenderCommandEncoder) {
-        if let textureCoordsBuffer = textureCoordsBuffer {
-            switch pipelineState {
-            case .sprite2DNoBlending,
-                    .sprite2DAlphaBlending,
-                    .sprite2DAdditiveBlending,
-                    .sprite2DPremultipliedBlending,
-                    .sprite3DNoBlending,
-                    .sprite3DAlphaBlending,
-                    .sprite3DAdditiveBlending,
-                    .sprite3DPremultipliedBlending:
-                renderEncoder.setVertexBuffer(textureCoordsBuffer, offset: 0, index: MetalPipeline.spriteVertexIndexTextureCoord)
-            default:
-                break
-            }
+            renderEncoder.setVertexBuffer(dataBuffer, offset: 0, index: MetalPipeline.slotVertexData)
         }
     }
     
     func setFragmentTexture(_ texture: MTLTexture?, renderEncoder: MTLRenderCommandEncoder) {
         if let texture = texture {
-            switch pipelineState {
-            case .sprite2DNoBlending,
-                    .sprite2DAlphaBlending,
-                    .sprite2DAdditiveBlending,
-                    .sprite2DPremultipliedBlending,
-                    .sprite3DNoBlending,
-                    .sprite3DAlphaBlending,
-                    .sprite3DAdditiveBlending,
-                    .sprite3DPremultipliedBlending:
-                renderEncoder.setFragmentTexture(texture, index: MetalPipeline.spriteFragmentIndexTexture)
-            case .spriteNodeIndexed2DNoBlending,
-                    .spriteNodeIndexed2DAlphaBlending,
-                    .spriteNodeIndexed2DAdditiveBlending,
-                    .spriteNodeIndexed2DPremultipliedBlending,
-                
-                    .spriteNodeWhiteIndexed2DNoBlending,
-                    .spriteNodeWhiteIndexed2DAlphaBlending,
-                    .spriteNodeWhiteIndexed2DAdditiveBlending,
-                    .spriteNodeWhiteIndexed2DPremultipliedBlending,
-                
-                
-                    .spriteNodeColoredIndexed2DNoBlending,
-                    .spriteNodeColoredIndexed2DAlphaBlending,
-                    .spriteNodeColoredIndexed2DAdditiveBlending,
-                    .spriteNodeColoredIndexed2DPremultipliedBlending,
-                
-                    .spriteNodeColoredWhiteIndexed2DNoBlending,
-                    .spriteNodeColoredWhiteIndexed2DAlphaBlending,
-                    .spriteNodeColoredWhiteIndexed2DAdditiveBlending,
-                    .spriteNodeColoredWhiteIndexed2DPremultipliedBlending,
-                
-                    .spriteNodeIndexed3DNoBlending,
-                    .spriteNodeIndexed3DAlphaBlending,
-                    .spriteNodeIndexed3DAdditiveBlending,
-                    .spriteNodeIndexed3DPremultipliedBlending,
-                
-                    .spriteNodeIndexedDiffuse3DNoBlending,
-                    .spriteNodeIndexedDiffuseColored3DNoBlending,
-                
-                    .spriteNodeIndexedPhong3DNoBlending,
-                    .spriteNodeIndexedPhongColored3DNoBlending,
-                
-                    .spriteNodeWhiteIndexed3DNoBlending,
-                    .spriteNodeWhiteIndexed3DAlphaBlending,
-                    .spriteNodeWhiteIndexed3DAdditiveBlending,
-                    .spriteNodeWhiteIndexed3DPremultipliedBlending,
-                
-                    .spriteNodeColoredIndexed3DNoBlending,
-                    .spriteNodeColoredIndexed3DAlphaBlending,
-                    .spriteNodeColoredIndexed3DAdditiveBlending,
-                    .spriteNodeColoredIndexed3DPremultipliedBlending,
-                
-                    .spriteNodeStereoscopicLeftColoredIndexed3DNoBlending,
-                
-                    .spriteNodeStereoscopicRightColoredIndexed3DNoBlending,
-                
-                    .spriteNodeColoredWhiteIndexed3DNoBlending,
-                    .spriteNodeColoredWhiteIndexed3DAlphaBlending,
-                    .spriteNodeColoredWhiteIndexed3DAdditiveBlending,
-                    .spriteNodeColoredWhiteIndexed3DPremultipliedBlending,
-                
-                    .gaussianBlurHorizontalIndexedNoBlending,
-                    .gaussianBlurVerticalIndexedNoBlending:
-                renderEncoder.setFragmentTexture(texture, index: MetalPipeline.spriteNodeIndexedFragmentIndexTexture)
-            default:
-                break
-            }
+            renderEncoder.setFragmentTexture(texture, index: MetalPipeline.slotFragmentTexture)
+        }
+    }
+    
+    func setFragmentLightTexture(_ texture: MTLTexture?, renderEncoder: MTLRenderCommandEncoder) {
+        if let texture = texture {
+            renderEncoder.setFragmentTexture(texture, index: MetalPipeline.slotFragmentLightTexture)
         }
     }
     

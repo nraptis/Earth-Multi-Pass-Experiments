@@ -10,31 +10,33 @@
 
 using namespace metal;
 
-#define SpriteNodeIndexedVertexIndexData 0
-#define SpriteNodeIndexedVertexIndexUniforms 1
+#define SlotVertexData 0
+#define SlotVertexUniforms 1
 
-#define SpriteNodeIndexedFragmentIndexTexture 0
-#define SpriteNodeIndexedFragmentIndexSampler 1
-#define SpriteNodeIndexedFragmentIndexUniforms 2
-#define SpriteNodeIndexedFragmentIndexNightTexture 3
+#define SlotFragmentTexture 0
+#define SlotFragmentSampler 1
+#define SlotFragmentUniforms 2
+#define SlotFragmentLightTexture 3
+#define SlotFragmentBumpTexture 4
+#define SlotFragmentDisplacementTexture 5
 
 typedef struct {
     matrix_float4x4 projectionMatrix;
     matrix_float4x4 modelViewMatrix;
-} SpriteNodeIndexedVertexUniforms;
+} VertexUniforms;
 
 typedef struct {
     matrix_float4x4 projectionMatrix;
     matrix_float4x4 modelViewMatrix;
     matrix_float4x4 normalMatrix;
-} SpriteNodeIndexedLightsVertexUniforms;
+} VertexUniformsDiffuse;
 
 typedef struct {
     float r;
     float g;
     float b;
     float a;
-} SpriteNodeIndexedFragmentUniforms;
+} FragmentUniforms;
 
 typedef struct {
     float r;
@@ -53,7 +55,7 @@ typedef struct {
     float lightDirY;
     float lightDirZ;
     
-} SpriteNodeIndexedDiffuseFragmentUniforms;
+} FragmentUniformsDiffuse;
 
 typedef struct {
     float r;
@@ -72,42 +74,41 @@ typedef struct {
     float lightDirX;
     float lightDirY;
     float lightDirZ;
-    
+
     float lightShininess;
     
-} SpriteNodeIndexedPhongFragmentUniforms;
-
+} FragmentUniformsPhong;
 
 typedef struct {
     float4 position [[position]];
     float2 textureCoord;
-} SpriteNodeIndexedColorInOut;
+} InOut;
 
 typedef struct {
     float4 position [[position]];
     float2 textureCoord;
     float4 color;
-} SpriteNodeColoredIndexedColorInOut;
+} InOutColors;
 
 typedef struct {
     float4 position [[position]];
     float2 textureCoord;
     float3 normal;
-} SpriteNodeDiffuseIndexedColorInOut;
+} InOutDiffuse;
 
 typedef struct {
     float4 position [[position]];
     float2 textureCoord;
     float3 normal;
     float3 eye;
-} SpriteNodePhongIndexedColorInOut;
+} InOutPhong;
 
 typedef struct {
     float4 position [[position]];
     float2 textureCoord;
     float3 normal;
     float4 color;
-} SpriteNodeDiffuseColoredIndexedColorInOut;
+} InOutDiffuseColors;
 
 typedef struct {
     float4 position [[position]];
@@ -115,42 +116,42 @@ typedef struct {
     float3 normal;
     float3 eye;
     float4 color;
-} SpriteNodePhongColoredIndexedColorInOut;
+} InOutPhongColors;
 
 typedef struct {
     packed_float2 position [[]];
     packed_float2 textureCoord [[]];
-} SpriteNodeIndexedVertex2D;
-
-typedef struct {
-    packed_float3 position [[]];
-    packed_float2 textureCoord [[]];
-} SpriteNodeIndexedVertex3D;
-
-typedef struct {
-    packed_float3 position [[]];
-    packed_float2 textureCoord [[]];
-    packed_float3 normal [[]];
-} SpriteNodeLightsIndexedVertex3D;
-
-typedef struct {
-    packed_float3 position [[]];
-    packed_float2 textureCoord [[]];
-    packed_float3 normal [[]];
-    packed_float4 color [[]];
-} SpriteNodeLightsColoredIndexedVertex3D;
+} Vertex2D;
 
 typedef struct {
     packed_float2 position [[]];
     packed_float2 textureCoord [[]];
     packed_float4 color [[]];
-} SpriteNodeColoredIndexedVertex2D;
+} Vertex2DColors;
+
+typedef struct {
+    packed_float3 position [[]];
+    packed_float2 textureCoord [[]];
+} Vertex3D;
 
 typedef struct {
     packed_float3 position [[]];
     packed_float2 textureCoord [[]];
     packed_float4 color [[]];
-} SpriteNodeColoredIndexedVertex3D;
+} Vertex3DColors;
+
+typedef struct {
+    packed_float3 position [[]];
+    packed_float2 textureCoord [[]];
+    packed_float3 normal [[]];
+} Vertex3DDiffuse;
+
+typedef struct {
+    packed_float3 position [[]];
+    packed_float2 textureCoord [[]];
+    packed_float3 normal [[]];
+    packed_float4 color [[]];
+} Vertex3DDiffuseColors;
 
 typedef struct {
     packed_float3 position [[]];
@@ -159,20 +160,20 @@ typedef struct {
     float shift [[]];
 } SpriteNodeStereoscopicColoredIndexedVertex3D;
 
-vertex SpriteNodeIndexedColorInOut sprite_node_indexed_2d_vertex(constant SpriteNodeIndexedVertex2D *verts [[buffer(SpriteNodeIndexedVertexIndexData)]],
-                                                                   uint vid [[vertex_id]],
-                                                                   constant SpriteNodeIndexedVertexUniforms & uniforms [[ buffer(SpriteNodeIndexedVertexIndexUniforms) ]]) {
-    SpriteNodeIndexedColorInOut out;
+vertex InOut sprite_node_2d_vertex(constant Vertex2D *verts [[buffer(SlotVertexData)]],
+                                                                uint vid [[vertex_id]],
+                                                                constant VertexUniforms & uniforms [[ buffer(SlotVertexUniforms) ]]) {
+    InOut out;
     float4 position = float4(verts[vid].position, 0.0, 1.0);
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
     out.textureCoord = verts[vid].textureCoord;
     return out;
 }
 
-fragment float4 sprite_node_indexed_2d_fragment(SpriteNodeIndexedColorInOut in [[stage_in]],
-                                                constant SpriteNodeIndexedFragmentUniforms & uniforms [[buffer(SpriteNodeIndexedFragmentIndexUniforms)]],
-                                                texture2d<half> colorMap [[ texture(SpriteNodeIndexedFragmentIndexTexture) ]],
-                                                sampler colorSampler [[ sampler(SpriteNodeIndexedFragmentIndexSampler) ]]) {
+fragment float4 sprite_node_2d_fragment(InOut in [[stage_in]],
+                                                constant FragmentUniforms & uniforms [[buffer(SlotFragmentUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
     half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
     float4 result = float4(colorSample.r * uniforms.r,
                            colorSample.g * uniforms.g,
@@ -181,10 +182,10 @@ fragment float4 sprite_node_indexed_2d_fragment(SpriteNodeIndexedColorInOut in [
     return result;
 }
 
-fragment float4 sprite_node_white_indexed_2d_fragment(SpriteNodeIndexedColorInOut in [[stage_in]],
-                                                constant SpriteNodeIndexedFragmentUniforms & uniforms [[buffer(SpriteNodeIndexedFragmentIndexUniforms)]],
-                                                texture2d<half> colorMap [[ texture(SpriteNodeIndexedFragmentIndexTexture) ]],
-                                                sampler colorSampler [[ sampler(SpriteNodeIndexedFragmentIndexSampler) ]]) {
+fragment float4 sprite_node_white_2d_fragment(InOut in [[stage_in]],
+                                                constant FragmentUniforms & uniforms [[buffer(SlotFragmentUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
     half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
     float4 result = float4(colorSample.a * uniforms.r,
                            colorSample.a * uniforms.g,
@@ -193,10 +194,10 @@ fragment float4 sprite_node_white_indexed_2d_fragment(SpriteNodeIndexedColorInOu
     return result;
 }
 
-vertex SpriteNodeColoredIndexedColorInOut sprite_node_colored_indexed_2d_vertex(constant SpriteNodeColoredIndexedVertex2D *verts [[buffer(SpriteNodeIndexedVertexIndexData)]],
+vertex InOutColors sprite_node_colored_2d_vertex(constant Vertex2DColors *verts [[buffer(SlotVertexData)]],
                                                                    uint vid [[vertex_id]],
-                                                                   constant SpriteNodeIndexedVertexUniforms & uniforms [[ buffer(SpriteNodeIndexedVertexIndexUniforms) ]]) {
-    SpriteNodeColoredIndexedColorInOut out;
+                                                                   constant VertexUniforms & uniforms [[ buffer(SlotVertexUniforms) ]]) {
+    InOutColors out;
     float4 position = float4(verts[vid].position, 0.0, 1.0);
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
     out.textureCoord = verts[vid].textureCoord;
@@ -204,11 +205,10 @@ vertex SpriteNodeColoredIndexedColorInOut sprite_node_colored_indexed_2d_vertex(
     return out;
 }
 
-
-fragment float4 sprite_node_colored_indexed_2d_fragment(SpriteNodeColoredIndexedColorInOut in [[stage_in]],
-                                                constant SpriteNodeIndexedFragmentUniforms & uniforms [[buffer(SpriteNodeIndexedFragmentIndexUniforms)]],
-                                                texture2d<half> colorMap [[ texture(SpriteNodeIndexedFragmentIndexTexture) ]],
-                                                sampler colorSampler [[ sampler(SpriteNodeIndexedFragmentIndexSampler) ]]) {
+fragment float4 sprite_node_colored_2d_fragment(InOutColors in [[stage_in]],
+                                                constant FragmentUniforms & uniforms [[buffer(SlotFragmentUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
     half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
     float4 result = float4(colorSample.r * uniforms.r * in.color[0],
                            colorSample.g * uniforms.g * in.color[1],
@@ -218,10 +218,10 @@ fragment float4 sprite_node_colored_indexed_2d_fragment(SpriteNodeColoredIndexed
 }
 
 
-fragment float4 sprite_node_colored_white_indexed_2d_fragment(SpriteNodeColoredIndexedColorInOut in [[stage_in]],
-                                                constant SpriteNodeIndexedFragmentUniforms & uniforms [[buffer(SpriteNodeIndexedFragmentIndexUniforms)]],
-                                                texture2d<half> colorMap [[ texture(SpriteNodeIndexedFragmentIndexTexture) ]],
-                                                sampler colorSampler [[ sampler(SpriteNodeIndexedFragmentIndexSampler) ]]) {
+fragment float4 sprite_node_colored_white_2d_fragment(InOutColors in [[stage_in]],
+                                                constant FragmentUniforms & uniforms [[buffer(SlotFragmentUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
     half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
     float4 result = float4(colorSample.a * uniforms.r * in.color[0],
                            colorSample.a * uniforms.g * in.color[1],
@@ -230,21 +230,20 @@ fragment float4 sprite_node_colored_white_indexed_2d_fragment(SpriteNodeColoredI
     return result;
 }
 
-
-vertex SpriteNodeIndexedColorInOut sprite_node_indexed_3d_vertex(constant SpriteNodeIndexedVertex3D *verts [[buffer(SpriteNodeIndexedVertexIndexData)]],
+vertex InOut sprite_node_3d_vertex(constant Vertex3D *verts [[buffer(SlotVertexData)]],
                                                                    uint vid [[vertex_id]],
-                                                                   constant SpriteNodeIndexedVertexUniforms & uniforms [[ buffer(SpriteNodeIndexedVertexIndexUniforms) ]]) {
-    SpriteNodeIndexedColorInOut out;
+                                                                   constant VertexUniforms & uniforms [[ buffer(SlotVertexUniforms) ]]) {
+    InOut out;
     float4 position = float4(verts[vid].position, 1.0);
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
     out.textureCoord = verts[vid].textureCoord;
     return out;
 }
 
-fragment float4 sprite_node_indexed_3d_fragment(SpriteNodeIndexedColorInOut in [[stage_in]],
-                                                constant SpriteNodeIndexedFragmentUniforms & uniforms [[buffer(SpriteNodeIndexedFragmentIndexUniforms)]],
-                                                texture2d<half> colorMap [[ texture(SpriteNodeIndexedFragmentIndexTexture) ]],
-                                                sampler colorSampler [[ sampler(SpriteNodeIndexedFragmentIndexSampler) ]]) {
+fragment float4 sprite_node_3d_fragment(InOut in [[stage_in]],
+                                                constant FragmentUniforms & uniforms [[buffer(SlotFragmentUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
     half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
     float4 result = float4(colorSample.r * uniforms.r,
                            colorSample.g * uniforms.g,
@@ -253,10 +252,10 @@ fragment float4 sprite_node_indexed_3d_fragment(SpriteNodeIndexedColorInOut in [
     return result;
 }
 
-vertex SpriteNodeDiffuseIndexedColorInOut sprite_node_indexed_diffuse_3d_vertex(constant SpriteNodeLightsIndexedVertex3D *verts [[buffer(SpriteNodeIndexedVertexIndexData)]],
+vertex InOutDiffuse sprite_node_diffuse_3d_vertex(constant Vertex3DDiffuse *verts [[buffer(SlotVertexData)]],
                                                                    uint vid [[vertex_id]],
-                                                                   constant SpriteNodeIndexedLightsVertexUniforms & uniforms [[ buffer(SpriteNodeIndexedVertexIndexUniforms) ]]) {
-    SpriteNodeDiffuseIndexedColorInOut out;
+                                                                   constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
+    InOutDiffuse out;
     float4 position = float4(verts[vid].position, 1.0);
     float4 normal = float4(verts[vid].normal, 1.0);
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
@@ -265,10 +264,10 @@ vertex SpriteNodeDiffuseIndexedColorInOut sprite_node_indexed_diffuse_3d_vertex(
     return out;
 }
 
-fragment float4 sprite_node_indexed_diffuse_3d_fragment(SpriteNodeDiffuseIndexedColorInOut in [[stage_in]],
-                                                constant SpriteNodeIndexedDiffuseFragmentUniforms & uniforms [[buffer(SpriteNodeIndexedFragmentIndexUniforms)]],
-                                                texture2d<half> colorMap [[ texture(SpriteNodeIndexedFragmentIndexTexture) ]],
-                                                sampler colorSampler [[ sampler(SpriteNodeIndexedFragmentIndexSampler) ]]) {
+fragment float4 sprite_node_diffuse_3d_fragment(InOutDiffuse in [[stage_in]],
+                                                constant FragmentUniformsDiffuse & uniforms [[buffer(SlotFragmentUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
     float3 inNormalized = normalize(in.normal);
     float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
     float ambientIntensity = uniforms.lightAmbientIntensity;
@@ -284,10 +283,10 @@ fragment float4 sprite_node_indexed_diffuse_3d_fragment(SpriteNodeDiffuseIndexed
     return result;
 }
 
-vertex SpriteNodeDiffuseColoredIndexedColorInOut sprite_node_indexed_diffuse_colored_3d_vertex(constant SpriteNodeLightsColoredIndexedVertex3D *verts [[buffer(SpriteNodeIndexedVertexIndexData)]],
+vertex InOutDiffuseColors sprite_node_diffuse_colored_3d_vertex(constant Vertex3DDiffuseColors *verts [[buffer(SlotVertexData)]],
                                                                    uint vid [[vertex_id]],
-                                                                   constant SpriteNodeIndexedLightsVertexUniforms & uniforms [[ buffer(SpriteNodeIndexedVertexIndexUniforms) ]]) {
-    SpriteNodeDiffuseColoredIndexedColorInOut out;
+                                                                   constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
+    InOutDiffuseColors out;
     float4 position = float4(verts[vid].position, 1.0);
     float4 normal = float4(verts[vid].normal, 1.0);
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
@@ -297,10 +296,10 @@ vertex SpriteNodeDiffuseColoredIndexedColorInOut sprite_node_indexed_diffuse_col
     return out;
 }
 
-fragment float4 sprite_node_indexed_diffuse_colored_3d_fragment(SpriteNodeDiffuseColoredIndexedColorInOut in [[stage_in]],
-                                                constant SpriteNodeIndexedDiffuseFragmentUniforms & uniforms [[buffer(SpriteNodeIndexedFragmentIndexUniforms)]],
-                                                texture2d<half> colorMap [[ texture(SpriteNodeIndexedFragmentIndexTexture) ]],
-                                                sampler colorSampler [[ sampler(SpriteNodeIndexedFragmentIndexSampler) ]]) {
+fragment float4 sprite_node_diffuse_colored_3d_fragment(InOutDiffuseColors in [[stage_in]],
+                                                constant FragmentUniformsDiffuse & uniforms [[buffer(SlotFragmentUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
     float3 inNormalized = normalize(in.normal);
     float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
     float ambientIntensity = uniforms.lightAmbientIntensity;
@@ -316,10 +315,10 @@ fragment float4 sprite_node_indexed_diffuse_colored_3d_fragment(SpriteNodeDiffus
     return result;
 }
 
-vertex SpriteNodePhongIndexedColorInOut sprite_node_indexed_phong_3d_vertex(constant SpriteNodeLightsIndexedVertex3D *verts [[buffer(SpriteNodeIndexedVertexIndexData)]],
+vertex InOutPhong sprite_node_phong_3d_vertex(constant Vertex3DDiffuse *verts [[buffer(SlotVertexData)]],
                                                                    uint vid [[vertex_id]],
-                                                                   constant SpriteNodeIndexedLightsVertexUniforms & uniforms [[ buffer(SpriteNodeIndexedVertexIndexUniforms) ]]) {
-    SpriteNodePhongIndexedColorInOut out;
+                                                                   constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
+    InOutPhong out;
     float4 position = float4(verts[vid].position, 1.0);
     float4 normal = float4(verts[vid].normal, 1.0);
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
@@ -329,11 +328,10 @@ vertex SpriteNodePhongIndexedColorInOut sprite_node_indexed_phong_3d_vertex(cons
     return out;
 }
 
-
-fragment float4 sprite_node_indexed_phong_3d_fragment(SpriteNodePhongIndexedColorInOut in [[stage_in]],
-                                                constant SpriteNodeIndexedPhongFragmentUniforms & uniforms [[buffer(SpriteNodeIndexedFragmentIndexUniforms)]],
-                                                texture2d<half> colorMap [[ texture(SpriteNodeIndexedFragmentIndexTexture) ]],
-                                                sampler colorSampler [[ sampler(SpriteNodeIndexedFragmentIndexSampler) ]]) {
+fragment float4 sprite_node_phong_3d_fragment(InOutPhong in [[stage_in]],
+                                                constant FragmentUniformsPhong & uniforms [[buffer(SlotFragmentUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
     float3 inNormalized = normalize(in.normal);
     float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
     float3 eye = normalize(in.eye);
@@ -343,7 +341,7 @@ fragment float4 sprite_node_indexed_phong_3d_fragment(SpriteNodePhongIndexedColo
     float diffuseIntensity = max(dot(inNormalized, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
     diffuseIntensity = clamp(diffuseIntensity, 0.0, 1.0);
     float specularIntensity = pow(max(dot(reflectedNormalized, eye), 0.0), uniforms.lightShininess) * uniforms.lightSpecularIntensity;
-    specularIntensity = clamp(specularIntensity, 0.0, 10.0);
+    specularIntensity = clamp(specularIntensity, 0.0, 1.0);
     float combinedLightIntensity = ambientIntensity + diffuseIntensity + specularIntensity;
     half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
     float4 result = float4(colorSample.r * uniforms.r * uniforms.lightR * combinedLightIntensity,
@@ -353,10 +351,10 @@ fragment float4 sprite_node_indexed_phong_3d_fragment(SpriteNodePhongIndexedColo
     return result;
 }
 
-vertex SpriteNodePhongColoredIndexedColorInOut sprite_node_indexed_phong_colored_3d_vertex(constant SpriteNodeLightsColoredIndexedVertex3D *verts [[buffer(SpriteNodeIndexedVertexIndexData)]],
+vertex InOutPhongColors sprite_node_phong_colored_3d_vertex(constant Vertex3DDiffuseColors *verts [[buffer(SlotVertexData)]],
                                                                    uint vid [[vertex_id]],
-                                                                   constant SpriteNodeIndexedLightsVertexUniforms & uniforms [[ buffer(SpriteNodeIndexedVertexIndexUniforms) ]]) {
-    SpriteNodePhongColoredIndexedColorInOut out;
+                                                                   constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
+    InOutPhongColors out;
     float4 position = float4(verts[vid].position, 1.0);
     float4 normal = float4(verts[vid].normal, 1.0);
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
@@ -367,10 +365,10 @@ vertex SpriteNodePhongColoredIndexedColorInOut sprite_node_indexed_phong_colored
     return out;
 }
 
-fragment float4 sprite_node_indexed_phong_colored_3d_fragment(SpriteNodePhongColoredIndexedColorInOut in [[stage_in]],
-                                                constant SpriteNodeIndexedPhongFragmentUniforms & uniforms [[buffer(SpriteNodeIndexedFragmentIndexUniforms)]],
-                                                texture2d<half> colorMap [[ texture(SpriteNodeIndexedFragmentIndexTexture) ]],
-                                                sampler colorSampler [[ sampler(SpriteNodeIndexedFragmentIndexSampler) ]]) {
+fragment float4 sprite_node_phong_colored_3d_fragment(InOutPhongColors in [[stage_in]],
+                                                constant FragmentUniformsPhong & uniforms [[buffer(SlotFragmentUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
     float3 inNormalized = normalize(in.normal);
     float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
     float3 eye = normalize(in.eye);
@@ -390,10 +388,10 @@ fragment float4 sprite_node_indexed_phong_colored_3d_fragment(SpriteNodePhongCol
     return result;
 }
 
-fragment float4 sprite_node_white_indexed_3d_fragment(SpriteNodeIndexedColorInOut in [[stage_in]],
-                                                constant SpriteNodeIndexedFragmentUniforms & uniforms [[buffer(SpriteNodeIndexedFragmentIndexUniforms)]],
-                                                texture2d<half> colorMap [[ texture(SpriteNodeIndexedFragmentIndexTexture) ]],
-                                                sampler colorSampler [[ sampler(SpriteNodeIndexedFragmentIndexSampler) ]]) {
+fragment float4 sprite_node_white_3d_fragment(InOut in [[stage_in]],
+                                                constant FragmentUniforms & uniforms [[buffer(SlotFragmentUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
     half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
     float4 result = float4(colorSample.a * uniforms.r,
                            colorSample.a * uniforms.g,
@@ -402,10 +400,10 @@ fragment float4 sprite_node_white_indexed_3d_fragment(SpriteNodeIndexedColorInOu
     return result;
 }
 
-vertex SpriteNodeColoredIndexedColorInOut sprite_node_colored_indexed_3d_vertex(constant SpriteNodeColoredIndexedVertex3D *verts [[buffer(SpriteNodeIndexedVertexIndexData)]],
+vertex InOutColors sprite_node_colored_3d_vertex(constant Vertex3DColors *verts [[buffer(SlotVertexData)]],
                                                                     uint vid [[vertex_id]],
-                                                                   constant SpriteNodeIndexedVertexUniforms & uniforms [[ buffer(SpriteNodeIndexedVertexIndexUniforms) ]]) {
-    SpriteNodeColoredIndexedColorInOut out;
+                                                                   constant VertexUniforms & uniforms [[ buffer(SlotVertexUniforms) ]]) {
+    InOutColors out;
     float4 position = float4(verts[vid].position, 1.0);
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
     out.textureCoord = verts[vid].textureCoord;
@@ -413,10 +411,10 @@ vertex SpriteNodeColoredIndexedColorInOut sprite_node_colored_indexed_3d_vertex(
     return out;
 }
 
-fragment float4 sprite_node_colored_indexed_3d_fragment(SpriteNodeColoredIndexedColorInOut in [[stage_in]],
-                                                constant SpriteNodeIndexedFragmentUniforms & uniforms [[buffer(SpriteNodeIndexedFragmentIndexUniforms)]],
-                                                texture2d<half> colorMap [[ texture(SpriteNodeIndexedFragmentIndexTexture) ]],
-                                                sampler colorSampler [[ sampler(SpriteNodeIndexedFragmentIndexSampler) ]]) {
+fragment float4 sprite_node_colored_3d_fragment(InOutColors in [[stage_in]],
+                                                constant FragmentUniforms & uniforms [[buffer(SlotFragmentUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
     half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
     float4 result = float4(colorSample.r * uniforms.r * in.color[0],
                            colorSample.g * uniforms.g * in.color[1],
@@ -426,10 +424,10 @@ fragment float4 sprite_node_colored_indexed_3d_fragment(SpriteNodeColoredIndexed
 }
 
 
-fragment float4 sprite_node_colored_white_indexed_3d_fragment(SpriteNodeColoredIndexedColorInOut in [[stage_in]],
-                                                constant SpriteNodeIndexedFragmentUniforms & uniforms [[buffer(SpriteNodeIndexedFragmentIndexUniforms)]],
-                                                texture2d<half> colorMap [[ texture(SpriteNodeIndexedFragmentIndexTexture) ]],
-                                                sampler colorSampler [[ sampler(SpriteNodeIndexedFragmentIndexSampler) ]]) {
+fragment float4 sprite_node_colored_white_3d_fragment(InOutColors in [[stage_in]],
+                                                constant FragmentUniforms & uniforms [[buffer(SlotFragmentUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
     half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
     float4 result = float4(colorSample.a * uniforms.r * in.color[0],
                            colorSample.a * uniforms.g * in.color[1],
@@ -438,10 +436,10 @@ fragment float4 sprite_node_colored_white_indexed_3d_fragment(SpriteNodeColoredI
     return result;
 }
 
-vertex SpriteNodeColoredIndexedColorInOut sprite_node_stereoscopic_left_colored_indexed_3d_vertex(constant SpriteNodeStereoscopicColoredIndexedVertex3D *verts [[buffer(SpriteNodeIndexedVertexIndexData)]],
+vertex InOutColors sprite_node_stereoscopic_left_colored_3d_vertex(constant SpriteNodeStereoscopicColoredIndexedVertex3D *verts [[buffer(SlotVertexData)]],
                                                                     uint vid [[vertex_id]],
-                                                                   constant SpriteNodeIndexedVertexUniforms & uniforms [[ buffer(SpriteNodeIndexedVertexIndexUniforms) ]]) {
-    SpriteNodeColoredIndexedColorInOut out;
+                                                                   constant VertexUniforms & uniforms [[ buffer(SlotVertexUniforms) ]]) {
+    InOutColors out;
     float4 position = float4(verts[vid].position, 1.0);
     float shift = verts[vid].shift;
     position[0] -= shift;
@@ -451,10 +449,10 @@ vertex SpriteNodeColoredIndexedColorInOut sprite_node_stereoscopic_left_colored_
     return out;
 }
 
-vertex SpriteNodeColoredIndexedColorInOut sprite_node_stereoscopic_right_colored_indexed_3d_vertex(constant SpriteNodeStereoscopicColoredIndexedVertex3D *verts [[buffer(SpriteNodeIndexedVertexIndexData)]],
+vertex InOutColors sprite_node_stereoscopic_right_colored_3d_vertex(constant SpriteNodeStereoscopicColoredIndexedVertex3D *verts [[buffer(SlotVertexData)]],
                                                                     uint vid [[vertex_id]],
-                                                                   constant SpriteNodeIndexedVertexUniforms & uniforms [[ buffer(SpriteNodeIndexedVertexIndexUniforms) ]]) {
-    SpriteNodeColoredIndexedColorInOut out;
+                                                                   constant VertexUniforms & uniforms [[ buffer(SlotVertexUniforms) ]]) {
+    InOutColors out;
     float4 position = float4(verts[vid].position, 1.0);
     float shift = verts[vid].shift;
     position[0] += shift;
@@ -464,10 +462,10 @@ vertex SpriteNodeColoredIndexedColorInOut sprite_node_stereoscopic_right_colored
     return out;
 }
 
-fragment float4 sprite_node_stereo_left_colored_indexed_3d_fragment(SpriteNodeColoredIndexedColorInOut in [[stage_in]],
-                                                                    constant SpriteNodeIndexedFragmentUniforms & uniforms [[buffer(SpriteNodeIndexedFragmentIndexUniforms)]],
-                                                texture2d<half> colorMap [[ texture(SpriteNodeIndexedFragmentIndexTexture) ]],
-                                                sampler colorSampler [[ sampler(SpriteNodeIndexedFragmentIndexSampler) ]]) {
+fragment float4 sprite_node_stereo_left_colored_3d_fragment(InOutColors in [[stage_in]],
+                                                                    constant FragmentUniforms & uniforms [[buffer(SlotFragmentUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
     half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
     float4 result = float4(0.0,
                            colorSample.g * uniforms.g * in.color[1],
@@ -476,10 +474,10 @@ fragment float4 sprite_node_stereo_left_colored_indexed_3d_fragment(SpriteNodeCo
     return result;
 }
 
-fragment float4 sprite_node_stereo_right_colored_indexed_3d_fragment(SpriteNodeColoredIndexedColorInOut in [[stage_in]],
-                                                                    constant SpriteNodeIndexedFragmentUniforms & uniforms [[buffer(SpriteNodeIndexedFragmentIndexUniforms)]],
-                                                texture2d<half> colorMap [[ texture(SpriteNodeIndexedFragmentIndexTexture) ]],
-                                                sampler colorSampler [[ sampler(SpriteNodeIndexedFragmentIndexSampler) ]]) {
+fragment float4 sprite_node_stereo_right_colored_3d_fragment(InOutColors in [[stage_in]],
+                                                                    constant FragmentUniforms & uniforms [[buffer(SlotFragmentUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
     half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
     float4 result = float4(colorSample.r * uniforms.r * in.color[0],
                            0.0,

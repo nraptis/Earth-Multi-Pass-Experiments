@@ -1,5 +1,5 @@
 //
-//  IndexedSpriteInstance.swift
+//  IndexedShapeInstance.swift
 //  StereoScope
 //
 //  Created by Nicky Taylor on 5/25/24.
@@ -9,10 +9,9 @@ import Foundation
 import Metal
 import simd
 
-class IndexedSpriteInstance<NodeType: PositionConforming2D & TextureCoordinateConforming,
-                            UniformsVertexType: UniformsVertex,
-                            UniformsFragmentType: UniformsFragment> {
-    
+class IndexedShapeInstance<NodeType: PositionConforming2D,
+                           UniformsVertexType: UniformsVertex,
+                           UniformsFragmentType: UniformsFragment> {
     
     var vertices: [NodeType]
     
@@ -31,9 +30,7 @@ class IndexedSpriteInstance<NodeType: PositionConforming2D & TextureCoordinateCo
     var isUniformsFragmentBufferDirty = true
     
     var cullMode = MTLCullMode.none
-    var samplerState = Graphics.SamplerState.linearClamp
     
-    weak var texture: MTLTexture?
     private(set) unowned var graphics: Graphics?
     
     init(sentinelNode: NodeType) {
@@ -57,11 +54,9 @@ class IndexedSpriteInstance<NodeType: PositionConforming2D & TextureCoordinateCo
         }
     }
     
-    func load(graphics: Graphics,
-              texture: MTLTexture?) {
+    func load(graphics: Graphics) {
         
         self.graphics = graphics
-        self.texture = texture
         
         uniformsVertexBuffer = graphics.buffer(uniform: uniformsVertex)
         uniformsFragmentBuffer = graphics.buffer(uniform: uniformsFragment)
@@ -79,13 +74,6 @@ class IndexedSpriteInstance<NodeType: PositionConforming2D & TextureCoordinateCo
                         x2: x + width, y2: y,
                         x3: x, y3: y + height,
                         x4: x + width, y4: y + height)
-    }
-    
-    func setTextureCoordFrame(startU: Float, startV: Float, endU: Float, endV: Float) {
-        setTextureCoordQuad(u1: startU, v1: startV,
-                            u2: endU, v2: startV,
-                            u3: startU, v3: endV,
-                            u4: endU, v4: endV)
     }
     
     func setPositionQuad(x1: Float, y1: Float,
@@ -126,53 +114,10 @@ class IndexedSpriteInstance<NodeType: PositionConforming2D & TextureCoordinateCo
         }
     }
     
-    func setTextureCoordQuad(u1: Float, v1: Float,
-                             u2: Float, v2: Float,
-                             u3: Float, v3: Float,
-                             u4: Float, v4: Float) {
-        if vertices[0].u != u1 {
-            vertices[0].u = u1
-            isVertexBufferDirty = true
-        }
-        if vertices[1].u != u2 {
-            vertices[1].u = u2
-            isVertexBufferDirty = true
-        }
-        if vertices[2].u != u3 {
-            vertices[2].u = u3
-            isVertexBufferDirty = true
-        }
-        if vertices[3].u != u4 {
-            vertices[3].u = u4
-            isVertexBufferDirty = true
-        }
-        if vertices[0].v != v1 {
-            vertices[0].v = v1
-            isVertexBufferDirty = true
-        }
-        if vertices[1].v != v2 {
-            vertices[1].v = v2
-            isVertexBufferDirty = true
-        }
-        if vertices[2].v != v3 {
-            vertices[2].v = v3
-            isVertexBufferDirty = true
-        }
-        if vertices[3].v != v4 {
-            vertices[3].v = v4
-            isVertexBufferDirty = true
-        }
-    }
-    
     func render(renderEncoder: MTLRenderCommandEncoder,
                 pipelineState: Graphics.PipelineState) {
         
         guard let graphics = graphics else {
-            return
-        }
-        
-        guard let texture = texture else {
-            print("IndexedTriangleTestDemoBufferShapeDemoColored2D => Render => Sprite Missing Texture")
             return
         }
         
@@ -217,10 +162,6 @@ class IndexedSpriteInstance<NodeType: PositionConforming2D & TextureCoordinateCo
         graphics.setVertexUniformsBuffer(uniformsVertexBuffer, renderEncoder: renderEncoder)
         graphics.setFragmentUniformsBuffer(uniformsFragmentBuffer, renderEncoder: renderEncoder)
         
-        graphics.setFragmentTexture(texture, renderEncoder: renderEncoder)
-        
-        graphics.set(samplerState: samplerState, renderEncoder: renderEncoder)
-        
         renderEncoder.setCullMode(cullMode)
         
         renderEncoder.drawIndexedPrimitives(type: MTLPrimitiveType.triangleStrip,
@@ -235,5 +176,4 @@ class IndexedSpriteInstance<NodeType: PositionConforming2D & TextureCoordinateCo
             vertexBuffer.contents().copyMemory(from: vertices, byteCount: MemoryLayout<NodeType>.size * 4)
         }
     }
-    
 }

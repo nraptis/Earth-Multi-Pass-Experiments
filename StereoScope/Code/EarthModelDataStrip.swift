@@ -21,7 +21,7 @@ class EarthModelDataStrip {
     
     let texturedTriangleBuffer = IndexedTexturedTriangleBuffer<Sprite3DLightedColoredVertex,
                                                                UniformsSpriteNodeIndexedLightsVertex,
-                                                               UniformsSpriteNodeIndexedDiffuseFragment>()
+                                                               UniformsSpriteNodeIndexedPhongFragment>()
     
     let texturedTriangleBloomBuffer = IndexedTexturedTriangleBuffer<Shape3DVertex,
                                                                     UniformsShapeNodeIndexedVertex,
@@ -121,7 +121,7 @@ class EarthModelDataStrip {
                                         isUniformsFragmentBufferDirty: true)
         
         texturedTriangleBloomBuffer.render(renderEncoder: renderEncoder,
-                                      pipelineState: pipelineState)
+                                           pipelineState: pipelineState)
         
     }
     
@@ -165,10 +165,10 @@ class EarthModelDataStrip {
         
         texturedTriangleBuffer.uniformsFragment.lightAmbientIntensity = lightAmbientIntensity
         texturedTriangleBuffer.uniformsFragment.lightDiffuseIntensity = lightDiffuseIntensity
-        //texturedTriangleBuffer.uniformsFragment.lightSpecularIntensity = lightSpecularIntensity
+        texturedTriangleBuffer.uniformsFragment.lightSpecularIntensity = lightSpecularIntensity
         
         
-        //texturedTriangleBuffer.uniformsFragment.lightShininess = lightShininess
+        texturedTriangleBuffer.uniformsFragment.lightShininess = lightShininess
         
         
         texturedTriangleBuffer.setDirty(isVertexBufferDirty: false,

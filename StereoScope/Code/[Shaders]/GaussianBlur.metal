@@ -37,19 +37,19 @@ typedef struct {
 typedef struct {
     float4 position [[position]];
     float2 textureCoord;
-} SpriteNodeIndexedColorInOut;
+} InOut;
 
-vertex SpriteNodeIndexedColorInOut gaussian_blur_indexed_vertex(constant SpriteNodeIndexedVertex *verts [[buffer(SpriteNodeIndexedVertexIndexData)]],
+vertex InOut gaussian_blur_vertex(constant SpriteNodeIndexedVertex *verts [[buffer(SpriteNodeIndexedVertexIndexData)]],
                                                 uint vid [[vertex_id]],
                                                 constant SpriteVertexUniforms & uniforms [[ buffer(SpriteNodeIndexedVertexIndexUniforms) ]]) {
-    SpriteNodeIndexedColorInOut out;
+    InOut out;
     float4 position = float4(verts[vid].position, 1.0);
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
     out.textureCoord = verts[vid].textureCoord;
     return out;
 }
 
-fragment float4 gaussian_blur_indexed_horizontal_fragment(SpriteNodeIndexedColorInOut in [[stage_in]],
+fragment float4 gaussian_blur_horizontal_fragment(InOut in [[stage_in]],
                                                      constant SpriteFragmentUniforms & uniforms [[ buffer(SpriteNodeIndexedFragmentIndexUniforms) ]],
                                                      texture2d<half> colorMap [[ texture(SpriteNodeIndexedFragmentIndexTexture) ]],
                                                      sampler colorSampler [[ sampler(SpriteNodeIndexedFragmentIndexSampler) ]]) {
@@ -70,7 +70,7 @@ fragment float4 gaussian_blur_indexed_horizontal_fragment(SpriteNodeIndexedColor
     return float4(r, g, b, 1.0);
 }
 
-fragment float4 gaussian_blur_indexed_vertical_fragment(SpriteNodeIndexedColorInOut in [[stage_in]],
+fragment float4 gaussian_blur_vertical_fragment(InOut in [[stage_in]],
                                                     constant SpriteFragmentUniforms & uniforms [[ buffer(SpriteNodeIndexedFragmentIndexUniforms) ]],
                                                     texture2d<half> colorMap [[ texture(SpriteNodeIndexedFragmentIndexTexture) ]],
                                                     sampler colorSampler [[ sampler(SpriteNodeIndexedFragmentIndexSampler) ]]) {
