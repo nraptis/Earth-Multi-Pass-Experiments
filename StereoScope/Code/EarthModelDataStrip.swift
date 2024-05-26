@@ -13,17 +13,11 @@ class EarthModelDataStrip {
     
     weak var texture: MTLTexture?
     
-    /*
-     let texturedTriangleBuffer = IndexedTexturedTriangleBuffer<Sprite3DVertex,
-                                                                UniformsSpriteNodeIndexedVertex,
-                                                                UniformsSpriteNodeIndexedFragment>()
-    */
+    let texturedTriangleBuffer = IndexedSpriteBuffer<Sprite3DLightedColoredVertex,
+                                                               UniformsLightsVertex,
+                                                               UniformsPhongFragment>()
     
-    let texturedTriangleBuffer = IndexedTexturedTriangleBuffer<Sprite3DLightedColoredVertex,
-                                                               UniformsSpriteNodeIndexedLightsVertex,
-                                                               UniformsSpriteNodeIndexedPhongFragment>()
-    
-    let texturedTriangleBloomBuffer = IndexedTexturedTriangleBuffer<Shape3DVertex,
+    let texturedTriangleBloomBuffer = IndexedSpriteBuffer<Shape3DVertex,
                                                                     UniformsShapeNodeIndexedVertex,
                                                                     UniformsShapeNodeIndexedFragment>()
     
@@ -142,6 +136,7 @@ class EarthModelDataStrip {
                 
                 pipelineState: Graphics.PipelineState) {
         
+        
         texturedTriangleBuffer.uniformsVertex.projectionMatrix = projectionMatrix
         texturedTriangleBuffer.uniformsVertex.modelViewMatrix = modelViewMatrix
         texturedTriangleBuffer.uniformsVertex.normalMatrix = normalMatrix
@@ -178,6 +173,7 @@ class EarthModelDataStrip {
         
         texturedTriangleBuffer.render(renderEncoder: renderEncoder,
                                       pipelineState: pipelineState)
+        
         
     }
     

@@ -41,6 +41,14 @@ class IndexedSpriteInstance<NodeType: PositionConforming2D & TextureCoordinateCo
                     sentinelNode,
                     sentinelNode,
                     sentinelNode]
+        vertices[0].u = 0.0
+        vertices[0].v = 0.0
+        vertices[1].u = 1.0
+        vertices[1].v = 0.0
+        vertices[2].u = 0.0
+        vertices[2].v = 1.0
+        vertices[3].u = 1.0
+        vertices[3].v = 1.0
     }
     
     func setDirty(isVertexBufferDirty: Bool,

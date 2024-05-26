@@ -9,9 +9,9 @@ import Foundation
 import Metal
 import simd
 
-class IndexedTexturedTriangleBuffer<NodeType,
-                                    UniformsVertexType: UniformsVertex,
-                                    UniformsFragmentType: UniformsFragment> {
+class IndexedSpriteBuffer<NodeType,
+                          UniformsVertexType: UniformsVertex,
+                          UniformsFragmentType: UniformsFragment> {
     
     private(set) var vertices = [NodeType]()
     private(set) var vertexCount = 0

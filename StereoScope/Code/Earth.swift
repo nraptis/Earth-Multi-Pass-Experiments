@@ -39,14 +39,11 @@ class Earth {
     func draw3DBloom(renderEncoder: MTLRenderCommandEncoder,
                      projectionMatrix: matrix_float4x4,
                      modelViewMatrix: matrix_float4x4) {
-        
-        /*
         for earthModelDataStrip in earthModelDataStrips {
             earthModelDataStrip.draw3DBloom(renderEncoder: renderEncoder,
                                             projectionMatrix: projectionMatrix,
                                             modelViewMatrix: modelViewMatrix, pipelineState: .shapeNodeIndexed3DNoBlending)
         }
-        */
     }
     
     func draw3D(renderEncoder: MTLRenderCommandEncoder,
@@ -77,7 +74,10 @@ class Earth {
                                        
                                        lightShininess: lightShininess,
                                        
-                                       pipelineState: .spriteNodeIndexedPhongColored3DNoBlending)
+                //pipelineState: .spriteNodeIndexedPhongColored3DNoBlending
+                                       //pipelineState: .shapeNodeIndexedDiffuse3DNoBlending
+                                       pipelineState: .spriteNodeIndexedPhong3DNoBlending)
+            
         }
     }
 }

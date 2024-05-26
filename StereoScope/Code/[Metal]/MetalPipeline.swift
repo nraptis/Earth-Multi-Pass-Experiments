@@ -10,7 +10,7 @@ import UIKit
 import Metal
 
 class MetalPipeline {
-
+    
     static let slotVertexData = 0
     static let slotVertexUniforms = 1
     
@@ -40,21 +40,21 @@ class MetalPipeline {
     
     
     private var shapeNodeIndexed2DVertexProgram: MTLFunction!
-        private var shapeNodeIndexed2DFragmentProgram: MTLFunction!
-        private var shapeNodeIndexed3DVertexProgram: MTLFunction!
-        private var shapeNodeIndexed3DFragmentProgram: MTLFunction!
-        private var shapeNodeIndexedPhong3DVertexProgram: MTLFunction!
-        private var shapeNodeIndexedPhong3DFragmentProgram: MTLFunction!
-        private var shapeNodeIndexedDiffuse3DVertexProgram: MTLFunction!
-        private var shapeNodeIndexedDiffuse3DFragmentProgram: MTLFunction!
-        private var shapeNodeColoredIndexed2DVertexProgram: MTLFunction!
-        private var shapeNodeColoredIndexed2DFragmentProgram: MTLFunction!
-        private var shapeNodeColoredIndexed3DVertexProgram: MTLFunction!
-        private var shapeNodeColoredIndexed3DFragmentProgram: MTLFunction!
-        private var shapeNodeIndexedPhongColored3DVertexProgram: MTLFunction!
-        private var shapeNodeIndexedPhongColored3DFragmentProgram: MTLFunction!
-        private var shapeNodeIndexedDiffuseColored3DVertexProgram: MTLFunction!
-        private var shapeNodeIndexedDiffuseColored3DFragmentProgram: MTLFunction!
+    private var shapeNodeIndexed2DFragmentProgram: MTLFunction!
+    private var shapeNodeIndexed3DVertexProgram: MTLFunction!
+    private var shapeNodeIndexed3DFragmentProgram: MTLFunction!
+    private var shapeNodeIndexedPhong3DVertexProgram: MTLFunction!
+    private var shapeNodeIndexedPhong3DFragmentProgram: MTLFunction!
+    private var shapeNodeIndexedDiffuse3DVertexProgram: MTLFunction!
+    private var shapeNodeIndexedDiffuse3DFragmentProgram: MTLFunction!
+    private var shapeNodeColoredIndexed2DVertexProgram: MTLFunction!
+    private var shapeNodeColoredIndexed2DFragmentProgram: MTLFunction!
+    private var shapeNodeColoredIndexed3DVertexProgram: MTLFunction!
+    private var shapeNodeColoredIndexed3DFragmentProgram: MTLFunction!
+    private var shapeNodeIndexedPhongColored3DVertexProgram: MTLFunction!
+    private var shapeNodeIndexedPhongColored3DFragmentProgram: MTLFunction!
+    private var shapeNodeIndexedDiffuseColored3DVertexProgram: MTLFunction!
+    private var shapeNodeIndexedDiffuseColored3DFragmentProgram: MTLFunction!
     
     
     
@@ -96,27 +96,27 @@ class MetalPipeline {
     
     
     private(set) var pipelineStateShapeNodeIndexed2DNoBlending: MTLRenderPipelineState!
-        private(set) var pipelineStateShapeNodeIndexed2DAlphaBlending: MTLRenderPipelineState!
-        private(set) var pipelineStateShapeNodeIndexed2DAdditiveBlending: MTLRenderPipelineState!
-        private(set) var pipelineStateShapeNodeIndexed2DPremultipliedBlending: MTLRenderPipelineState!
-        private(set) var pipelineStateShapeNodeIndexed3DNoBlending: MTLRenderPipelineState!
-        private(set) var pipelineStateShapeNodeIndexed3DAlphaBlending: MTLRenderPipelineState!
-        private(set) var pipelineStateShapeNodeIndexed3DAdditiveBlending: MTLRenderPipelineState!
-        private(set) var pipelineStateShapeNodeIndexed3DPremultipliedBlending: MTLRenderPipelineState!
-        private(set) var pipelineStateShapeNodeColoredIndexed2DNoBlending: MTLRenderPipelineState!
-        private(set) var pipelineStateShapeNodeColoredIndexed2DAlphaBlending: MTLRenderPipelineState!
-        private(set) var pipelineStateShapeNodeColoredIndexed2DAdditiveBlending: MTLRenderPipelineState!
-        private(set) var pipelineStateShapeNodeColoredIndexed2DPremultipliedBlending: MTLRenderPipelineState!
-        private(set) var pipelineStateShapeNodeColoredIndexed3DNoBlending: MTLRenderPipelineState!
-        private(set) var pipelineStateShapeNodeColoredIndexed3DAlphaBlending: MTLRenderPipelineState!
-        private(set) var pipelineStateShapeNodeColoredIndexed3DAdditiveBlending: MTLRenderPipelineState!
-        private(set) var pipelineStateShapeNodeColoredIndexed3DPremultipliedBlending: MTLRenderPipelineState!
-        
-        private(set) var pipelineStateShapeNodeIndexedPhong3DNoBlending: MTLRenderPipelineState!
-        private(set) var pipelineStateShapeNodeIndexedPhongColored3DNoBlending: MTLRenderPipelineState!
-        private(set) var pipelineStateShapeNodeIndexedDiffuse3DNoBlending: MTLRenderPipelineState!
-        private(set) var pipelineStateShapeNodeIndexedDiffuseColored3DNoBlending: MTLRenderPipelineState!
-
+    private(set) var pipelineStateShapeNodeIndexed2DAlphaBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateShapeNodeIndexed2DAdditiveBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateShapeNodeIndexed2DPremultipliedBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateShapeNodeIndexed3DNoBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateShapeNodeIndexed3DAlphaBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateShapeNodeIndexed3DAdditiveBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateShapeNodeIndexed3DPremultipliedBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateShapeNodeColoredIndexed2DNoBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateShapeNodeColoredIndexed2DAlphaBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateShapeNodeColoredIndexed2DAdditiveBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateShapeNodeColoredIndexed2DPremultipliedBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateShapeNodeColoredIndexed3DNoBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateShapeNodeColoredIndexed3DAlphaBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateShapeNodeColoredIndexed3DAdditiveBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateShapeNodeColoredIndexed3DPremultipliedBlending: MTLRenderPipelineState!
+    
+    private(set) var pipelineStateShapeNodeIndexedPhong3DNoBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateShapeNodeIndexedPhongColored3DNoBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateShapeNodeIndexedDiffuse3DNoBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateShapeNodeIndexedDiffuseColored3DNoBlending: MTLRenderPipelineState!
+    
     
     
     private(set) var pipelineStateSpriteNodeIndexed2DNoBlending: MTLRenderPipelineState!
@@ -208,30 +208,30 @@ class MetalPipeline {
     }
     
     private func buildFunctions() {
-
+        
         
         shapeNodeIndexed2DVertexProgram = metalLibrary.makeFunction(name: "shape_node_2d_vertex")
-                shapeNodeIndexed2DFragmentProgram = metalLibrary.makeFunction(name: "shape_node_2d_fragment")
-                shapeNodeIndexed3DVertexProgram = metalLibrary.makeFunction(name: "shape_node_3d_vertex")!
-                shapeNodeIndexed3DFragmentProgram = metalLibrary.makeFunction(name: "shape_node_3d_fragment")!
-                
-                shapeNodeIndexedPhong3DVertexProgram = metalLibrary.makeFunction(name: "shape_node_phong_3d_vertex")!
-                shapeNodeIndexedPhong3DFragmentProgram = metalLibrary.makeFunction(name: "shape_node_phong_3d_fragment")!
-                
-                shapeNodeIndexedPhongColored3DVertexProgram = metalLibrary.makeFunction(name: "shape_node_phong_colored_3d_vertex")!
-                shapeNodeIndexedPhongColored3DFragmentProgram = metalLibrary.makeFunction(name: "shape_node_phong_colored_3d_fragment")!
-                
-                shapeNodeIndexedDiffuse3DVertexProgram = metalLibrary.makeFunction(name: "shape_node_diffuse_3d_vertex")!
-                shapeNodeIndexedDiffuse3DFragmentProgram = metalLibrary.makeFunction(name: "shape_node_diffuse_3d_fragment")!
-                
-                shapeNodeIndexedDiffuseColored3DVertexProgram = metalLibrary.makeFunction(name: "shape_node_diffuse_colored_3d_vertex")!
-                shapeNodeIndexedDiffuseColored3DFragmentProgram = metalLibrary.makeFunction(name: "shape_node_diffuse_colored_3d_fragment")!
-                
-                shapeNodeColoredIndexed2DVertexProgram = metalLibrary.makeFunction(name: "shape_node_colored_2d_vertex")
-                shapeNodeColoredIndexed2DFragmentProgram = metalLibrary.makeFunction(name: "shape_node_colored_2d_fragment")
-                shapeNodeColoredIndexed3DVertexProgram = metalLibrary.makeFunction(name: "shape_node_colored_3d_vertex")
-                shapeNodeColoredIndexed3DFragmentProgram = metalLibrary.makeFunction(name: "shape_node_colored_3d_fragment")
-
+        shapeNodeIndexed2DFragmentProgram = metalLibrary.makeFunction(name: "shape_node_2d_fragment")
+        shapeNodeIndexed3DVertexProgram = metalLibrary.makeFunction(name: "shape_node_3d_vertex")!
+        shapeNodeIndexed3DFragmentProgram = metalLibrary.makeFunction(name: "shape_node_3d_fragment")!
+        
+        shapeNodeIndexedPhong3DVertexProgram = metalLibrary.makeFunction(name: "shape_node_phong_3d_vertex")!
+        shapeNodeIndexedPhong3DFragmentProgram = metalLibrary.makeFunction(name: "shape_node_phong_3d_fragment")!
+        
+        shapeNodeIndexedPhongColored3DVertexProgram = metalLibrary.makeFunction(name: "shape_node_phong_colored_3d_vertex")!
+        shapeNodeIndexedPhongColored3DFragmentProgram = metalLibrary.makeFunction(name: "shape_node_phong_colored_3d_fragment")!
+        
+        shapeNodeIndexedDiffuse3DVertexProgram = metalLibrary.makeFunction(name: "shape_node_diffuse_3d_vertex")!
+        shapeNodeIndexedDiffuse3DFragmentProgram = metalLibrary.makeFunction(name: "shape_node_diffuse_3d_fragment")!
+        
+        shapeNodeIndexedDiffuseColored3DVertexProgram = metalLibrary.makeFunction(name: "shape_node_diffuse_colored_3d_vertex")!
+        shapeNodeIndexedDiffuseColored3DFragmentProgram = metalLibrary.makeFunction(name: "shape_node_diffuse_colored_3d_fragment")!
+        
+        shapeNodeColoredIndexed2DVertexProgram = metalLibrary.makeFunction(name: "shape_node_colored_2d_vertex")
+        shapeNodeColoredIndexed2DFragmentProgram = metalLibrary.makeFunction(name: "shape_node_colored_2d_fragment")
+        shapeNodeColoredIndexed3DVertexProgram = metalLibrary.makeFunction(name: "shape_node_colored_3d_vertex")
+        shapeNodeColoredIndexed3DFragmentProgram = metalLibrary.makeFunction(name: "shape_node_colored_3d_fragment")
+        
         
         
         spriteNodeIndexed2DVertexProgram = metalLibrary.makeFunction(name: "sprite_node_2d_vertex")
@@ -281,102 +281,102 @@ class MetalPipeline {
     
     
     private func buildPipelineStatesShapeNodeIndexed2D() {
-            let pipelineDescriptor = MTLRenderPipelineDescriptor()
-            pipelineDescriptor.vertexFunction = shapeNodeIndexed2DVertexProgram
-            pipelineDescriptor.fragmentFunction = shapeNodeIndexed2DFragmentProgram
-            pipelineDescriptor.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
-            pipelineDescriptor.rasterSampleCount = 4
-            pipelineStateShapeNodeIndexed2DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
-            configAlphaBlending(pipelineDescriptor: pipelineDescriptor)
-            pipelineStateShapeNodeIndexed2DAlphaBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
-            configAdditiveBlending(pipelineDescriptor: pipelineDescriptor)
-            pipelineStateShapeNodeIndexed2DAdditiveBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
-            configPremultipliedBlending(pipelineDescriptor: pipelineDescriptor)
-            pipelineStateShapeNodeIndexed2DPremultipliedBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
-        }
-        
-        private func buildPipelineStatesShapeNodeIndexed3D() {
-            let pipelineDescriptor = MTLRenderPipelineDescriptor()
-            pipelineDescriptor.vertexFunction = shapeNodeIndexed3DVertexProgram
-            pipelineDescriptor.fragmentFunction = shapeNodeIndexed3DFragmentProgram
-            pipelineDescriptor.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
-            pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
-            pipelineStateShapeNodeIndexed3DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
-            configAlphaBlending(pipelineDescriptor: pipelineDescriptor)
-            pipelineStateShapeNodeIndexed3DAlphaBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
-            configAdditiveBlending(pipelineDescriptor: pipelineDescriptor)
-            pipelineStateShapeNodeIndexed3DAdditiveBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
-            configPremultipliedBlending(pipelineDescriptor: pipelineDescriptor)
-            pipelineStateShapeNodeIndexed3DPremultipliedBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
-        }
-        
-        func buildPipelineStatesShapeNodeDiffuseIndexed3D() {
-            let pipelineDescriptor = MTLRenderPipelineDescriptor()
-            pipelineDescriptor.vertexFunction = shapeNodeIndexedDiffuse3DVertexProgram
-            pipelineDescriptor.fragmentFunction = shapeNodeIndexedDiffuse3DFragmentProgram
-            pipelineDescriptor.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
-            pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
-            pipelineStateShapeNodeIndexedDiffuse3DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
-        }
-            
-        func buildPipelineStatesShapeNodeDiffuseColoredIndexed3D() {
-            let pipelineDescriptor = MTLRenderPipelineDescriptor()
-            pipelineDescriptor.vertexFunction = shapeNodeIndexedDiffuseColored3DVertexProgram
-            pipelineDescriptor.fragmentFunction = shapeNodeIndexedDiffuseColored3DFragmentProgram
-            pipelineDescriptor.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
-            pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
-            pipelineStateShapeNodeIndexedDiffuseColored3DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
-        }
-        
-        func buildPipelineStatesShapeNodePhongIndexed3D() {
-            let pipelineDescriptor = MTLRenderPipelineDescriptor()
-            pipelineDescriptor.vertexFunction = shapeNodeIndexedPhong3DVertexProgram
-            pipelineDescriptor.fragmentFunction = shapeNodeIndexedPhong3DFragmentProgram
-            pipelineDescriptor.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
-            pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
-            pipelineStateShapeNodeIndexedPhong3DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
-        }
-        
-        func buildPipelineStatesShapeNodePhongColoredIndexed3D() {
-            let pipelineDescriptor = MTLRenderPipelineDescriptor()
-            pipelineDescriptor.vertexFunction = shapeNodeIndexedPhongColored3DVertexProgram
-            pipelineDescriptor.fragmentFunction = shapeNodeIndexedPhongColored3DFragmentProgram
-            pipelineDescriptor.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
-            pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
-            pipelineStateShapeNodeIndexedPhongColored3DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
-        }
-        
-        private func buildPipelineStatesShapeNodeColoredIndexed2D() {
-            let pipelineDescriptor = MTLRenderPipelineDescriptor()
-            pipelineDescriptor.vertexFunction = shapeNodeColoredIndexed2DVertexProgram
-            pipelineDescriptor.fragmentFunction = shapeNodeColoredIndexed2DFragmentProgram
-            pipelineDescriptor.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
-            pipelineDescriptor.rasterSampleCount = 4
-            pipelineStateShapeNodeColoredIndexed2DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
-            configAlphaBlending(pipelineDescriptor: pipelineDescriptor)
-            pipelineStateShapeNodeColoredIndexed2DAlphaBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
-            configAdditiveBlending(pipelineDescriptor: pipelineDescriptor)
-            pipelineStateShapeNodeColoredIndexed2DAdditiveBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
-            configPremultipliedBlending(pipelineDescriptor: pipelineDescriptor)
-            pipelineStateShapeNodeColoredIndexed2DPremultipliedBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
-        }
-
-        
-        private func buildPipelineStatesShapeNodeColoredIndexed3D() {
-            let pipelineDescriptor = MTLRenderPipelineDescriptor()
-            pipelineDescriptor.vertexFunction = shapeNodeColoredIndexed3DVertexProgram
-            pipelineDescriptor.fragmentFunction = shapeNodeColoredIndexed3DFragmentProgram
-            pipelineDescriptor.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
-            pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
-            pipelineStateShapeNodeColoredIndexed3DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
-            configAlphaBlending(pipelineDescriptor: pipelineDescriptor)
-            pipelineStateShapeNodeColoredIndexed3DAlphaBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
-            configAdditiveBlending(pipelineDescriptor: pipelineDescriptor)
-            pipelineStateShapeNodeColoredIndexed3DAdditiveBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
-            configPremultipliedBlending(pipelineDescriptor: pipelineDescriptor)
-            pipelineStateShapeNodeColoredIndexed3DPremultipliedBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
-        }
-
+        let pipelineDescriptor = MTLRenderPipelineDescriptor()
+        pipelineDescriptor.vertexFunction = shapeNodeIndexed2DVertexProgram
+        pipelineDescriptor.fragmentFunction = shapeNodeIndexed2DFragmentProgram
+        pipelineDescriptor.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
+        pipelineDescriptor.rasterSampleCount = 4
+        pipelineStateShapeNodeIndexed2DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+        configAlphaBlending(pipelineDescriptor: pipelineDescriptor)
+        pipelineStateShapeNodeIndexed2DAlphaBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+        configAdditiveBlending(pipelineDescriptor: pipelineDescriptor)
+        pipelineStateShapeNodeIndexed2DAdditiveBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+        configPremultipliedBlending(pipelineDescriptor: pipelineDescriptor)
+        pipelineStateShapeNodeIndexed2DPremultipliedBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+    }
+    
+    private func buildPipelineStatesShapeNodeIndexed3D() {
+        let pipelineDescriptor = MTLRenderPipelineDescriptor()
+        pipelineDescriptor.vertexFunction = shapeNodeIndexed3DVertexProgram
+        pipelineDescriptor.fragmentFunction = shapeNodeIndexed3DFragmentProgram
+        pipelineDescriptor.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
+        pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
+        pipelineStateShapeNodeIndexed3DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+        configAlphaBlending(pipelineDescriptor: pipelineDescriptor)
+        pipelineStateShapeNodeIndexed3DAlphaBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+        configAdditiveBlending(pipelineDescriptor: pipelineDescriptor)
+        pipelineStateShapeNodeIndexed3DAdditiveBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+        configPremultipliedBlending(pipelineDescriptor: pipelineDescriptor)
+        pipelineStateShapeNodeIndexed3DPremultipliedBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+    }
+    
+    func buildPipelineStatesShapeNodeDiffuseIndexed3D() {
+        let pipelineDescriptor = MTLRenderPipelineDescriptor()
+        pipelineDescriptor.vertexFunction = shapeNodeIndexedDiffuse3DVertexProgram
+        pipelineDescriptor.fragmentFunction = shapeNodeIndexedDiffuse3DFragmentProgram
+        pipelineDescriptor.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
+        pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
+        pipelineStateShapeNodeIndexedDiffuse3DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+    }
+    
+    func buildPipelineStatesShapeNodeDiffuseColoredIndexed3D() {
+        let pipelineDescriptor = MTLRenderPipelineDescriptor()
+        pipelineDescriptor.vertexFunction = shapeNodeIndexedDiffuseColored3DVertexProgram
+        pipelineDescriptor.fragmentFunction = shapeNodeIndexedDiffuseColored3DFragmentProgram
+        pipelineDescriptor.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
+        pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
+        pipelineStateShapeNodeIndexedDiffuseColored3DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+    }
+    
+    func buildPipelineStatesShapeNodePhongIndexed3D() {
+        let pipelineDescriptor = MTLRenderPipelineDescriptor()
+        pipelineDescriptor.vertexFunction = shapeNodeIndexedPhong3DVertexProgram
+        pipelineDescriptor.fragmentFunction = shapeNodeIndexedPhong3DFragmentProgram
+        pipelineDescriptor.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
+        pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
+        pipelineStateShapeNodeIndexedPhong3DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+    }
+    
+    func buildPipelineStatesShapeNodePhongColoredIndexed3D() {
+        let pipelineDescriptor = MTLRenderPipelineDescriptor()
+        pipelineDescriptor.vertexFunction = shapeNodeIndexedPhongColored3DVertexProgram
+        pipelineDescriptor.fragmentFunction = shapeNodeIndexedPhongColored3DFragmentProgram
+        pipelineDescriptor.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
+        pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
+        pipelineStateShapeNodeIndexedPhongColored3DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+    }
+    
+    private func buildPipelineStatesShapeNodeColoredIndexed2D() {
+        let pipelineDescriptor = MTLRenderPipelineDescriptor()
+        pipelineDescriptor.vertexFunction = shapeNodeColoredIndexed2DVertexProgram
+        pipelineDescriptor.fragmentFunction = shapeNodeColoredIndexed2DFragmentProgram
+        pipelineDescriptor.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
+        pipelineDescriptor.rasterSampleCount = 4
+        pipelineStateShapeNodeColoredIndexed2DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+        configAlphaBlending(pipelineDescriptor: pipelineDescriptor)
+        pipelineStateShapeNodeColoredIndexed2DAlphaBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+        configAdditiveBlending(pipelineDescriptor: pipelineDescriptor)
+        pipelineStateShapeNodeColoredIndexed2DAdditiveBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+        configPremultipliedBlending(pipelineDescriptor: pipelineDescriptor)
+        pipelineStateShapeNodeColoredIndexed2DPremultipliedBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+    }
+    
+    
+    private func buildPipelineStatesShapeNodeColoredIndexed3D() {
+        let pipelineDescriptor = MTLRenderPipelineDescriptor()
+        pipelineDescriptor.vertexFunction = shapeNodeColoredIndexed3DVertexProgram
+        pipelineDescriptor.fragmentFunction = shapeNodeColoredIndexed3DFragmentProgram
+        pipelineDescriptor.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
+        pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
+        pipelineStateShapeNodeColoredIndexed3DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+        configAlphaBlending(pipelineDescriptor: pipelineDescriptor)
+        pipelineStateShapeNodeColoredIndexed3DAlphaBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+        configAdditiveBlending(pipelineDescriptor: pipelineDescriptor)
+        pipelineStateShapeNodeColoredIndexed3DAdditiveBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+        configPremultipliedBlending(pipelineDescriptor: pipelineDescriptor)
+        pipelineStateShapeNodeColoredIndexed3DPremultipliedBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+    }
+    
     
     
     
@@ -435,7 +435,7 @@ class MetalPipeline {
         pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
         pipelineStateSpriteNodeIndexedDiffuse3DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
     }
-        
+    
     func buildPipelineStatesSpriteNodeDiffuseColoredIndexed3D() {
         let pipelineDescriptor = MTLRenderPipelineDescriptor()
         pipelineDescriptor.vertexFunction = spriteNodeIndexedDiffuseColored3DVertexProgram

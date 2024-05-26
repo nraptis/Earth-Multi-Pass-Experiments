@@ -11,7 +11,7 @@ import simd
 typealias UniformsSpriteNodeIndexedVertex = UniformsShapeVertex
 typealias UniformsSpriteNodeIndexedFragment = UniformsShapeFragment
 
-struct UniformsSpriteNodeIndexedDiffuseFragment: UniformsFragment {
+struct UniformsDiffuseFragment: UniformsFragment {
     
     var red: Float
     var green: Float
@@ -90,7 +90,7 @@ struct UniformsSpriteNodeIndexedDiffuseFragment: UniformsFragment {
     }
 }
 
-struct UniformsSpriteNodeIndexedPhongFragment: UniformsFragment {
+struct UniformsPhongFragment: UniformsFragment {
     
     var red: Float
     var green: Float
@@ -178,7 +178,7 @@ struct UniformsSpriteNodeIndexedPhongFragment: UniformsFragment {
     }
 }
 
-struct UniformsSpriteNodeIndexedLightsVertex: UniformsVertex {
+struct UniformsLightsVertex: UniformsVertex {
     
     var projectionMatrix: matrix_float4x4
     var modelViewMatrix: matrix_float4x4

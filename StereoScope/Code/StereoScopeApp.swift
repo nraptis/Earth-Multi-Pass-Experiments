@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+var overshoot = Float(0.5)
+
 @main
 struct StereoScopeApp: App {
     
@@ -22,6 +24,8 @@ struct StereoScopeApp: App {
     
     @State private var selectedStereoscopicMode = StereoscopicModes.normal
     @State private var selectedBloomMode = BloomModes.bloom
+    @State private var _overshoot = Float(0.5)
+    
     
     var body: some Scene {
         WindowGroup {
@@ -56,7 +60,11 @@ struct StereoScopeApp: App {
                             }
                         }
                     }
+                    
                     .pickerStyle(.segmented)
+                    
+                    Slider(value: $_overshoot)
+                    
                     Spacer()
                 }
                 .preferredColorScheme(.dark)
@@ -78,6 +86,11 @@ struct StereoScopeApp: App {
                     case .bloom:
                         MetalViewController.shared?.isBloomEnabled = true
                     }
+                }
+                .onChange(of: _overshoot) {
+                    overshoot = _overshoot
+                    
+                    print("overshoot = \(overshoot)")
                 }
             }
         }
