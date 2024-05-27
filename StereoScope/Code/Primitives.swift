@@ -7,6 +7,11 @@
 
 import Foundation
 
+protocol StereoscopicConforming {
+    var shiftRed: Float { set get }
+    var shiftBlue: Float { set get }
+}
+
 protocol ColorConforming {
     var r: Float { set get }
     var g: Float { set get }
@@ -72,6 +77,16 @@ struct Sprite3DVertex: PositionConforming3D, TextureCoordinateConforming {
     var z: Float
     var u: Float
     var v: Float
+}
+
+struct Sprite3DVertexStereoscopic: PositionConforming3D, TextureCoordinateConforming, StereoscopicConforming {
+    var x: Float
+    var y: Float
+    var z: Float
+    var u: Float
+    var v: Float
+    var shiftRed: Float
+    var shiftBlue: Float
 }
 
 struct Sprite3DColoredVertex: PositionConforming3D, TextureCoordinateConforming, ColorConforming {

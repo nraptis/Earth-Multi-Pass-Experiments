@@ -210,11 +210,11 @@ vertex InOutDiffuse shape_node_diffuse_3d_vertex(constant Vertex3DDiffuse *verts
 
 fragment float4 shape_node_diffuse_3d_fragment(InOutDiffuse in [[stage_in]],
                                                 constant FragmentUniformsDiffuse & uniforms [[buffer(SlotFragmentUniforms)]]) {
-    float3 inNormalized = normalize(in.normal);
+    float3 inNormal = normalize(in.normal);
     float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
     float ambientIntensity = uniforms.lightAmbientIntensity;
     ambientIntensity = clamp(ambientIntensity, 0.0, 1.0);
-    float diffuseIntensity = max(dot(inNormalized, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
+    float diffuseIntensity = max(dot(inNormal, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
     diffuseIntensity = clamp(diffuseIntensity, 0.0, 1.0);
     float combinedLightIntensity = ambientIntensity + diffuseIntensity;
     float4 result = float4(uniforms.r * uniforms.lightR * combinedLightIntensity,
@@ -238,11 +238,11 @@ vertex InOutDiffuseColors shape_node_diffuse_colored_3d_vertex(constant Vertex3D
 
 fragment float4 shape_node_diffuse_colored_3d_fragment(InOutDiffuseColors in [[stage_in]],
                                                        constant FragmentUniformsDiffuse & uniforms [[buffer(SlotFragmentUniforms)]]) {
-    float3 inNormalized = normalize(in.normal);
+    float3 inNormal = normalize(in.normal);
     float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
     float ambientIntensity = uniforms.lightAmbientIntensity;
     ambientIntensity = clamp(ambientIntensity, 0.0, 1.0);
-    float diffuseIntensity = max(dot(inNormalized, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
+    float diffuseIntensity = max(dot(inNormal, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
     diffuseIntensity = clamp(diffuseIntensity, 0.0, 1.0);
     float combinedLightIntensity = ambientIntensity + diffuseIntensity;
     float4 result = float4(uniforms.r * uniforms.lightR * combinedLightIntensity * in.color[0],
@@ -266,13 +266,13 @@ vertex InOutPhong shape_node_phong_3d_vertex(constant Vertex3DDiffuse *verts [[b
 
 fragment float4 shape_node_phong_3d_fragment(InOutPhong in [[stage_in]],
                                              constant FragmentUniformsPhong & uniforms [[buffer(SlotFragmentUniforms)]]) {
-    float3 inNormalized = normalize(in.normal);
+    float3 inNormal = normalize(in.normal);
     float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
     float3 eye = normalize(in.eye);
-    float3 reflectedNormalized = normalize(-reflect(antiDirection, inNormalized));
+    float3 reflectedNormalized = normalize(-reflect(antiDirection, inNormal));
     float ambientIntensity = uniforms.lightAmbientIntensity;
     ambientIntensity = clamp(ambientIntensity, 0.0, 1.0);
-    float diffuseIntensity = max(dot(inNormalized, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
+    float diffuseIntensity = max(dot(inNormal, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
     diffuseIntensity = clamp(diffuseIntensity, 0.0, 1.0);
     float specularIntensity = pow(max(dot(reflectedNormalized, eye), 0.0), uniforms.lightShininess) * uniforms.lightSpecularIntensity;
     specularIntensity = clamp(specularIntensity, 0.0, 1.0);
@@ -299,13 +299,13 @@ vertex InOutPhongColors shape_node_phong_colored_3d_vertex(constant Vertex3DDiff
 
 fragment float4 shape_node_phong_colored_3d_fragment(InOutPhongColors in [[stage_in]],
                                                 constant FragmentUniformsPhong & uniforms [[buffer(SlotFragmentUniforms)]]) {
-    float3 inNormalized = normalize(in.normal);
+    float3 inNormal = normalize(in.normal);
     float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
     float3 eye = normalize(in.eye);
-    float3 reflectedNormalized = normalize(-reflect(antiDirection, inNormalized));
+    float3 reflectedNormalized = normalize(-reflect(antiDirection, inNormal));
     float ambientIntensity = uniforms.lightAmbientIntensity;
     ambientIntensity = clamp(ambientIntensity, 0.0, 1.0);
-    float diffuseIntensity = max(dot(inNormalized, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
+    float diffuseIntensity = max(dot(inNormal, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
     diffuseIntensity = clamp(diffuseIntensity, 0.0, 1.0);
     float specularIntensity = pow(max(dot(reflectedNormalized, eye), 0.0), uniforms.lightShininess) * uniforms.lightSpecularIntensity;
     specularIntensity = clamp(specularIntensity, 0.0, 10.0);

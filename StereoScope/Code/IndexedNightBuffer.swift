@@ -1,23 +1,23 @@
 //
-//  IndexedTriangleBufferSprite3D.swift
+//  IndexedNightBuffer.swift
 //  StereoScope
 //
-//  Created by Nicky Taylor on 5/24/24.
+//  Created by Nicky Taylor on 5/25/24.
 //
 
 import Foundation
 import Metal
 import simd
 
-class IndexedSpriteBuffer<NodeType,
+class IndexedNightBuffer<NodeType,
                           UniformsVertexType: UniformsVertex,
                           UniformsFragmentType: UniformsFragment> {
     
-    var vertices = [NodeType]()
+    private(set) var vertices = [NodeType]()
     private(set) var vertexCount = 0
     private(set) var vertexCapacity = 0
     
-    var indices = [UInt32]()
+    private(set) var indices = [UInt32]()
     private(set) var indexCount = 0
     private(set) var indexCapacity = 0
     
@@ -42,6 +42,8 @@ class IndexedSpriteBuffer<NodeType,
     var samplerState = Graphics.SamplerState.linearClamp
     
     private(set) weak var texture: MTLTexture?
+    private(set) weak var textureLight: MTLTexture?
+    
     private(set) unowned var graphics: Graphics?
     
     func setDirty(isVertexBufferDirty: Bool,
@@ -63,10 +65,12 @@ class IndexedSpriteBuffer<NodeType,
     }
     
     func load(graphics: Graphics,
-              texture: MTLTexture?) {
+              texture: MTLTexture?,
+              textureLight: MTLTexture?) {
         
         self.graphics = graphics
         self.texture = texture
+        self.textureLight = textureLight
         
         uniformsVertexBuffer = graphics.buffer(uniform: uniformsVertex)
         uniformsFragmentBuffer = graphics.buffer(uniform: uniformsFragment)
@@ -143,6 +147,11 @@ class IndexedSpriteBuffer<NodeType,
             return
         }
         
+        guard let textureLight = textureLight else {
+            print("IndexedTriangleTestDemoBufferShapeDemoColored2D => Render => Sprite Missing Texture")
+            return
+        }
+        
         guard let uniformsVertexBuffer = uniformsVertexBuffer else {
             print("IndexedTriangleTestDemoBufferShapeDemoColored2D => Render => Sprite Missing Uniforms Vertex Buffer")
             return
@@ -190,6 +199,8 @@ class IndexedSpriteBuffer<NodeType,
         graphics.setFragmentUniformsBuffer(uniformsFragmentBuffer, renderEncoder: renderEncoder)
         
         graphics.setFragmentTexture(texture, renderEncoder: renderEncoder)
+        
+        graphics.setFragmentLightTexture(textureLight, renderEncoder: renderEncoder)
         
         graphics.set(samplerState: samplerState, renderEncoder: renderEncoder)
         

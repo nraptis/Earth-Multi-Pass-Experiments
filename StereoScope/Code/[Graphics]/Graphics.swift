@@ -13,17 +13,13 @@ protocol GraphicsDelegate: AnyObject {
     
     var graphics: Graphics! { get set }
     
-    //2nd
     func load()
     
-    //3rd
     func loadComplete()
     
-    //4th (repeats)
     func update(deltaTime: Float)
     
-    //5th (repeats)
-    
+    func draw3DPrebloom(renderEncoder: MTLRenderCommandEncoder)
     func draw3DBloom(renderEncoder: MTLRenderCommandEncoder)
     
     func draw3DStereoscopicLeft(renderEncoder: MTLRenderCommandEncoder)
@@ -46,7 +42,6 @@ class Graphics {
     enum PipelineState {
         case invalid
         
-
         case shapeNodeIndexed2DNoBlending
         case shapeNodeIndexed2DAlphaBlending
         case shapeNodeIndexed2DAdditiveBlending
@@ -54,20 +49,20 @@ class Graphics {
         case shapeNodeIndexed3DNoBlending
         case shapeNodeIndexed3DAlphaBlending
         case shapeNodeIndexed3DAdditiveBlending
-                case shapeNodeIndexed3DPremultipliedBlending
-                case shapeNodeIndexedDiffuse3DNoBlending
-                case shapeNodeIndexedDiffuseColored3DNoBlending
-                case shapeNodeIndexedPhong3DNoBlending
-                case shapeNodeIndexedPhongColored3DNoBlending
+        case shapeNodeIndexed3DPremultipliedBlending
+        case shapeNodeIndexedDiffuse3DNoBlending
+        case shapeNodeIndexedDiffuseColored3DNoBlending
+        case shapeNodeIndexedPhong3DNoBlending
+        case shapeNodeIndexedPhongColored3DNoBlending
         
-                case shapeNodeColoredIndexed2DNoBlending
-                case shapeNodeColoredIndexed2DAlphaBlending
-                case shapeNodeColoredIndexed2DAdditiveBlending
-                case shapeNodeColoredIndexed2DPremultipliedBlending
-                case shapeNodeColoredIndexed3DNoBlending
-                case shapeNodeColoredIndexed3DAlphaBlending
-                case shapeNodeColoredIndexed3DAdditiveBlending
-                case shapeNodeColoredIndexed3DPremultipliedBlending
+        case shapeNodeColoredIndexed2DNoBlending
+        case shapeNodeColoredIndexed2DAlphaBlending
+        case shapeNodeColoredIndexed2DAdditiveBlending
+        case shapeNodeColoredIndexed2DPremultipliedBlending
+        case shapeNodeColoredIndexed3DNoBlending
+        case shapeNodeColoredIndexed3DAlphaBlending
+        case shapeNodeColoredIndexed3DAdditiveBlending
+        case shapeNodeColoredIndexed3DPremultipliedBlending
         
         
         case spriteNodeIndexed2DNoBlending
@@ -78,10 +73,25 @@ class Graphics {
         case spriteNodeIndexed3DAlphaBlending
         case spriteNodeIndexed3DAdditiveBlending
         case spriteNodeIndexed3DPremultipliedBlending
+        
+        case spriteNodeStereoscopicLeftIndexed3DNoBlending
+        case spriteNodeStereoscopicLeftIndexed3DAlphaBlending
+        case spriteNodeStereoscopicLeftIndexed3DAdditiveBlending
+        case spriteNodeStereoscopicLeftIndexed3DPremultipliedBlending
+        
+        case spriteNodeStereoscopicRightIndexed3DNoBlending
+        case spriteNodeStereoscopicRightIndexed3DAlphaBlending
+        case spriteNodeStereoscopicRightIndexed3DAdditiveBlending
+        case spriteNodeNodeStereoscopicRightIndexed3DPremultipliedBlending
+        
+        
         case spriteNodeIndexedDiffuse3DNoBlending
         case spriteNodeIndexedDiffuseColored3DNoBlending
         case spriteNodeIndexedPhong3DNoBlending
         case spriteNodeIndexedPhongColored3DNoBlending
+        
+        case spriteNodeIndexedNight3DNoBlending
+        
         case spriteNodeWhiteIndexed2DNoBlending
         case spriteNodeWhiteIndexed2DAlphaBlending
         case spriteNodeWhiteIndexed2DAdditiveBlending
@@ -108,8 +118,6 @@ class Graphics {
         case spriteNodeColoredWhiteIndexed3DAdditiveBlending
         case spriteNodeColoredWhiteIndexed3DPremultipliedBlending
         
-        case spriteNodeStereoscopicLeftColoredIndexed3DNoBlending
-        case spriteNodeStereoscopicRightColoredIndexed3DNoBlending
         
         case gaussianBlurHorizontalIndexedNoBlending
         case gaussianBlurVerticalIndexedNoBlending
@@ -260,6 +268,26 @@ class Graphics {
             
             
             
+            
+        case .spriteNodeStereoscopicLeftIndexed3DNoBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicLeftIndexed3DNoBlending)
+        case .spriteNodeStereoscopicLeftIndexed3DAlphaBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicLeftIndexed3DAlphaBlending)
+        case .spriteNodeStereoscopicLeftIndexed3DAdditiveBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicLeftIndexed3DAdditiveBlending)
+        case .spriteNodeStereoscopicLeftIndexed3DPremultipliedBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicLeftIndexed3DPremultipliedBlending)
+        
+        case .spriteNodeStereoscopicRightIndexed3DNoBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicRightIndexed3DNoBlending)
+        case .spriteNodeStereoscopicRightIndexed3DAlphaBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicRightIndexed3DAlphaBlending)
+        case .spriteNodeStereoscopicRightIndexed3DAdditiveBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicRightIndexed3DAdditiveBlending)
+        case .spriteNodeNodeStereoscopicRightIndexed3DPremultipliedBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicRightIndexed3DPremultipliedBlending)
+            
+            
         case .spriteNodeWhiteIndexed2DNoBlending:
             renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeWhiteIndexed2DNoBlending)
         case .spriteNodeWhiteIndexed2DAlphaBlending:
@@ -299,7 +327,10 @@ class Graphics {
             
         case .spriteNodeIndexedPhongColored3DNoBlending:
             renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeIndexedPhongColored3DNoBlending)
-        
+            
+            
+        case .spriteNodeIndexedNight3DNoBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeIndexedNight3DNoBlending)
             
        
         case .spriteNodeColoredWhiteIndexed2DNoBlending:
@@ -321,13 +352,7 @@ class Graphics {
         case .spriteNodeColoredIndexed3DPremultipliedBlending:
             renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeColoredIndexed3DPremultipliedBlending)
             
-            
-            
-        case .spriteNodeStereoscopicLeftColoredIndexed3DNoBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicLeftColoredIndexed3DNoBlending)
-        
-        case .spriteNodeStereoscopicRightColoredIndexed3DNoBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicRightColoredIndexed3DNoBlending)
+
             
         case .spriteNodeColoredWhiteIndexed3DNoBlending:
             renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeColoredWhiteIndexed3DNoBlending)

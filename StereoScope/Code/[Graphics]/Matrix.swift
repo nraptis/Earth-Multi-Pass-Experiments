@@ -98,7 +98,7 @@ extension matrix_float4x4 {
     mutating func ortho(width: Float, height: Float) {
         ortho(left: 0.0, right: width,
               bottom: height, top: 0.0,
-              nearZ: -512.0, farZ: 0.0)
+              nearZ: -1024, farZ: 0.0)
     }
     
     mutating func perspective(fovy: Float, aspect: Float, nearZ: Float, farZ: Float) {

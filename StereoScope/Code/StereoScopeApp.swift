@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-var overshoot = Float(0.5)
+var overshoot = Float(20.0)
 
 @main
 struct StereoScopeApp: App {
@@ -24,7 +24,7 @@ struct StereoScopeApp: App {
     
     @State private var selectedStereoscopicMode = StereoscopicModes.normal
     @State private var selectedBloomMode = BloomModes.bloom
-    @State private var _overshoot = Float(0.5)
+    @State private var _overshoot = Float(20.0)
     
     
     var body: some Scene {
@@ -63,7 +63,7 @@ struct StereoScopeApp: App {
                     
                     .pickerStyle(.segmented)
                     
-                    Slider(value: $_overshoot)
+                    Slider(value: $_overshoot, in: 0.0...150.0)
                     
                     Spacer()
                 }

@@ -11,11 +11,14 @@ import simd
 
 class Earth {
     
-    let earthModelData = EarthModelData()
+    let earthModelData: EarthModelData
     let earthModelDataStrips: [EarthModelDataStrip]
     weak var texture: MTLTexture?
     
-    init() {
+    init(width: Float, height: Float) {
+        
+        earthModelData = EarthModelData(width: width, height: height)
+        
         var _earthModelDataStrips = [EarthModelDataStrip]()
         for indexV in 1...EarthModelData.tileCountV {
             let earthModelDataStrip = EarthModelDataStrip(earthModelData: earthModelData,
@@ -27,12 +30,20 @@ class Earth {
     }
     
     func load(graphics: Graphics,
-              texture: MTLTexture?) {
+              texture: MTLTexture?,
+              textureLight: MTLTexture?) {
         self.texture = texture
         
         for earthModelDataStrip in earthModelDataStrips {
             earthModelDataStrip.load(graphics: graphics,
-                                     texture: texture)
+                                     texture: texture,
+                                     textureLight: textureLight)
+        }
+    }
+    
+    func updateStereo(rotation: Float) {
+        for earthModelDataStrip in earthModelDataStrips {
+            earthModelDataStrip.updateStereo(rotation: rotation)
         }
     }
     
@@ -56,6 +67,7 @@ class Earth {
                 lightAmbientIntensity: Float,
                 lightDiffuseIntensity: Float,
                 lightSpecularIntensity: Float,
+                lightNightIntensity: Float,
                 lightShininess: Float) {
         
         for earthModelDataStrip in earthModelDataStrips {
@@ -71,12 +83,16 @@ class Earth {
                                        lightAmbientIntensity: lightAmbientIntensity,
                                        lightDiffuseIntensity: lightDiffuseIntensity,
                                        lightSpecularIntensity: lightSpecularIntensity,
+                                       lightNightIntensity: lightNightIntensity,
                                        
                                        lightShininess: lightShininess,
                                        
-                //pipelineState: .spriteNodeIndexedPhongColored3DNoBlending
-                                       //pipelineState: .shapeNodeIndexedDiffuse3DNoBlending
-                                       pipelineState: .spriteNodeIndexedPhong3DNoBlending)
+                                       pipelineState: .spriteNodeIndexedNight3DNoBlending
+                                       //pipelineState: .spriteNodeStereoscopicLeftIndexed3DNoBlending
+            
+                                       
+            
+            )
             
         }
     }
