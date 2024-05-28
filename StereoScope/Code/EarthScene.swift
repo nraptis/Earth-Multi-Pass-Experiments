@@ -23,8 +23,6 @@ class EarthScene: GraphicsDelegate {
     var lightsTexture: MTLTexture?
     var galaxyTexture: MTLTexture?
     
-    
-    
     private var galaxySprite = IndexedSpriteInstance<Sprite3DVertex,
                                                      UniformsSpriteVertex,
                                                      UniformsSpriteFragment>(sentinelNode: Sprite3DVertex(x: 0.0, y: 0.0, z: 0.0, u: 0.0, v: 0.0))
@@ -61,16 +59,13 @@ class EarthScene: GraphicsDelegate {
             }
         }
         
+        
         if let image = UIImage(named: "galaxy") {
+        //if let image = UIImage(named: "earth_texture") {
             if let cgImage = image.cgImage {
                 galaxyTexture = try? loader.newTexture(cgImage: cgImage)
             }
         }
-        
-        
-        
-        print("earthTexture = \(earthTexture)")
-        print("lightsTexture = \(lightsTexture)")
         
         testSprite.load(graphics: graphics,
                         texture: earthTexture)
@@ -94,8 +89,8 @@ class EarthScene: GraphicsDelegate {
     
     func update(deltaTime: Float) {
         
-        earthRotation += 0.0025
-        //earthRotation += 0.00125 * 10.0
+        //earthRotation += 0.0025
+        earthRotation += 0.05
         
         if earthRotation >= (Float.pi * 2.0) {
             earthRotation -= (Float.pi * 2.0)
@@ -106,7 +101,7 @@ class EarthScene: GraphicsDelegate {
             lightRotation += (Float.pi * 2.0)
         }
         
-        earth.updateStereo(rotation: earthRotation)
+        earth.updateStereo(radians: earthRotation)
         
     }
     
@@ -192,12 +187,7 @@ class EarthScene: GraphicsDelegate {
     
     func draw3D(renderEncoder: MTLRenderCommandEncoder) {
         
-        
         let matrixPack = getMatrixPack()
-        
-        
-        
-        
         graphics.set(depthState: .lessThan, renderEncoder: renderEncoder)
         earth.draw3D(renderEncoder: renderEncoder,
                      projectionMatrix: matrixPack.projectionMatrix,
@@ -216,10 +206,37 @@ class EarthScene: GraphicsDelegate {
     }
     
     func draw3DStereoscopicLeft(renderEncoder: MTLRenderCommandEncoder) {
-        
+        let matrixPack = getMatrixPack()
+        graphics.set(depthState: .lessThan, renderEncoder: renderEncoder)
+        earth.draw3DStereoscopicLeft(renderEncoder: renderEncoder,
+                                     projectionMatrix: matrixPack.projectionMatrix,
+                                     modelViewMatrix: matrixPack.modelViewMatrix,
+                                     normalMatrix: matrixPack.normalMatrix,
+                                     lightDirX: sin(lightRotation),
+                                     lightDirY: 0.0,
+                                     lightDirZ: -cosf(lightRotation),
+                                     lightAmbientIntensity: 0.0,
+                                     lightDiffuseIntensity: 1.0,
+                                     lightSpecularIntensity: 999_999_999.0,
+                                     lightNightIntensity: 1.0,
+                                     lightShininess: 24.0)
     }
     
     func draw3DStereoscopicRight(renderEncoder: MTLRenderCommandEncoder) {
-        
+        let matrixPack = getMatrixPack()
+        graphics.set(depthState: .lessThan, renderEncoder: renderEncoder)
+        earth.draw3DStereoscopicRight(renderEncoder: renderEncoder,
+                                      projectionMatrix: matrixPack.projectionMatrix,
+                                      modelViewMatrix: matrixPack.modelViewMatrix,
+                                      normalMatrix: matrixPack.normalMatrix,
+                                      lightDirX: sin(lightRotation),
+                                      lightDirY: 0.0,
+                                      lightDirZ: -cosf(lightRotation),
+                                      lightAmbientIntensity: 0.0,
+                                      lightDiffuseIntensity: 1.0,
+                                      lightSpecularIntensity: 999_999_999.0,
+                                      lightNightIntensity: 1.0,
+                                      lightShininess: 24.0)
     }
+    
 }

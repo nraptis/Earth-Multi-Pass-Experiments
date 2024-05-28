@@ -41,9 +41,9 @@ class Earth {
         }
     }
     
-    func updateStereo(rotation: Float) {
+    func updateStereo(radians: Float) {
         for earthModelDataStrip in earthModelDataStrips {
-            earthModelDataStrip.updateStereo(rotation: rotation)
+            earthModelDataStrip.updateStereo(radians: radians)
         }
     }
     
@@ -70,6 +70,7 @@ class Earth {
                 lightNightIntensity: Float,
                 lightShininess: Float) {
         
+        
         for earthModelDataStrip in earthModelDataStrips {
             earthModelDataStrip.draw3D(renderEncoder: renderEncoder,
                                        projectionMatrix: projectionMatrix,
@@ -88,12 +89,95 @@ class Earth {
                                        lightShininess: lightShininess,
                                        
                                        pipelineState: .spriteNodeIndexedNight3DNoBlending
-                                       //pipelineState: .spriteNodeStereoscopicLeftIndexed3DNoBlending
-            
+                                       //pipelineState: .shapeNodeColoredIndexed3DNoBlending
                                        
+                                       //pipelineState: .spriteNodeStereoscopicRightIndexed3DNoBlending
+                                       
+            
             
             )
             
         }
     }
+    
+    func draw3DStereoscopicLeft(renderEncoder: MTLRenderCommandEncoder,
+                                projectionMatrix: matrix_float4x4,
+                                modelViewMatrix: matrix_float4x4,
+                                normalMatrix: matrix_float4x4,
+                                lightDirX: Float,
+                                lightDirY: Float,
+                                lightDirZ: Float,
+                                lightAmbientIntensity: Float,
+                                lightDiffuseIntensity: Float,
+                                lightSpecularIntensity: Float,
+                                lightNightIntensity: Float,
+                                lightShininess: Float) {
+        
+        for earthModelDataStrip in earthModelDataStrips {
+            earthModelDataStrip.draw3DStereoscopic(renderEncoder: renderEncoder,
+                                       projectionMatrix: projectionMatrix,
+                                       modelViewMatrix: modelViewMatrix,
+                                       normalMatrix: normalMatrix,
+                                       
+                                       lightDirX: lightDirX,
+                                       lightDirY: lightDirY,
+                                       lightDirZ: lightDirZ,
+                                       
+                                       lightAmbientIntensity: lightAmbientIntensity,
+                                       lightDiffuseIntensity: lightDiffuseIntensity,
+                                       lightSpecularIntensity: lightSpecularIntensity,
+                                       lightNightIntensity: lightNightIntensity,
+                                       
+                                       lightShininess: lightShininess,
+                                       
+                                       //pipelineState: .spriteNodeIndexedNight3DNoBlending
+                                       //pipelineState: .shapeNodeColoredIndexed3DNoBlending
+                                       
+                                       pipelineState: .spriteNodeStereoscopicLeftIndexed3DNoBlending
+                                       
+            
+            
+            )
+            
+        }
+    }
+    
+    func draw3DStereoscopicRight(renderEncoder: MTLRenderCommandEncoder,
+                                projectionMatrix: matrix_float4x4,
+                                modelViewMatrix: matrix_float4x4,
+                                normalMatrix: matrix_float4x4,
+                                lightDirX: Float,
+                                lightDirY: Float,
+                                lightDirZ: Float,
+                                lightAmbientIntensity: Float,
+                                lightDiffuseIntensity: Float,
+                                lightSpecularIntensity: Float,
+                                lightNightIntensity: Float,
+                                lightShininess: Float) {
+        
+        for earthModelDataStrip in earthModelDataStrips {
+            earthModelDataStrip.draw3DStereoscopic(renderEncoder: renderEncoder,
+                                                   projectionMatrix: projectionMatrix,
+                                                   modelViewMatrix: modelViewMatrix,
+                                                   normalMatrix: normalMatrix,
+                                                   
+                                                   lightDirX: lightDirX,
+                                                   lightDirY: lightDirY,
+                                                   lightDirZ: lightDirZ,
+                                                   
+                                                   lightAmbientIntensity: lightAmbientIntensity,
+                                                   lightDiffuseIntensity: lightDiffuseIntensity,
+                                                   lightSpecularIntensity: lightSpecularIntensity,
+                                                   lightNightIntensity: lightNightIntensity,
+                                                   
+                                                   lightShininess: lightShininess,
+                                                   
+                                                   //pipelineState: .spriteNodeIndexedNight3DNoBlending
+                                                   //pipelineState: .shapeNodeColoredIndexed3DNoBlending
+                                                   
+                                                   pipelineState: .spriteNodeStereoscopicRightIndexed3DNoBlending)
+            
+        }
+    }
+    
 }

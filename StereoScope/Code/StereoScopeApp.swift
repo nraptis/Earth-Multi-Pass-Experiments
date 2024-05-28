@@ -22,10 +22,9 @@ struct StereoScopeApp: App {
         case bloom
     }
     
-    @State private var selectedStereoscopicMode = StereoscopicModes.normal
+    @State private var selectedStereoscopicMode = StereoscopicModes.stereoscopic3D
     @State private var selectedBloomMode = BloomModes.bloom
     @State private var _overshoot = Float(20.0)
-    
     
     var body: some Scene {
         WindowGroup {
@@ -60,7 +59,6 @@ struct StereoScopeApp: App {
                             }
                         }
                     }
-                    
                     .pickerStyle(.segmented)
                     
                     Slider(value: $_overshoot, in: 0.0...150.0)

@@ -21,7 +21,7 @@ class MetalViewController: UIViewController {
     private var _isTimerRunning = false
     private var _isMetalEngineLoaded = false
     
-    var isStereoscopicEnabled = false
+    var isStereoscopicEnabled = true
     var isBloomEnabled = true
     
     let metalView: MetalView

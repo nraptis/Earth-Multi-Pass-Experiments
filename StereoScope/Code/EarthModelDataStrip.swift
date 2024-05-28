@@ -8,6 +8,7 @@
 import Foundation
 import Metal
 import simd
+import UIKit
 
 class EarthModelDataStrip {
     
@@ -28,18 +29,17 @@ class EarthModelDataStrip {
                                                                UniformsShapeFragment>()
     
     
-    
-    
-    let nightBuffer = IndexedNightBuffer<Sprite3DLightedVertex,
-                                                               UniformsLightsVertex,
-                                                               UniformsNightFragment>()
+    let nightBuffer = IndexedNightBuffer<Sprite3DLightedVertex, UniformsLightsVertex, UniformsNightFragment>()
     
     
     
     
-    let texturedTriangleBloomBuffer = IndexedSpriteBuffer<Shape3DVertex,
-                                                                    UniformsShapeNodeIndexedVertex,
-                                                                    UniformsShapeNodeIndexedFragment>()
+    let texturedTriangleBloomBuffer = IndexedSpriteBuffer<Shape3DVertex, UniformsShapeNodeIndexedVertex, UniformsShapeNodeIndexedFragment>()
+    
+    
+    let stereoSetupTestBuffer = IndexedShapeBuffer<Shape3DColoredVertex, UniformsShapeNodeIndexedVertex, UniformsShapeNodeIndexedFragment>()
+    
+    
     
     init(earthModelData: EarthModelData,
          indexV: Int) {
@@ -57,7 +57,6 @@ class EarthModelDataStrip {
             let normalY1 = earthModelData.normals[indexH][indexV - 1].y
             let normalZ1 = earthModelData.normals[indexH][indexV - 1].z
             
-            
             let u1 = earthModelData.textureCoords[indexH][indexV - 1].x
             let v1 = earthModelData.textureCoords[indexH][indexV - 1].y
             
@@ -74,10 +73,6 @@ class EarthModelDataStrip {
             
             texturedTriangleBuffer.add(index: UInt32(indexH * 2))
             texturedTriangleBuffer.add(index: UInt32(indexH * 2 + 1))
-            
-            /*
-             
-             */
             
             texturedTriangleBuffer.add(vertex: Sprite3DLightedColoredVertex(x: x1,
                                                                             y: y1,
@@ -116,10 +111,6 @@ class EarthModelDataStrip {
             
             stereoTriangleBuffer.add(index: UInt32(indexH * 2))
             stereoTriangleBuffer.add(index: UInt32(indexH * 2 + 1))
-            
-            /*
-             
-             */
             
             stereoTriangleBuffer.add(vertex: Sprite3DVertexStereoscopic(x: x1,
                                                                             y: y1,
@@ -193,6 +184,16 @@ class EarthModelDataStrip {
                                                                    z: z2))
             
             
+            stereoSetupTestBuffer.add(index: UInt32(indexH * 2))
+            stereoSetupTestBuffer.add(index: UInt32(indexH * 2 + 1))
+            stereoSetupTestBuffer.add(vertex: Shape3DColoredVertex(x: x1,
+                                                                   y: y1,
+                                                                   z: z1, r: 1.0, g: 1.0, b: 1.0, a: 1.0))
+            stereoSetupTestBuffer.add(vertex: Shape3DColoredVertex(x: x2,
+                                                                   y: y2,
+                                                                   z: z2,
+                                                                   r: 1.0,
+                                                                   g: 1.0, b: 1.0, a: 1.0))
             
             
         }
@@ -211,6 +212,9 @@ class EarthModelDataStrip {
         
         stereoTriangleBuffer.load(graphics: graphics,
                                   texture: texture)
+        
+        stereoSetupTestBuffer.load(graphics: graphics)
+        
     }
     
     func draw3DBloom(renderEncoder: MTLRenderCommandEncoder,
@@ -236,77 +240,51 @@ class EarthModelDataStrip {
         
     }
     
-    func updateStereo(rotation: Float) {
+    func updateStereo(radians: Float) {
         
-        let percentV1 = Float(indexV - 1) / Float(EarthModelData.tileCountV)
-        let percentV2 = Float(indexV) / Float(EarthModelData.tileCountV)
-        
-        let factorV1 = sinf(percentV1 * Math.pi)
-        let factorV2 = sinf(percentV2 * Math.pi)
-        
-        let startRotationH = Float(Float.pi)
-        let endRotationH = startRotationH + Float.pi * 2.0
-        let startRotationV = Float.pi
-        let endRotationV = Float(0.0)
-        var indexV = 0
-        
-        
-        let _angleV1 = startRotationV + (endRotationV - startRotationV) * percentV1
-        let _angleV2 = startRotationV + (endRotationV - startRotationV) * percentV2
-        
-        
-
-        let radius = Float(200.0)
-                
+        let stereoAmount = Float(UIDevice.current.userInterfaceIdiom == .pad ? 18.0 : 8.0)
         
         if let earthModelData = earthModelData {
             
-            
             for indexH in 0...EarthModelData.tileCountH {
                 
-                let percentH = (Float(indexH) / Float(EarthModelData.tileCountH))
-                let _angleH = startRotationH + (endRotationH - startRotationH) * percentH
+                let normalX1 = earthModelData.normals[indexH][indexV - 1].x
+                let normalY1 = earthModelData.normals[indexH][indexV - 1].y
+                let normalZ1 = earthModelData.normals[indexH][indexV - 1].z
                 
-                let dirX1 = sinf(_angleH + rotation - Math.pi_2)
-                let dirY1 = -cosf(_angleH - rotation)
+                let normalX2 = earthModelData.normals[indexH][indexV].x
+                let normalY2 = earthModelData.normals[indexH][indexV].y
+                let normalZ2 = earthModelData.normals[indexH][indexV].z
                 
+                let factorY1 = sinf(fabsf(1.0 - normalY1) * Math.pi_2)
+                let factorY2 = sinf(fabsf(1.0 - normalY2) * Math.pi_2)
                 
+                let baseRotation1 = -atan2f(-normalX1, -normalZ1)
+                let rotation1 = baseRotation1 - radians
+                let stereoShift1 = fabsf(cosf(rotation1) * factorY1)
                 
+                let baseRotation2 = -atan2f(-normalX2, -normalZ2)
+                let rotation2 = baseRotation2 - radians
+                let stereoShift2 = fabsf(cosf(rotation2) * factorY2)
                 
-                /*
-                stereoTriangleBuffer.vertices[indexH * 2].x = point1.x * radius
-                stereoTriangleBuffer.vertices[indexH * 2].y = point1.y * radius
-                stereoTriangleBuffer.vertices[indexH * 2].z = point1.z * radius
+                let vertexIndex1 = (indexH << 1)
+                let vertexIndex2 = vertexIndex1 + 1
                 
-                stereoTriangleBuffer.vertices[indexH * 2 + 1].x = point2.x * radius
-                stereoTriangleBuffer.vertices[indexH * 2 + 1].y = point2.y * radius
-                stereoTriangleBuffer.vertices[indexH * 2 + 1].z = point2.z * radius
-                */
+                stereoSetupTestBuffer.vertices[vertexIndex1].r = stereoShift1
+                stereoSetupTestBuffer.vertices[vertexIndex1].g = stereoShift1
+                stereoSetupTestBuffer.vertices[vertexIndex1].b = stereoShift1
                 
-                let factorH1 = fabsf(dirX1)
-                let factorH2 = fabsf(dirX1)
+                stereoSetupTestBuffer.vertices[vertexIndex2].r = stereoShift2
+                stereoSetupTestBuffer.vertices[vertexIndex2].g = stereoShift2
+                stereoSetupTestBuffer.vertices[vertexIndex2].b = stereoShift2
                 
+                stereoTriangleBuffer.vertices[vertexIndex1].shiftRed = 2.0 + stereoShift1 * stereoAmount
+                stereoTriangleBuffer.vertices[vertexIndex1].shiftBlue = 2.0 + stereoShift1 * stereoAmount
                 
-                stereoTriangleBuffer.vertices[indexH * 2].shiftRed = factorH1 * overshoot
-                stereoTriangleBuffer.vertices[indexH * 2 + 1].shiftRed = factorH2 * overshoot
-                
-                
-                /*
-                let factorH = fabsf(point.z)
-                
-                if Bool.random() {
-                    stereoTriangleBuffer.vertices[indexH * 2].shiftRed = factorH * 100.0
-                    stereoTriangleBuffer.vertices[indexH * 2 + 1].shiftRed = factorH * 100.0
-                } else {
-                    stereoTriangleBuffer.vertices[indexH * 2].shiftRed = factorH * 0.0
-                    stereoTriangleBuffer.vertices[indexH * 2 + 1].shiftRed = factorH * 0.0
-                }
-                */
-                
-                
+                stereoTriangleBuffer.vertices[vertexIndex2].shiftRed = 2.0 + stereoShift1 * stereoAmount
+                stereoTriangleBuffer.vertices[vertexIndex2].shiftBlue = 2.0 + stereoShift1 * stereoAmount
             }
         }
-        
     }
     
     func draw3D(renderEncoder: MTLRenderCommandEncoder,
@@ -326,20 +304,6 @@ class EarthModelDataStrip {
                 lightShininess: Float,
                 
                 pipelineState: Graphics.PipelineState) {
-        
-        
-        /*
-        stereoTriangleBuffer.uniformsVertex.projectionMatrix = projectionMatrix
-        stereoTriangleBuffer.uniformsVertex.modelViewMatrix = modelViewMatrix
-
-        stereoTriangleBuffer.setDirty(isVertexBufferDirty: true,
-                                        isIndexBufferDirty: false,
-                                        isUniformsVertexBufferDirty: true,
-                                        isUniformsFragmentBufferDirty: true)
-        
-        stereoTriangleBuffer.render(renderEncoder: renderEncoder,
-                                      pipelineState: pipelineState)
-        */
         
         
         
@@ -385,6 +349,7 @@ class EarthModelDataStrip {
                                        pipelineState: pipelineState)
         
         
+        
         /*
          texturedTriangleBuffer.uniformsVertex.projectionMatrix = projectionMatrix
          texturedTriangleBuffer.uniformsVertex.modelViewMatrix = modelViewMatrix
@@ -427,5 +392,36 @@ class EarthModelDataStrip {
         
     }
     
+    func draw3DStereoscopic(renderEncoder: MTLRenderCommandEncoder,
+                            projectionMatrix: matrix_float4x4,
+                            modelViewMatrix: matrix_float4x4,
+                            normalMatrix: matrix_float4x4,
+                
+                            lightDirX: Float,
+                            lightDirY: Float,
+                            lightDirZ: Float,
+                
+                            lightAmbientIntensity: Float,
+                            lightDiffuseIntensity: Float,
+                            lightSpecularIntensity: Float,
+                            lightNightIntensity: Float,
+                
+                            lightShininess: Float,
+                
+                            pipelineState: Graphics.PipelineState) {
+
+        
+        stereoTriangleBuffer.uniformsVertex.projectionMatrix = projectionMatrix
+        stereoTriangleBuffer.uniformsVertex.modelViewMatrix = modelViewMatrix
+
+        stereoTriangleBuffer.setDirty(isVertexBufferDirty: true,
+                                        isIndexBufferDirty: false,
+                                        isUniformsVertexBufferDirty: true,
+                                        isUniformsFragmentBufferDirty: true)
+        
+        stereoTriangleBuffer.render(renderEncoder: renderEncoder,
+                                      pipelineState: pipelineState)
+        
+    }
     
 }
