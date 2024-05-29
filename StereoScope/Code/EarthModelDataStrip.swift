@@ -28,6 +28,19 @@ class EarthModelDataStrip {
                                                                UniformsShapeVertex,
                                                                UniformsShapeFragment>()
     
+    let stereoLightedTriangleBuffer = IndexedSpriteBuffer<Sprite3DLightedStereoscopicVertex,
+                                                               UniformsLightsVertex,
+                                                          UniformsDiffuseFragment>()
+    
+    
+    let stereoLightedColoredTriangleBuffer = IndexedSpriteBuffer<Sprite3DLightedColoredStereoscopicVertex,
+                                                               UniformsLightsVertex,
+                                                          UniformsDiffuseFragment>()
+    
+    
+    
+    
+    
     
     let stereoColoredTriangleBuffer = IndexedSpriteBuffer<Sprite3DVertexColoredStereoscopic,
                                                                UniformsShapeVertex,
@@ -109,7 +122,64 @@ class EarthModelDataStrip {
             
             
             
+            //
             
+            stereoLightedTriangleBuffer.add(index: UInt32(indexH * 2))
+            stereoLightedTriangleBuffer.add(index: UInt32(indexH * 2 + 1))
+            
+            stereoLightedTriangleBuffer.add(vertex: Sprite3DLightedStereoscopicVertex(x: x1,
+                                                                            y: y1,
+                                                                            z: z1,
+                                                                            u: u1,
+                                                                            v: v1,
+                                                                                      normalX: normalX1,
+                                                                                      normalY: normalY1,
+                                                                                      normalZ: normalZ1,
+                                                                        shiftRed: 0.0,
+                                                                        shiftBlue: 0.0))
+            stereoLightedTriangleBuffer.add(vertex: Sprite3DLightedStereoscopicVertex(x: x2,
+                                                                            y: y2,
+                                                                            z: z2,
+                                                                            u: u2,
+                                                                            v: v2,
+                                                                                      normalX: normalX2,
+                                                                                      normalY: normalY2,
+                                                                                      normalZ: normalZ2,
+                                                                          shiftRed: 0.0,
+                                                                          shiftBlue: 0.0))
+            
+            ////
+            ///
+            ///
+            ///
+            
+            
+            
+            stereoLightedColoredTriangleBuffer.add(index: UInt32(indexH * 2))
+            stereoLightedColoredTriangleBuffer.add(index: UInt32(indexH * 2 + 1))
+            
+            stereoLightedColoredTriangleBuffer.add(vertex: Sprite3DLightedColoredStereoscopicVertex(x: x1,
+                                                                            y: y1,
+                                                                            z: z1,
+                                                                            u: u1,
+                                                                            v: v1,
+                                                                                      normalX: normalX1,
+                                                                                      normalY: normalY1,
+                                                                                      normalZ: normalZ1,
+                                                                                                    r: Float.random(in: 0.5...1.0), g: Float.random(in: 0.5...1.0), b: Float.random(in: 0.5...1.0), a: 1.0,
+                                                                        shiftRed: 0.0,
+                                                                        shiftBlue: 0.0))
+            stereoLightedColoredTriangleBuffer.add(vertex: Sprite3DLightedColoredStereoscopicVertex(x: x2,
+                                                                            y: y2,
+                                                                            z: z2,
+                                                                            u: u2,
+                                                                            v: v2,
+                                                                                      normalX: normalX2,
+                                                                                      normalY: normalY2,
+                                                                                      normalZ: normalZ2,
+                                                                                                    r: Float.random(in: 0.5...1.0), g: Float.random(in: 0.5...1.0), b: Float.random(in: 0.5...1.0), a: 1.0,
+                                                                          shiftRed: 0.0,
+                                                                          shiftBlue: 0.0))
             
             ///
             ///
@@ -249,8 +319,14 @@ class EarthModelDataStrip {
         
         stereoTriangleBuffer.load(graphics: graphics,
                                   texture: texture)
+        stereoLightedTriangleBuffer.load(graphics: graphics,
+                                         texture: texture)
         stereoColoredTriangleBuffer.load(graphics: graphics,
                                          texture: texture)
+        
+        stereoLightedColoredTriangleBuffer.load(graphics: graphics,
+                                                texture: texture)
+        
         stereoSetupTestBuffer.load(graphics: graphics)
         
     }
@@ -343,20 +419,7 @@ class EarthModelDataStrip {
                 
                 pipelineState: Graphics.PipelineState) {
         
-        
-        stereoTriangleBuffer.uniformsVertex.projectionMatrix = projectionMatrix
-        stereoTriangleBuffer.uniformsVertex.modelViewMatrix = modelViewMatrix
 
-        stereoTriangleBuffer.setDirty(isVertexBufferDirty: true,
-                                        isIndexBufferDirty: false,
-                                        isUniformsVertexBufferDirty: true,
-                                        isUniformsFragmentBufferDirty: true)
-        
-        stereoTriangleBuffer.render(renderEncoder: renderEncoder,
-                                      pipelineState: pipelineState)
-        
-        /*
-        
          nightBuffer.uniformsVertex.projectionMatrix = projectionMatrix
          nightBuffer.uniformsVertex.modelViewMatrix = modelViewMatrix
          nightBuffer.uniformsVertex.normalMatrix = normalMatrix
@@ -398,7 +461,6 @@ class EarthModelDataStrip {
          nightBuffer.render(renderEncoder: renderEncoder,
                                        pipelineState: pipelineState)
         
-        */
         
         /*
          texturedTriangleBuffer.uniformsVertex.projectionMatrix = projectionMatrix
@@ -459,6 +521,45 @@ class EarthModelDataStrip {
                             lightShininess: Float,
                 
                             pipelineState: Graphics.PipelineState) {
+        
+        
+        stereoLightedColoredTriangleBuffer.uniformsVertex.projectionMatrix = projectionMatrix
+        stereoLightedColoredTriangleBuffer.uniformsVertex.modelViewMatrix = modelViewMatrix
+        stereoLightedColoredTriangleBuffer.uniformsVertex.normalMatrix = normalMatrix
+        stereoLightedColoredTriangleBuffer.uniformsFragment.lightDirX = lightDirX
+        stereoLightedColoredTriangleBuffer.uniformsFragment.lightDirY = lightDirY
+        stereoLightedColoredTriangleBuffer.uniformsFragment.lightDirZ = lightDirZ
+        stereoLightedColoredTriangleBuffer.uniformsFragment.lightAmbientIntensity = lightAmbientIntensity
+        stereoLightedColoredTriangleBuffer.uniformsFragment.lightDiffuseIntensity = lightDiffuseIntensity
+        stereoLightedColoredTriangleBuffer.setDirty(isVertexBufferDirty: true,
+                                        isIndexBufferDirty: false,
+                                        isUniformsVertexBufferDirty: true,
+                                        isUniformsFragmentBufferDirty: true)
+        
+        stereoLightedColoredTriangleBuffer.render(renderEncoder: renderEncoder,
+                                      pipelineState: pipelineState)
+        
+        
+        
+        /*
+        stereoLightedTriangleBuffer.uniformsVertex.projectionMatrix = projectionMatrix
+        stereoLightedTriangleBuffer.uniformsVertex.modelViewMatrix = modelViewMatrix
+        stereoLightedTriangleBuffer.uniformsVertex.normalMatrix = normalMatrix
+        stereoLightedTriangleBuffer.uniformsFragment.lightDirX = lightDirX
+        stereoLightedTriangleBuffer.uniformsFragment.lightDirY = lightDirY
+        stereoLightedTriangleBuffer.uniformsFragment.lightDirZ = lightDirZ
+        stereoLightedTriangleBuffer.uniformsFragment.lightAmbientIntensity = lightAmbientIntensity
+        stereoLightedTriangleBuffer.uniformsFragment.lightDiffuseIntensity = lightDiffuseIntensity
+        stereoLightedTriangleBuffer.setDirty(isVertexBufferDirty: true,
+                                        isIndexBufferDirty: false,
+                                        isUniformsVertexBufferDirty: true,
+                                        isUniformsFragmentBufferDirty: true)
+        
+        stereoLightedTriangleBuffer.render(renderEncoder: renderEncoder,
+                                      pipelineState: pipelineState)
+        */
+        
+        
 /*
         
         stereoTriangleBuffer.uniformsVertex.projectionMatrix = projectionMatrix
@@ -475,6 +576,7 @@ class EarthModelDataStrip {
         
         
         
+        /*
         stereoColoredTriangleBuffer.uniformsVertex.projectionMatrix = projectionMatrix
         stereoColoredTriangleBuffer.uniformsVertex.modelViewMatrix = modelViewMatrix
 
@@ -486,7 +588,7 @@ class EarthModelDataStrip {
         stereoColoredTriangleBuffer.render(renderEncoder: renderEncoder,
                                       pipelineState: pipelineState)
         
-        
+        */
         
         
         

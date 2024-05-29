@@ -130,6 +130,19 @@ struct Shape3DLightedVertex: PositionConforming3D, NormalConforming {
     var normalZ: Float
 }
 
+struct Sprite3DLightedStereoscopicVertex: PositionConforming3D, TextureCoordinateConforming, StereoscopicConforming {
+    var x: Float
+    var y: Float
+    var z: Float
+    var u: Float
+    var v: Float
+    var normalX: Float
+    var normalY: Float
+    var normalZ: Float
+    var shiftRed: Float
+    var shiftBlue: Float
+}
+
 struct Shape3DLightedColoredVertex: PositionConforming3D, NormalConforming, ColorConforming {
     var x: Float
     var y: Float
@@ -177,4 +190,21 @@ struct Sprite3DLightedColoredVertex: PositionConforming3D, TextureCoordinateConf
     var g: Float
     var b: Float
     var a: Float
+}
+
+struct Sprite3DLightedColoredStereoscopicVertex: PositionConforming3D, TextureCoordinateConforming, NormalConforming, StereoscopicConforming {
+    var x: Float
+    var y: Float
+    var z: Float
+    var u: Float
+    var v: Float
+    var normalX: Float
+    var normalY: Float
+    var normalZ: Float
+    var r: Float
+    var g: Float
+    var b: Float
+    var a: Float
+    var shiftRed: Float
+    var shiftBlue: Float
 }

@@ -139,7 +139,7 @@ class Earth {
                                        
                                        //pipelineState: .spriteNodeStereoscopicBlueIndexed3DNoBlending
                                                    
-                                                   pipelineState: .spriteNodeColoredStereoscopicBlueIndexed3DNoBlending
+                                                   pipelineState: .spriteNodeIndexedDiffuseColoredStereoscopicBlue3DNoBlending
                                                                
                                        
             
@@ -184,7 +184,7 @@ class Earth {
                                                    //pipelineState: .shapeNodeColoredIndexed3DNoBlending
                                                    
                                                    //pipelineState: .spriteNodeStereoscopicRedIndexed3DNoBlending
-                                                   pipelineState: .spriteNodeColoredStereoscopicRedIndexed3DNoBlending
+                                                   pipelineState: .spriteNodeIndexedDiffuseColoredStereoscopicRed3DNoBlending
             
             
             )

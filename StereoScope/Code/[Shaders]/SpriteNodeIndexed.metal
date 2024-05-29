@@ -43,18 +43,14 @@ typedef struct {
     float g;
     float b;
     float a;
-    
     float lightR;
     float lightG;
     float lightB;
-    
     float lightAmbientIntensity;
     float lightDiffuseIntensity;
-    
     float lightDirX;
     float lightDirY;
     float lightDirZ;
-    
 } FragmentUniformsDiffuse;
 
 typedef struct {
@@ -62,21 +58,16 @@ typedef struct {
     float g;
     float b;
     float a;
-    
     float lightR;
     float lightG;
     float lightB;
-    
     float lightAmbientIntensity;
     float lightDiffuseIntensity;
     float lightSpecularIntensity;
-    
     float lightDirX;
     float lightDirY;
     float lightDirZ;
-
     float lightShininess;
-    
 } FragmentUniformsPhong;
 
 typedef struct {
@@ -84,19 +75,15 @@ typedef struct {
     float g;
     float b;
     float a;
-    
     float lightR;
     float lightG;
     float lightB;
-    
     float lightAmbientIntensity;
     float lightDiffuseIntensity;
     float lightNightIntensity;
-    
     float lightDirX;
     float lightDirY;
     float lightDirZ;
-    
     float overshoot;
     
 } FragmentUniformsNight;
@@ -193,8 +180,23 @@ typedef struct {
     packed_float3 position [[]];
     packed_float2 textureCoord [[]];
     packed_float3 normal [[]];
+    packed_float2 shift [[]];
+} Vertex3DDiffuseStereoscopic;
+
+typedef struct {
+    packed_float3 position [[]];
+    packed_float2 textureCoord [[]];
+    packed_float3 normal [[]];
     packed_float4 color [[]];
 } Vertex3DDiffuseColors;
+
+typedef struct {
+    packed_float3 position [[]];
+    packed_float2 textureCoord [[]];
+    packed_float3 normal [[]];
+    packed_float4 color [[]];
+    packed_float2 shift [[]];
+} Vertex3DDiffuseColorsStereoscopic;
 
 typedef struct {
     packed_float3 position [[]];
@@ -345,19 +347,22 @@ fragment float4 sprite_node_stereoscopic_red_3d_fragment(InOut in [[stage_in]],
 }
 
 
-vertex InOutDiffuse sprite_node_diffuse_3d_vertex(constant Vertex3DDiffuse *verts [[buffer(SlotVertexData)]],
+
+
+vertex InOutDiffuseColors sprite_node_diffuse_colored_3d_vertex(constant Vertex3DDiffuseColors *verts [[buffer(SlotVertexData)]],
                                                                    uint vid [[vertex_id]],
                                                                    constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
-    InOutDiffuse out;
+    InOutDiffuseColors out;
     float4 position = float4(verts[vid].position, 1.0);
     float4 normal = float4(verts[vid].normal, 1.0);
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
     out.textureCoord = verts[vid].textureCoord;
     out.normal = float3(uniforms.normalMatrix * normal);
+    out.color = verts[vid].color;
     return out;
 }
 
-fragment float4 sprite_node_diffuse_3d_fragment(InOutDiffuse in [[stage_in]],
+fragment float4 sprite_node_diffuse_colored_3d_fragment(InOutDiffuseColors in [[stage_in]],
                                                 constant FragmentUniformsDiffuse & uniforms [[buffer(SlotFragmentUniforms)]],
                                                 texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
                                                 sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
@@ -369,10 +374,10 @@ fragment float4 sprite_node_diffuse_3d_fragment(InOutDiffuse in [[stage_in]],
     diffuseIntensity = clamp(diffuseIntensity, 0.0, 1.0);
     float combinedLightIntensity = ambientIntensity + diffuseIntensity;
     half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
-    float4 result = float4(colorSample.r * uniforms.r * uniforms.lightR * combinedLightIntensity,
-                           colorSample.g * uniforms.g * uniforms.lightG * combinedLightIntensity,
-                           colorSample.b * uniforms.b * uniforms.lightB * combinedLightIntensity,
-                           colorSample.a * uniforms.a);
+    float4 result = float4(colorSample.r * uniforms.r * uniforms.lightR * combinedLightIntensity * in.color[0],
+                           colorSample.g * uniforms.g * uniforms.lightG * combinedLightIntensity * in.color[1],
+                           colorSample.b * uniforms.b * uniforms.lightB * combinedLightIntensity * in.color[2],
+                           colorSample.a * uniforms.a * in.color[3]);
     return result;
 }
 
@@ -442,40 +447,6 @@ fragment float4 sprite_node_night_3d_fragment(InOutNight in [[stage_in]],
 
 //FragmentUniformsNight
 //
-
-
-
-vertex InOutDiffuseColors sprite_node_diffuse_colored_3d_vertex(constant Vertex3DDiffuseColors *verts [[buffer(SlotVertexData)]],
-                                                                   uint vid [[vertex_id]],
-                                                                   constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
-    InOutDiffuseColors out;
-    float4 position = float4(verts[vid].position, 1.0);
-    float4 normal = float4(verts[vid].normal, 1.0);
-    out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
-    out.textureCoord = verts[vid].textureCoord;
-    out.normal = float3(uniforms.normalMatrix * normal);
-    out.color = verts[vid].color;
-    return out;
-}
-
-fragment float4 sprite_node_diffuse_colored_3d_fragment(InOutDiffuseColors in [[stage_in]],
-                                                constant FragmentUniformsDiffuse & uniforms [[buffer(SlotFragmentUniforms)]],
-                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
-                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
-    float3 inNormal = normalize(in.normal);
-    float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
-    float ambientIntensity = uniforms.lightAmbientIntensity;
-    ambientIntensity = clamp(ambientIntensity, 0.0, 1.0);
-    float diffuseIntensity = max(dot(inNormal, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
-    diffuseIntensity = clamp(diffuseIntensity, 0.0, 1.0);
-    float combinedLightIntensity = ambientIntensity + diffuseIntensity;
-    half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
-    float4 result = float4(colorSample.r * uniforms.r * uniforms.lightR * combinedLightIntensity * in.color[0],
-                           colorSample.g * uniforms.g * uniforms.lightG * combinedLightIntensity * in.color[1],
-                           colorSample.b * uniforms.b * uniforms.lightB * combinedLightIntensity * in.color[2],
-                           colorSample.a * uniforms.a * in.color[3]);
-    return result;
-}
 
 vertex InOutPhong sprite_node_phong_3d_vertex(constant Vertex3DDiffuse *verts [[buffer(SlotVertexData)]],
                                                                    uint vid [[vertex_id]],
@@ -644,5 +615,175 @@ fragment float4 sprite_node_colored_white_3d_fragment(InOutColors in [[stage_in]
                            colorSample.a * uniforms.g * in.color[1],
                            colorSample.a * uniforms.b * in.color[2],
                            colorSample.a * uniforms.a * in.color[3]);
+    return result;
+}
+
+
+
+vertex InOutDiffuse sprite_node_diffuse_3d_vertex(constant Vertex3DDiffuse *verts [[buffer(SlotVertexData)]],
+                                                                   uint vid [[vertex_id]],
+                                                                   constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
+    InOutDiffuse out;
+    float4 position = float4(verts[vid].position, 1.0);
+    float4 normal = float4(verts[vid].normal, 1.0);
+    out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
+    out.textureCoord = verts[vid].textureCoord;
+    out.normal = float3(uniforms.normalMatrix * normal);
+    return out;
+}
+
+fragment float4 sprite_node_diffuse_3d_fragment(InOutDiffuse in [[stage_in]],
+                                                constant FragmentUniformsDiffuse & uniforms [[buffer(SlotFragmentUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
+    float3 inNormal = normalize(in.normal);
+    float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
+    float ambientIntensity = uniforms.lightAmbientIntensity;
+    ambientIntensity = clamp(ambientIntensity, 0.0, 1.0);
+    float diffuseIntensity = max(dot(inNormal, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
+    diffuseIntensity = clamp(diffuseIntensity, 0.0, 1.0);
+    float combinedLightIntensity = ambientIntensity + diffuseIntensity;
+    half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
+    float4 result = float4(colorSample.r * uniforms.r * uniforms.lightR * combinedLightIntensity,
+                           colorSample.g * uniforms.g * uniforms.lightG * combinedLightIntensity,
+                           colorSample.b * uniforms.b * uniforms.lightB * combinedLightIntensity,
+                           colorSample.a * uniforms.a);
+    return result;
+}
+
+
+
+
+vertex InOutDiffuse sprite_node_diffuse_stereoscopic_blue_3d_vertex(constant Vertex3DDiffuseStereoscopic *verts [[buffer(SlotVertexData)]],
+                                                                   uint vid [[vertex_id]],
+                                                                   constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
+    InOutDiffuse out;
+    float4 position = float4(verts[vid].position, 1.0);
+    position[0] += verts[vid].shift[0];
+    float4 normal = float4(verts[vid].normal, 1.0);
+    out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
+    out.textureCoord = verts[vid].textureCoord;
+    out.normal = float3(uniforms.normalMatrix * normal);
+    return out;
+}
+
+
+fragment float4 sprite_node_diffuse_stereoscopic_blue_3d_fragment(InOutDiffuse in [[stage_in]],
+                                                constant FragmentUniformsDiffuse & uniforms [[buffer(SlotFragmentUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
+    float3 inNormal = normalize(in.normal);
+    float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
+    float ambientIntensity = uniforms.lightAmbientIntensity;
+    ambientIntensity = clamp(ambientIntensity, 0.0, 1.0);
+    float diffuseIntensity = max(dot(inNormal, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
+    diffuseIntensity = clamp(diffuseIntensity, 0.0, 1.0);
+    float combinedLightIntensity = ambientIntensity + diffuseIntensity;
+    half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
+    float4 result = float4(0.0,
+                           colorSample.g * uniforms.g * uniforms.lightG * combinedLightIntensity,
+                           colorSample.b * uniforms.b * uniforms.lightB * combinedLightIntensity,
+                           colorSample.a * uniforms.a);
+    return result;
+}
+
+vertex InOutDiffuse sprite_node_diffuse_stereoscopic_red_3d_vertex(constant Vertex3DDiffuseStereoscopic *verts [[buffer(SlotVertexData)]],
+                                                                   uint vid [[vertex_id]],
+                                                                   constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
+    InOutDiffuse out;
+    float4 position = float4(verts[vid].position, 1.0);
+    position[0] -= verts[vid].shift[1];
+    float4 normal = float4(verts[vid].normal, 1.0);
+    out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
+    out.textureCoord = verts[vid].textureCoord;
+    out.normal = float3(uniforms.normalMatrix * normal);
+    return out;
+}
+
+fragment float4 sprite_node_diffuse_stereoscopic_red_3d_fragment(InOutDiffuse in [[stage_in]],
+                                                constant FragmentUniformsDiffuse & uniforms [[buffer(SlotFragmentUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
+    float3 inNormal = normalize(in.normal);
+    float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
+    float ambientIntensity = uniforms.lightAmbientIntensity;
+    ambientIntensity = clamp(ambientIntensity, 0.0, 1.0);
+    float diffuseIntensity = max(dot(inNormal, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
+    diffuseIntensity = clamp(diffuseIntensity, 0.0, 1.0);
+    float combinedLightIntensity = ambientIntensity + diffuseIntensity;
+    half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
+    float4 result = float4(colorSample.r * uniforms.r * uniforms.lightR * combinedLightIntensity,
+                           0.0,
+                           0.0,
+                           colorSample.a * uniforms.a);
+    return result;
+}
+
+
+
+vertex InOutDiffuseColors sprite_node_diffuse_colored_stereoscopic_blue_3d_vertex(constant Vertex3DDiffuseColorsStereoscopic *verts [[buffer(SlotVertexData)]],
+                                                                   uint vid [[vertex_id]],
+                                                                   constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
+    InOutDiffuseColors out;
+    float4 position = float4(verts[vid].position, 1.0);
+    position[0] += verts[vid].shift[0];
+    float4 normal = float4(verts[vid].normal, 1.0);
+    out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
+    out.textureCoord = verts[vid].textureCoord;
+    out.normal = float3(uniforms.normalMatrix * normal);
+    out.color = verts[vid].color;
+    return out;
+}
+
+
+fragment float4 sprite_node_diffuse_colored_stereoscopic_blue_3d_fragment(InOutDiffuseColors in [[stage_in]],
+                                                constant FragmentUniformsDiffuse & uniforms [[buffer(SlotFragmentUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
+    float3 inNormal = normalize(in.normal);
+    float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
+    float ambientIntensity = uniforms.lightAmbientIntensity;
+    ambientIntensity = clamp(ambientIntensity, 0.0, 1.0);
+    float diffuseIntensity = max(dot(inNormal, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
+    diffuseIntensity = clamp(diffuseIntensity, 0.0, 1.0);
+    float combinedLightIntensity = ambientIntensity + diffuseIntensity;
+    half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
+    float4 result = float4(0.0,
+                           colorSample.g * uniforms.g * uniforms.lightG * combinedLightIntensity * in.color[1],
+                           colorSample.b * uniforms.b * uniforms.lightB * combinedLightIntensity * in.color[2],
+                           colorSample.a * uniforms.a);
+    return result;
+}
+
+vertex InOutDiffuseColors sprite_node_diffuse_colored_stereoscopic_red_3d_vertex(constant Vertex3DDiffuseColorsStereoscopic *verts [[buffer(SlotVertexData)]],
+                                                                   uint vid [[vertex_id]],
+                                                                   constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
+    InOutDiffuseColors out;
+    float4 position = float4(verts[vid].position, 1.0);
+    position[0] -= verts[vid].shift[1];
+    float4 normal = float4(verts[vid].normal, 1.0);
+    out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
+    out.textureCoord = verts[vid].textureCoord;
+    out.normal = float3(uniforms.normalMatrix * normal);
+    out.color = verts[vid].color;
+    return out;
+}
+
+fragment float4 sprite_node_diffuse_colored_stereoscopic_red_3d_fragment(InOutDiffuseColors in [[stage_in]],
+                                                constant FragmentUniformsDiffuse & uniforms [[buffer(SlotFragmentUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
+    float3 inNormal = normalize(in.normal);
+    float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
+    float ambientIntensity = uniforms.lightAmbientIntensity;
+    ambientIntensity = clamp(ambientIntensity, 0.0, 1.0);
+    float diffuseIntensity = max(dot(inNormal, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
+    diffuseIntensity = clamp(diffuseIntensity, 0.0, 1.0);
+    float combinedLightIntensity = ambientIntensity + diffuseIntensity;
+    half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
+    float4 result = float4(colorSample.r * uniforms.r * uniforms.lightR * combinedLightIntensity * in.color[0],
+                           0.0,
+                           0.0,
+                           colorSample.a * uniforms.a);
     return result;
 }
