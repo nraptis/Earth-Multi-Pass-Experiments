@@ -179,6 +179,13 @@ typedef struct {
 typedef struct {
     packed_float3 position [[]];
     packed_float2 textureCoord [[]];
+    packed_float4 color [[]];
+    packed_float2 shift [[]];
+} Vertex3DColorsStereoscopic;
+
+typedef struct {
+    packed_float3 position [[]];
+    packed_float2 textureCoord [[]];
     packed_float3 normal [[]];
 } Vertex3DDiffuse;
 
@@ -288,7 +295,7 @@ fragment float4 sprite_node_3d_fragment(InOut in [[stage_in]],
     return result;
 }
 
-vertex InOut sprite_node_stereoscopic_left_3d_vertex(constant Vertex3DStereoscopic *verts [[buffer(SlotVertexData)]],
+vertex InOut sprite_node_stereoscopic_blue_3d_vertex(constant Vertex3DStereoscopic *verts [[buffer(SlotVertexData)]],
                                                      uint vid [[vertex_id]],
                                                      constant VertexUniforms & uniforms [[ buffer(SlotVertexUniforms) ]]) {
     
@@ -301,19 +308,20 @@ vertex InOut sprite_node_stereoscopic_left_3d_vertex(constant Vertex3DStereoscop
     return out;
 }
 
-fragment float4 sprite_node_stereoscopic_left_3d_fragment(InOut in [[stage_in]],
+fragment float4 sprite_node_stereoscopic_blue_3d_fragment(InOut in [[stage_in]],
                                                 constant FragmentUniforms & uniforms [[buffer(SlotFragmentUniforms)]],
                                                 texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
                                                 sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
     half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
-    float4 result = float4(colorSample.r * uniforms.r,
-                           0.0,
-                           0.0,
+    float4 result = float4(0.0,
+                           colorSample.g * uniforms.g,
+                           colorSample.b * uniforms.b,
                            colorSample.a * uniforms.a);
+    
     return result;
 }
 
-vertex InOut sprite_node_stereoscopic_right_3d_vertex(constant Vertex3DStereoscopic *verts [[buffer(SlotVertexData)]],
+vertex InOut sprite_node_stereoscopic_red_3d_vertex(constant Vertex3DStereoscopic *verts [[buffer(SlotVertexData)]],
                                                                    uint vid [[vertex_id]],
                                                                    constant VertexUniforms & uniforms [[ buffer(SlotVertexUniforms) ]]) {
     InOut out;
@@ -324,20 +332,18 @@ vertex InOut sprite_node_stereoscopic_right_3d_vertex(constant Vertex3DStereosco
     return out;
 }
 
-fragment float4 sprite_node_stereoscopic_right_3d_fragment(InOut in [[stage_in]],
+fragment float4 sprite_node_stereoscopic_red_3d_fragment(InOut in [[stage_in]],
                                                            constant FragmentUniforms & uniforms [[buffer(SlotFragmentUniforms)]],
                                                            texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
                                                            sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
     half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
-    float4 result = float4(0.0,
-                           colorSample.g * uniforms.g,
-                           colorSample.b * uniforms.b,
+    float4 result = float4(colorSample.r * uniforms.r,
+                           0.0,
+                           0.0,
                            colorSample.a * uniforms.a);
     return result;
 }
 
-
-//Vertex3DStereoscopic
 
 vertex InOutDiffuse sprite_node_diffuse_3d_vertex(constant Vertex3DDiffuse *verts [[buffer(SlotVertexData)]],
                                                                    uint vid [[vertex_id]],
@@ -578,6 +584,55 @@ fragment float4 sprite_node_colored_3d_fragment(InOutColors in [[stage_in]],
                            colorSample.a * uniforms.a * in.color[3]);
     return result;
 }
+
+vertex InOutColors sprite_node_colored_stereoscopic_blue_3d_vertex(constant Vertex3DColorsStereoscopic *verts [[buffer(SlotVertexData)]],
+                                                                    uint vid [[vertex_id]],
+                                                                   constant VertexUniforms & uniforms [[ buffer(SlotVertexUniforms) ]]) {
+    InOutColors out;
+    float4 position = float4(verts[vid].position, 1.0);
+    position[0] += verts[vid].shift[0];
+    out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
+    out.textureCoord = verts[vid].textureCoord;
+    out.color = verts[vid].color;
+    return out;
+}
+
+fragment float4 sprite_node_colored_stereoscopic_blue_3d_fragment(InOutColors in [[stage_in]],
+                                                constant FragmentUniforms & uniforms [[buffer(SlotFragmentUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
+    half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
+    float4 result = float4(0.0,
+                           colorSample.g * uniforms.g * in.color[1],
+                           colorSample.b * uniforms.b * in.color[2],
+                           colorSample.a * uniforms.a * in.color[3]);
+    return result;
+}
+
+vertex InOutColors sprite_node_colored_stereoscopic_red_3d_vertex(constant Vertex3DColorsStereoscopic *verts [[buffer(SlotVertexData)]],
+                                                                    uint vid [[vertex_id]],
+                                                                   constant VertexUniforms & uniforms [[ buffer(SlotVertexUniforms) ]]) {
+    InOutColors out;
+    float4 position = float4(verts[vid].position, 1.0);
+    position[0] -= verts[vid].shift[1];
+    out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
+    out.textureCoord = verts[vid].textureCoord;
+    out.color = verts[vid].color;
+    return out;
+}
+
+fragment float4 sprite_node_colored_stereoscopic_red_3d_fragment(InOutColors in [[stage_in]],
+                                                constant FragmentUniforms & uniforms [[buffer(SlotFragmentUniforms)]],
+                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
+    half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
+    float4 result = float4(colorSample.r * uniforms.r * in.color[0],
+                           0.0,
+                           0.0,
+                           colorSample.a * uniforms.a * in.color[3]);
+    return result;
+}
+
 
 
 fragment float4 sprite_node_colored_white_3d_fragment(InOutColors in [[stage_in]],

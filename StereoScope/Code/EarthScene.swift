@@ -205,10 +205,10 @@ class EarthScene: GraphicsDelegate {
         
     }
     
-    func draw3DStereoscopicLeft(renderEncoder: MTLRenderCommandEncoder) {
+    func draw3DStereoscopicBlue(renderEncoder: MTLRenderCommandEncoder) {
         let matrixPack = getMatrixPack()
         graphics.set(depthState: .lessThan, renderEncoder: renderEncoder)
-        earth.draw3DStereoscopicLeft(renderEncoder: renderEncoder,
+        earth.draw3DStereoscopicBlue(renderEncoder: renderEncoder,
                                      projectionMatrix: matrixPack.projectionMatrix,
                                      modelViewMatrix: matrixPack.modelViewMatrix,
                                      normalMatrix: matrixPack.normalMatrix,
@@ -222,10 +222,10 @@ class EarthScene: GraphicsDelegate {
                                      lightShininess: 24.0)
     }
     
-    func draw3DStereoscopicRight(renderEncoder: MTLRenderCommandEncoder) {
+    func draw3DStereoscopicRed(renderEncoder: MTLRenderCommandEncoder) {
         let matrixPack = getMatrixPack()
         graphics.set(depthState: .lessThan, renderEncoder: renderEncoder)
-        earth.draw3DStereoscopicRight(renderEncoder: renderEncoder,
+        earth.draw3DStereoscopicRed(renderEncoder: renderEncoder,
                                       projectionMatrix: matrixPack.projectionMatrix,
                                       modelViewMatrix: matrixPack.modelViewMatrix,
                                       normalMatrix: matrixPack.normalMatrix,

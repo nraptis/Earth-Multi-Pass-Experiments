@@ -29,6 +29,14 @@ class EarthModelDataStrip {
                                                                UniformsShapeFragment>()
     
     
+    let stereoColoredTriangleBuffer = IndexedSpriteBuffer<Sprite3DVertexColoredStereoscopic,
+                                                               UniformsShapeVertex,
+                                                               UniformsShapeFragment>()
+    
+    
+    
+    
+    
     let nightBuffer = IndexedNightBuffer<Sprite3DLightedVertex, UniformsLightsVertex, UniformsNightFragment>()
     
     
@@ -131,6 +139,35 @@ class EarthModelDataStrip {
             ///
             ///
             ///
+            
+            
+            
+            stereoColoredTriangleBuffer.add(index: UInt32(indexH * 2))
+            stereoColoredTriangleBuffer.add(index: UInt32(indexH * 2 + 1))
+            
+            stereoColoredTriangleBuffer.add(vertex: Sprite3DVertexColoredStereoscopic(x: x1,
+                                                                            y: y1,
+                                                                            z: z1,
+                                                                            u: u1,
+                                                                            v: v1,
+                                                                                      r: Float.random(in: 0.5...1.0), g: Float.random(in: 0.5...1.0), b: Float.random(in: 0.5...1.0), a: 1.0,
+                                                                        shiftRed: 0.0,
+                                                                        shiftBlue: 0.0))
+            stereoColoredTriangleBuffer.add(vertex: Sprite3DVertexColoredStereoscopic(x: x2,
+                                                                            y: y2,
+                                                                            z: z2,
+                                                                            u: u2,
+                                                                            v: v2,
+                                                                                      r: Float.random(in: 0.5...1.0), g: Float.random(in: 0.5...1.0), b: Float.random(in: 0.5...1.0), a: 1.0,
+                                                                          shiftRed: 0.0,
+                                                                          shiftBlue: 0.0))
+            
+            
+            
+            
+            
+            
+            
             //
             //
             //
@@ -212,7 +249,8 @@ class EarthModelDataStrip {
         
         stereoTriangleBuffer.load(graphics: graphics,
                                   texture: texture)
-        
+        stereoColoredTriangleBuffer.load(graphics: graphics,
+                                         texture: texture)
         stereoSetupTestBuffer.load(graphics: graphics)
         
     }
@@ -306,6 +344,18 @@ class EarthModelDataStrip {
                 pipelineState: Graphics.PipelineState) {
         
         
+        stereoTriangleBuffer.uniformsVertex.projectionMatrix = projectionMatrix
+        stereoTriangleBuffer.uniformsVertex.modelViewMatrix = modelViewMatrix
+
+        stereoTriangleBuffer.setDirty(isVertexBufferDirty: true,
+                                        isIndexBufferDirty: false,
+                                        isUniformsVertexBufferDirty: true,
+                                        isUniformsFragmentBufferDirty: true)
+        
+        stereoTriangleBuffer.render(renderEncoder: renderEncoder,
+                                      pipelineState: pipelineState)
+        
+        /*
         
          nightBuffer.uniformsVertex.projectionMatrix = projectionMatrix
          nightBuffer.uniformsVertex.modelViewMatrix = modelViewMatrix
@@ -348,7 +398,7 @@ class EarthModelDataStrip {
          nightBuffer.render(renderEncoder: renderEncoder,
                                        pipelineState: pipelineState)
         
-        
+        */
         
         /*
          texturedTriangleBuffer.uniformsVertex.projectionMatrix = projectionMatrix
@@ -409,7 +459,7 @@ class EarthModelDataStrip {
                             lightShininess: Float,
                 
                             pipelineState: Graphics.PipelineState) {
-
+/*
         
         stereoTriangleBuffer.uniformsVertex.projectionMatrix = projectionMatrix
         stereoTriangleBuffer.uniformsVertex.modelViewMatrix = modelViewMatrix
@@ -421,6 +471,25 @@ class EarthModelDataStrip {
         
         stereoTriangleBuffer.render(renderEncoder: renderEncoder,
                                       pipelineState: pipelineState)
+ */
+        
+        
+        
+        stereoColoredTriangleBuffer.uniformsVertex.projectionMatrix = projectionMatrix
+        stereoColoredTriangleBuffer.uniformsVertex.modelViewMatrix = modelViewMatrix
+
+        stereoColoredTriangleBuffer.setDirty(isVertexBufferDirty: true,
+                                        isIndexBufferDirty: false,
+                                        isUniformsVertexBufferDirty: true,
+                                        isUniformsFragmentBufferDirty: true)
+        
+        stereoColoredTriangleBuffer.render(renderEncoder: renderEncoder,
+                                      pipelineState: pipelineState)
+        
+        
+        
+        
+        
         
     }
     

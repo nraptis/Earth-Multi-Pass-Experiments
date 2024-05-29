@@ -89,9 +89,13 @@ class Earth {
                                        lightShininess: lightShininess,
                                        
                                        pipelineState: .spriteNodeIndexedNight3DNoBlending
+                                       
                                        //pipelineState: .shapeNodeColoredIndexed3DNoBlending
                                        
-                                       //pipelineState: .spriteNodeStereoscopicRightIndexed3DNoBlending
+                                       //pipelineState: .spriteNodeStereoscopicBlueIndexed3DNoBlending
+                                       
+                                      // pipelineState: .spriteNodeStereoscopicBlueIndexed3DNoBlending
+                                       
                                        
             
             
@@ -100,7 +104,7 @@ class Earth {
         }
     }
     
-    func draw3DStereoscopicLeft(renderEncoder: MTLRenderCommandEncoder,
+    func draw3DStereoscopicBlue(renderEncoder: MTLRenderCommandEncoder,
                                 projectionMatrix: matrix_float4x4,
                                 modelViewMatrix: matrix_float4x4,
                                 normalMatrix: matrix_float4x4,
@@ -133,7 +137,10 @@ class Earth {
                                        //pipelineState: .spriteNodeIndexedNight3DNoBlending
                                        //pipelineState: .shapeNodeColoredIndexed3DNoBlending
                                        
-                                       pipelineState: .spriteNodeStereoscopicLeftIndexed3DNoBlending
+                                       //pipelineState: .spriteNodeStereoscopicBlueIndexed3DNoBlending
+                                                   
+                                                   pipelineState: .spriteNodeColoredStereoscopicBlueIndexed3DNoBlending
+                                                               
                                        
             
             
@@ -142,7 +149,7 @@ class Earth {
         }
     }
     
-    func draw3DStereoscopicRight(renderEncoder: MTLRenderCommandEncoder,
+    func draw3DStereoscopicRed(renderEncoder: MTLRenderCommandEncoder,
                                 projectionMatrix: matrix_float4x4,
                                 modelViewMatrix: matrix_float4x4,
                                 normalMatrix: matrix_float4x4,
@@ -154,6 +161,7 @@ class Earth {
                                 lightSpecularIntensity: Float,
                                 lightNightIntensity: Float,
                                 lightShininess: Float) {
+        
         
         for earthModelDataStrip in earthModelDataStrips {
             earthModelDataStrip.draw3DStereoscopic(renderEncoder: renderEncoder,
@@ -175,9 +183,15 @@ class Earth {
                                                    //pipelineState: .spriteNodeIndexedNight3DNoBlending
                                                    //pipelineState: .shapeNodeColoredIndexed3DNoBlending
                                                    
-                                                   pipelineState: .spriteNodeStereoscopicRightIndexed3DNoBlending)
+                                                   //pipelineState: .spriteNodeStereoscopicRedIndexed3DNoBlending
+                                                   pipelineState: .spriteNodeColoredStereoscopicRedIndexed3DNoBlending
+            
+            
+            )
+        
             
         }
+         
     }
     
 }

@@ -22,8 +22,8 @@ protocol GraphicsDelegate: AnyObject {
     func draw3DPrebloom(renderEncoder: MTLRenderCommandEncoder)
     func draw3DBloom(renderEncoder: MTLRenderCommandEncoder)
     
-    func draw3DStereoscopicLeft(renderEncoder: MTLRenderCommandEncoder)
-    func draw3DStereoscopicRight(renderEncoder: MTLRenderCommandEncoder)
+    func draw3DStereoscopicBlue(renderEncoder: MTLRenderCommandEncoder)
+    func draw3DStereoscopicRed(renderEncoder: MTLRenderCommandEncoder)
     
     func draw3D(renderEncoder: MTLRenderCommandEncoder)
     func draw2D(renderEncoder: MTLRenderCommandEncoder)
@@ -74,15 +74,25 @@ class Graphics {
         case spriteNodeIndexed3DAdditiveBlending
         case spriteNodeIndexed3DPremultipliedBlending
         
-        case spriteNodeStereoscopicLeftIndexed3DNoBlending
-        case spriteNodeStereoscopicLeftIndexed3DAlphaBlending
-        case spriteNodeStereoscopicLeftIndexed3DAdditiveBlending
-        case spriteNodeStereoscopicLeftIndexed3DPremultipliedBlending
+        case spriteNodeStereoscopicBlueIndexed3DNoBlending
+        case spriteNodeStereoscopicBlueIndexed3DAlphaBlending
+        case spriteNodeStereoscopicBlueIndexed3DAdditiveBlending
+        case spriteNodeStereoscopicBlueIndexed3DPremultipliedBlending
         
-        case spriteNodeStereoscopicRightIndexed3DNoBlending
-        case spriteNodeStereoscopicRightIndexed3DAlphaBlending
-        case spriteNodeStereoscopicRightIndexed3DAdditiveBlending
-        case spriteNodeNodeStereoscopicRightIndexed3DPremultipliedBlending
+        case spriteNodeStereoscopicRedIndexed3DNoBlending
+        case spriteNodeStereoscopicRedIndexed3DAlphaBlending
+        case spriteNodeStereoscopicRedIndexed3DAdditiveBlending
+        case spriteNodeNodeStereoscopicRedIndexed3DPremultipliedBlending
+        
+        case spriteNodeColoredStereoscopicBlueIndexed3DNoBlending
+                case spriteNodeColoredStereoscopicBlueIndexed3DAlphaBlending
+                case spriteNodeColoredStereoscopicBlueIndexed3DAdditiveBlending
+                case spriteNodeColoredStereoscopicBlueIndexed3DPremultipliedBlending
+                
+                case spriteNodeColoredStereoscopicRedIndexed3DNoBlending
+                case spriteNodeColoredStereoscopicRedIndexed3DAlphaBlending
+                case spriteNodeColoredStereoscopicRedIndexed3DAdditiveBlending
+                case spriteNodeNodeColoredStereoscopicRedIndexed3DPremultipliedBlending
         
         
         case spriteNodeIndexedDiffuse3DNoBlending
@@ -269,24 +279,41 @@ class Graphics {
             
             
             
-        case .spriteNodeStereoscopicLeftIndexed3DNoBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicLeftIndexed3DNoBlending)
-        case .spriteNodeStereoscopicLeftIndexed3DAlphaBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicLeftIndexed3DAlphaBlending)
-        case .spriteNodeStereoscopicLeftIndexed3DAdditiveBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicLeftIndexed3DAdditiveBlending)
-        case .spriteNodeStereoscopicLeftIndexed3DPremultipliedBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicLeftIndexed3DPremultipliedBlending)
+        case .spriteNodeStereoscopicBlueIndexed3DNoBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicBlueIndexed3DNoBlending)
+        case .spriteNodeStereoscopicBlueIndexed3DAlphaBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicBlueIndexed3DAlphaBlending)
+        case .spriteNodeStereoscopicBlueIndexed3DAdditiveBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicBlueIndexed3DAdditiveBlending)
+        case .spriteNodeStereoscopicBlueIndexed3DPremultipliedBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicBlueIndexed3DPremultipliedBlending)
         
-        case .spriteNodeStereoscopicRightIndexed3DNoBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicRightIndexed3DNoBlending)
-        case .spriteNodeStereoscopicRightIndexed3DAlphaBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicRightIndexed3DAlphaBlending)
-        case .spriteNodeStereoscopicRightIndexed3DAdditiveBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicRightIndexed3DAdditiveBlending)
-        case .spriteNodeNodeStereoscopicRightIndexed3DPremultipliedBlending:
-            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicRightIndexed3DPremultipliedBlending)
+        case .spriteNodeStereoscopicRedIndexed3DNoBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicRedIndexed3DNoBlending)
+        case .spriteNodeStereoscopicRedIndexed3DAlphaBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicRedIndexed3DAlphaBlending)
+        case .spriteNodeStereoscopicRedIndexed3DAdditiveBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicRedIndexed3DAdditiveBlending)
+        case .spriteNodeNodeStereoscopicRedIndexed3DPremultipliedBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeStereoscopicRedIndexed3DPremultipliedBlending)
             
+        case .spriteNodeColoredStereoscopicBlueIndexed3DNoBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeColoredStereoscopicBlueIndexed3DNoBlending)
+        case .spriteNodeColoredStereoscopicBlueIndexed3DAlphaBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeColoredStereoscopicBlueIndexed3DAlphaBlending)
+        case .spriteNodeColoredStereoscopicBlueIndexed3DAdditiveBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeColoredStereoscopicBlueIndexed3DAdditiveBlending)
+        case .spriteNodeColoredStereoscopicBlueIndexed3DPremultipliedBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeColoredStereoscopicBlueIndexed3DPremultipliedBlending)
+        
+        case .spriteNodeColoredStereoscopicRedIndexed3DNoBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeColoredStereoscopicRedIndexed3DNoBlending)
+        case .spriteNodeColoredStereoscopicRedIndexed3DAlphaBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeColoredStereoscopicRedIndexed3DAlphaBlending)
+        case .spriteNodeColoredStereoscopicRedIndexed3DAdditiveBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeColoredStereoscopicRedIndexed3DAdditiveBlending)
+        case .spriteNodeNodeColoredStereoscopicRedIndexed3DPremultipliedBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeColoredStereoscopicRedIndexed3DPremultipliedBlending)
             
         case .spriteNodeWhiteIndexed2DNoBlending:
             renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeWhiteIndexed2DNoBlending)

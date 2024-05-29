@@ -89,6 +89,20 @@ struct Sprite3DVertexStereoscopic: PositionConforming3D, TextureCoordinateConfor
     var shiftBlue: Float
 }
 
+struct Sprite3DVertexColoredStereoscopic: PositionConforming3D, TextureCoordinateConforming, StereoscopicConforming, ColorConforming {
+    var x: Float
+    var y: Float
+    var z: Float
+    var u: Float
+    var v: Float
+    var r: Float
+    var g: Float
+    var b: Float
+    var a: Float
+    var shiftRed: Float
+    var shiftBlue: Float
+}
+
 struct Sprite3DColoredVertex: PositionConforming3D, TextureCoordinateConforming, ColorConforming {
     var x: Float
     var y: Float
