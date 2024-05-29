@@ -381,73 +381,6 @@ fragment float4 sprite_node_diffuse_colored_3d_fragment(InOutDiffuseColors in [[
     return result;
 }
 
-
-vertex InOutNight sprite_node_night_3d_vertex(constant Vertex3DDiffuse *verts [[buffer(SlotVertexData)]],
-                                                                   uint vid [[vertex_id]],
-                                                                   constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
-    InOutNight out;
-    float4 position = float4(verts[vid].position, 1.0);
-    float4 normal = float4(verts[vid].normal, 1.0);
-    float4 normalInverse = float4(-verts[vid].normal[0],
-                                  -verts[vid].normal[1],
-                                  -verts[vid].normal[2],
-                                  1.0);
-    out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
-    out.textureCoord = verts[vid].textureCoord;
-    out.normal = float3(uniforms.normalMatrix * normal);
-    out.normalInverse = float3(uniforms.normalMatrix * normalInverse);
-    return out;
-}
-
-fragment float4 sprite_node_night_3d_fragment(InOutNight in [[stage_in]],
-                                                constant FragmentUniformsNight & uniforms [[buffer(SlotFragmentUniforms)]],
-                                              texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
-                                              texture2d<half> lightMap [[ texture(SlotFragmentLightTexture) ]],
-                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
-    float3 inNormal = normalize(in.normal);
-    float3 inNormalInverse = normalize(in.normalInverse);
-    
-    float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
-    float ambientIntensity = uniforms.lightAmbientIntensity;
-    ambientIntensity = clamp(ambientIntensity, 0.0, 1.0);
-    float diffuseIntensity = max(dot(inNormal, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
-    diffuseIntensity = clamp(diffuseIntensity, 0.0, 1.0);
-    
-    float combinedLightIntensity = ambientIntensity + diffuseIntensity;
-    
-    float nightIntensity = max(dot(inNormalInverse, antiDirection), 0.0) * uniforms.lightNightIntensity;
-    nightIntensity = clamp(nightIntensity, 0.0, 1.0);
-    
-    half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
-    half4 lightSample = lightMap.sample(colorSampler, in.textureCoord.xy);
-    
-    float redBase = uniforms.r * uniforms.lightR;
-    float greenBase = uniforms.g * uniforms.lightG;
-    float blueBase = uniforms.b * uniforms.lightB;
-    
-    float redLeft = redBase * colorSample.r * combinedLightIntensity;
-    float greenLeft = greenBase * colorSample.g * combinedLightIntensity;
-    float blueLeft = blueBase * colorSample.b * combinedLightIntensity;
-    
-    float redRight = redBase * lightSample.r * nightIntensity;
-    float greenRight = greenBase * lightSample.g * nightIntensity;
-    float blueRight = blueBase * lightSample.b * nightIntensity;
-    
-    float red = clamp(redLeft + redRight, 0.0, 1.0);
-    float green = clamp(greenLeft + greenRight, 0.0, 1.0);
-    float blue = clamp(blueLeft + blueRight, 0.0, 1.0);
-    
-    
-    float4 result = float4(red,
-                           green,
-                           blue,
-                           1.0);
-    return result;
-}
-
-//FragmentUniformsNight
-//
-
 vertex InOutPhong sprite_node_phong_3d_vertex(constant Vertex3DDiffuse *verts [[buffer(SlotVertexData)]],
                                                                    uint vid [[vertex_id]],
                                                                    constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
@@ -701,9 +634,9 @@ vertex InOutDiffuse sprite_node_diffuse_stereoscopic_red_3d_vertex(constant Vert
 }
 
 fragment float4 sprite_node_diffuse_stereoscopic_red_3d_fragment(InOutDiffuse in [[stage_in]],
-                                                constant FragmentUniformsDiffuse & uniforms [[buffer(SlotFragmentUniforms)]],
-                                                texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
-                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
+                                                                 constant FragmentUniformsDiffuse & uniforms [[buffer(SlotFragmentUniforms)]],
+                                                                 texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                                                 sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
     float3 inNormal = normalize(in.normal);
     float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
     float ambientIntensity = uniforms.lightAmbientIntensity;
@@ -785,5 +718,181 @@ fragment float4 sprite_node_diffuse_colored_stereoscopic_red_3d_fragment(InOutDi
                            0.0,
                            0.0,
                            colorSample.a * uniforms.a);
+    return result;
+}
+
+vertex InOutNight sprite_node_night_3d_vertex(constant Vertex3DDiffuse *verts [[buffer(SlotVertexData)]],
+                                                                   uint vid [[vertex_id]],
+                                                                   constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
+    InOutNight out;
+    float4 position = float4(verts[vid].position, 1.0);
+    float4 normal = float4(verts[vid].normal, 1.0);
+    float4 normalInverse = float4(-verts[vid].normal[0],
+                                  -verts[vid].normal[1],
+                                  -verts[vid].normal[2],
+                                  1.0);
+    out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
+    out.textureCoord = verts[vid].textureCoord;
+    out.normal = float3(uniforms.normalMatrix * normal);
+    out.normalInverse = float3(uniforms.normalMatrix * normalInverse);
+    return out;
+}
+
+fragment float4 sprite_node_night_3d_fragment(InOutNight in [[stage_in]],
+                                              constant FragmentUniformsNight & uniforms [[buffer(SlotFragmentUniforms)]],
+                                              texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                              texture2d<half> lightMap [[ texture(SlotFragmentLightTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
+    float3 inNormal = normalize(in.normal);
+    float3 inNormalInverse = normalize(in.normalInverse);
+    
+    float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
+    float ambientIntensity = uniforms.lightAmbientIntensity;
+    ambientIntensity = clamp(ambientIntensity, 0.0, 1.0);
+    float diffuseIntensity = max(dot(inNormal, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
+    diffuseIntensity = clamp(diffuseIntensity, 0.0, 1.0);
+    
+    float combinedLightIntensity = ambientIntensity + diffuseIntensity;
+    
+    float nightIntensity = max(dot(inNormalInverse, antiDirection), 0.0) * uniforms.lightNightIntensity;
+    nightIntensity = clamp(nightIntensity, 0.0, 1.0);
+    
+    half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
+    half4 lightSample = lightMap.sample(colorSampler, in.textureCoord.xy);
+    
+    float redBase = uniforms.r * uniforms.lightR;
+    float greenBase = uniforms.g * uniforms.lightG;
+    float blueBase = uniforms.b * uniforms.lightB;
+    
+    float redLeft = redBase * colorSample.r * combinedLightIntensity;
+    float greenLeft = greenBase * colorSample.g * combinedLightIntensity;
+    float blueLeft = blueBase * colorSample.b * combinedLightIntensity;
+    
+    float redRight = redBase * lightSample.r * nightIntensity;
+    float greenRight = greenBase * lightSample.g * nightIntensity;
+    float blueRight = blueBase * lightSample.b * nightIntensity;
+    
+    float red = clamp(redLeft + redRight, 0.0, 1.0);
+    float green = clamp(greenLeft + greenRight, 0.0, 1.0);
+    float blue = clamp(blueLeft + blueRight, 0.0, 1.0);
+    
+    
+    float4 result = float4(red,
+                           green,
+                           blue,
+                           1.0);
+    return result;
+}
+
+
+
+
+vertex InOutNight sprite_node_night_stereoscopic_blue_3d_vertex(constant Vertex3DDiffuseStereoscopic *verts [[buffer(SlotVertexData)]],
+                                                                uint vid [[vertex_id]],
+                                                                   constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
+    InOutNight out;
+    float4 position = float4(verts[vid].position, 1.0);
+    position[0] += verts[vid].shift[0];
+    float4 normal = float4(verts[vid].normal, 1.0);
+    float4 normalInverse = float4(-verts[vid].normal[0],
+                                  -verts[vid].normal[1],
+                                  -verts[vid].normal[2],
+                                  1.0);
+    out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
+    out.textureCoord = verts[vid].textureCoord;
+    out.normal = float3(uniforms.normalMatrix * normal);
+    out.normalInverse = float3(uniforms.normalMatrix * normalInverse);
+    return out;
+}
+
+fragment float4 sprite_node_night_stereoscopic_blue_3d_fragment(InOutNight in [[stage_in]],
+                                              constant FragmentUniformsNight & uniforms [[buffer(SlotFragmentUniforms)]],
+                                              texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                              texture2d<half> lightMap [[ texture(SlotFragmentLightTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
+    float3 inNormal = normalize(in.normal);
+    float3 inNormalInverse = normalize(in.normalInverse);
+    
+    float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
+    float ambientIntensity = uniforms.lightAmbientIntensity;
+    ambientIntensity = clamp(ambientIntensity, 0.0, 1.0);
+    float diffuseIntensity = max(dot(inNormal, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
+    diffuseIntensity = clamp(diffuseIntensity, 0.0, 1.0);
+    
+    float combinedLightIntensity = ambientIntensity + diffuseIntensity;
+    
+    float nightIntensity = max(dot(inNormalInverse, antiDirection), 0.0) * uniforms.lightNightIntensity;
+    nightIntensity = clamp(nightIntensity, 0.0, 1.0);
+    
+    half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
+    half4 lightSample = lightMap.sample(colorSampler, in.textureCoord.xy);
+    
+    float greenBase = uniforms.g * uniforms.lightG;
+    float blueBase = uniforms.b * uniforms.lightB;
+    
+    float greenLeft = greenBase * colorSample.g * combinedLightIntensity;
+    float blueLeft = blueBase * colorSample.b * combinedLightIntensity;
+    
+    float greenRight = greenBase * lightSample.g * nightIntensity;
+    float blueRight = blueBase * lightSample.b * nightIntensity;
+    
+    float green = clamp(greenLeft + greenRight, 0.0, 1.0);
+    float blue = clamp(blueLeft + blueRight, 0.0, 1.0);
+    
+    float4 result = float4(0.0,
+                           green,
+                           blue,
+                           1.0);
+    return result;
+}
+
+vertex InOutNight sprite_node_night_stereoscopic_red_3d_vertex(constant Vertex3DDiffuseStereoscopic *verts [[buffer(SlotVertexData)]],
+                                                                   uint vid [[vertex_id]],
+                                                                   constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
+    InOutNight out;
+    float4 position = float4(verts[vid].position, 1.0);
+    position[0] -= verts[vid].shift[1];
+    float4 normal = float4(verts[vid].normal, 1.0);
+    float4 normalInverse = float4(-verts[vid].normal[0],
+                                  -verts[vid].normal[1],
+                                  -verts[vid].normal[2],
+                                  1.0);
+    out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
+    out.textureCoord = verts[vid].textureCoord;
+    out.normal = float3(uniforms.normalMatrix * normal);
+    out.normalInverse = float3(uniforms.normalMatrix * normalInverse);
+    return out;
+}
+
+fragment float4 sprite_node_night_stereoscopic_red_3d_fragment(InOutNight in [[stage_in]],
+                                              constant FragmentUniformsNight & uniforms [[buffer(SlotFragmentUniforms)]],
+                                              texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
+                                              texture2d<half> lightMap [[ texture(SlotFragmentLightTexture) ]],
+                                                sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
+    float3 inNormal = normalize(in.normal);
+    float3 inNormalInverse = normalize(in.normalInverse);
+    
+    float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
+    float ambientIntensity = uniforms.lightAmbientIntensity;
+    ambientIntensity = clamp(ambientIntensity, 0.0, 1.0);
+    float diffuseIntensity = max(dot(inNormal, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
+    diffuseIntensity = clamp(diffuseIntensity, 0.0, 1.0);
+    
+    float combinedLightIntensity = ambientIntensity + diffuseIntensity;
+    
+    float nightIntensity = max(dot(inNormalInverse, antiDirection), 0.0) * uniforms.lightNightIntensity;
+    nightIntensity = clamp(nightIntensity, 0.0, 1.0);
+    
+    half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
+    half4 lightSample = lightMap.sample(colorSampler, in.textureCoord.xy);
+    
+    float redBase = uniforms.r * uniforms.lightR;
+    float redLeft = redBase * colorSample.r * combinedLightIntensity;
+    float redRight = redBase * lightSample.r * nightIntensity;
+    float red = clamp(redLeft + redRight, 0.0, 1.0);
+    float4 result = float4(red,
+                           0.0,
+                           0.0,
+                           1.0);
     return result;
 }

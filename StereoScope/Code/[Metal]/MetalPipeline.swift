@@ -56,8 +56,6 @@ class MetalPipeline {
     private var shapeNodeIndexedDiffuseColored3DVertexProgram: MTLFunction!
     private var shapeNodeIndexedDiffuseColored3DFragmentProgram: MTLFunction!
     
-    
-    
     private var spriteNodeIndexed2DVertexProgram: MTLFunction!
     private var spriteNodeIndexed2DFragmentProgram: MTLFunction!
     private var spriteNodeWhiteIndexed2DFragmentProgram: MTLFunction!
@@ -79,6 +77,11 @@ class MetalPipeline {
     
     private var spriteNodeIndexedNight3DVertexProgram: MTLFunction!
     private var spriteNodeIndexedNight3DFragmentProgram: MTLFunction!
+    private var spriteNodeIndexedNightStereoscopicRed3DVertexProgram: MTLFunction!
+    private var spriteNodeIndexedNightStereoscopicRed3DFragmentProgram: MTLFunction!
+    private var spriteNodeIndexedNightStereoscopicBlue3DVertexProgram: MTLFunction!
+    private var spriteNodeIndexedNightStereoscopicBlue3DFragmentProgram: MTLFunction!
+    
     
     
     private var spriteNodeWhiteIndexed3DFragmentProgram: MTLFunction!
@@ -110,14 +113,11 @@ class MetalPipeline {
     private var spriteNodeStereoscopicBlueIndexed3DFragmentProgram: MTLFunction!
     private var spriteNodeStereoscopicRedIndexed3DVertexProgram: MTLFunction!
     private var spriteNodeStereoscopicRedIndexed3DFragmentProgram: MTLFunction!
-
     
     private var gaussianBlurIndexedVertexProgram: MTLFunction!
-    private var gaussianBlurIndexedColoredVertexProgram: MTLFunction!
+    
     private var gaussianBlurIndexedHorizontalFragmentProgram: MTLFunction!
     private var gaussianBlurIndexedVerticalFragmentProgram: MTLFunction!
-    private var gaussianBlurIndexedColoredIndexedHorizontalFragmentProgram: MTLFunction!
-    private var gaussianBlurIndexedColoredIndexedVerticalFragmentProgram: MTLFunction!
     
     
     
@@ -216,9 +216,11 @@ class MetalPipeline {
     
     private(set) var pipelineStateSpriteNodeIndexedDiffuseColored3DNoBlending: MTLRenderPipelineState!
     private(set) var pipelineStateSpriteNodeIndexedDiffuseColoredStereoscopicRed3DNoBlending: MTLRenderPipelineState!
-        private(set) var pipelineStateSpriteNodeIndexedDiffuseColoredStereoscopicBlue3DNoBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateSpriteNodeIndexedDiffuseColoredStereoscopicBlue3DNoBlending: MTLRenderPipelineState!
     
     private(set) var pipelineStateSpriteNodeIndexedNight3DNoBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateSpriteNodeIndexedNightStereoscopicRed3DNoBlending: MTLRenderPipelineState!
+    private(set) var pipelineStateSpriteNodeIndexedNightStereoscopicBlue3DNoBlending: MTLRenderPipelineState!
     
     private(set) var pipelineStateSpriteNodeColoredWhiteIndexed2DNoBlending: MTLRenderPipelineState!
     private(set) var pipelineStateSpriteNodeColoredWhiteIndexed2DAlphaBlending: MTLRenderPipelineState!
@@ -270,9 +272,9 @@ class MetalPipeline {
         buildPipelineStatesSpriteNodePhongIndexed3D()
         buildPipelineStatesSpriteNodePhongColoredIndexed3D()
         
-        
         buildPipelineStatesSpriteNodeNightIndexed3D()
-        
+        buildPipelineStatesSpriteNodeNightStereoscopicRedIndexed3D()
+        buildPipelineStatesSpriteNodeNightStereoscopicBlueIndexed3D()
         
         buildPipelineStatesSpriteNodeWhiteIndexed2D()
         buildPipelineStatesSpriteNodeWhiteIndexed3D()
@@ -365,23 +367,22 @@ class MetalPipeline {
         spriteNodeColoredStereoscopicRedIndexed3DFragmentProgram = metalLibrary.makeFunction(name: "sprite_node_colored_stereoscopic_red_3d_fragment")!
         
         
-        spriteNodeColoredWhiteIndexed2DFragmentProgram = metalLibrary.makeFunction(name: "sprite_node_colored_white_2d_fragment")
-        spriteNodeColoredWhiteIndexed3DFragmentProgram = metalLibrary.makeFunction(name: "sprite_node_colored_white_3d_fragment")
+        spriteNodeColoredWhiteIndexed2DFragmentProgram = metalLibrary.makeFunction(name: "sprite_node_colored_white_2d_fragment")!
+        spriteNodeColoredWhiteIndexed3DFragmentProgram = metalLibrary.makeFunction(name: "sprite_node_colored_white_3d_fragment")!
         
-        spriteNodeIndexedNight3DVertexProgram = metalLibrary.makeFunction(name: "sprite_node_night_3d_vertex")
-        spriteNodeIndexedNight3DFragmentProgram = metalLibrary.makeFunction(name: "sprite_node_night_3d_fragment")
+        spriteNodeIndexedNight3DVertexProgram = metalLibrary.makeFunction(name: "sprite_node_night_3d_vertex")!
+        spriteNodeIndexedNight3DFragmentProgram = metalLibrary.makeFunction(name: "sprite_node_night_3d_fragment")!
+        spriteNodeIndexedNightStereoscopicRed3DVertexProgram = metalLibrary.makeFunction(name: "sprite_node_night_stereoscopic_red_3d_vertex")!
+        spriteNodeIndexedNightStereoscopicRed3DFragmentProgram = metalLibrary.makeFunction(name: "sprite_node_night_stereoscopic_red_3d_fragment")!
+        spriteNodeIndexedNightStereoscopicBlue3DVertexProgram = metalLibrary.makeFunction(name: "sprite_node_night_stereoscopic_blue_3d_vertex")!
+        spriteNodeIndexedNightStereoscopicBlue3DFragmentProgram = metalLibrary.makeFunction(name: "sprite_node_night_stereoscopic_blue_3d_fragment")!
         
         
         
+        gaussianBlurIndexedVertexProgram = metalLibrary.makeFunction(name: "gaussian_blur_vertex")!
         
-        gaussianBlurIndexedVertexProgram = metalLibrary.makeFunction(name: "gaussian_blur_vertex")
-        gaussianBlurIndexedColoredVertexProgram = metalLibrary.makeFunction(name: "gaussian_blur_colored_vertex")
-        
-        gaussianBlurIndexedHorizontalFragmentProgram = metalLibrary.makeFunction(name: "gaussian_blur_horizontal_fragment")
-        gaussianBlurIndexedVerticalFragmentProgram = metalLibrary.makeFunction(name: "gaussian_blur_vertical_fragment")
-        
-        gaussianBlurIndexedColoredIndexedHorizontalFragmentProgram = metalLibrary.makeFunction(name: "gaussian_blur_colored_horizontal_fragment")
-        gaussianBlurIndexedColoredIndexedVerticalFragmentProgram = metalLibrary.makeFunction(name: "gaussian_blur_colored_vertical_fragment")
+        gaussianBlurIndexedHorizontalFragmentProgram = metalLibrary.makeFunction(name: "gaussian_blur_horizontal_fragment")!
+        gaussianBlurIndexedVerticalFragmentProgram = metalLibrary.makeFunction(name: "gaussian_blur_vertical_fragment")!
     }
     
     private func buildPipelineStatesShapeNodeIndexed2D() {
@@ -656,6 +657,24 @@ class MetalPipeline {
         pipelineStateSpriteNodeIndexedNight3DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
     }
     
+    
+    func buildPipelineStatesSpriteNodeNightStereoscopicRedIndexed3D() {
+        let pipelineDescriptor = MTLRenderPipelineDescriptor()
+        pipelineDescriptor.vertexFunction = spriteNodeIndexedNightStereoscopicRed3DVertexProgram
+        pipelineDescriptor.fragmentFunction = spriteNodeIndexedNightStereoscopicRed3DFragmentProgram
+        pipelineDescriptor.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
+        pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
+        pipelineStateSpriteNodeIndexedNightStereoscopicRed3DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+    }
+
+    func buildPipelineStatesSpriteNodeNightStereoscopicBlueIndexed3D() {
+        let pipelineDescriptor = MTLRenderPipelineDescriptor()
+        pipelineDescriptor.vertexFunction = spriteNodeIndexedNightStereoscopicBlue3DVertexProgram
+        pipelineDescriptor.fragmentFunction = spriteNodeIndexedNightStereoscopicBlue3DFragmentProgram
+        pipelineDescriptor.colorAttachments[0].pixelFormat = metalLayer.pixelFormat
+        pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
+        pipelineStateSpriteNodeIndexedNightStereoscopicBlue3DNoBlending = try? metalDevice.makeRenderPipelineState(descriptor: pipelineDescriptor)
+    }
     
     func buildPipelineStatesSpriteNodePhongIndexed3D() {
         let pipelineDescriptor = MTLRenderPipelineDescriptor()

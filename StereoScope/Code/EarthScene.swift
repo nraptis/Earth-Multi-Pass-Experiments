@@ -27,7 +27,6 @@ class EarthScene: GraphicsDelegate {
                                                      UniformsSpriteVertex,
                                                      UniformsSpriteFragment>(sentinelNode: Sprite3DVertex(x: 0.0, y: 0.0, z: 0.0, u: 0.0, v: 0.0))
    
-    
     let testSprite = SpriteInstance2D()
     
     
@@ -89,8 +88,8 @@ class EarthScene: GraphicsDelegate {
     
     func update(deltaTime: Float) {
         
-        //earthRotation += 0.0025
-        earthRotation += 0.05
+        earthRotation += 0.0025
+        //earthRotation += 0.05
         
         if earthRotation >= (Float.pi * 2.0) {
             earthRotation -= (Float.pi * 2.0)

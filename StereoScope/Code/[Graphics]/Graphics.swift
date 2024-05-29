@@ -100,7 +100,7 @@ class Graphics {
         case spriteNodeIndexedDiffuseStereoscopicRed3DNoBlending
         
         case spriteNodeIndexedDiffuseColored3DNoBlending
-        case spriteNodeIndexedDiffuseColoredStereoscopicBlue3DNoBlending        
+        case spriteNodeIndexedDiffuseColoredStereoscopicBlue3DNoBlending
         case spriteNodeIndexedDiffuseColoredStereoscopicRed3DNoBlending
         
         
@@ -108,6 +108,10 @@ class Graphics {
         case spriteNodeIndexedPhongColored3DNoBlending
         
         case spriteNodeIndexedNight3DNoBlending
+        
+        case spriteNodeIndexedNightStereoscopicBlue3DNoBlending
+        case spriteNodeIndexedNightStereoscopicRed3DNoBlending
+        
         
         case spriteNodeWhiteIndexed2DNoBlending
         case spriteNodeWhiteIndexed2DAlphaBlending
@@ -378,6 +382,13 @@ class Graphics {
             
         case .spriteNodeIndexedNight3DNoBlending:
             renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeIndexedNight3DNoBlending)
+            
+            
+        case .spriteNodeIndexedNightStereoscopicBlue3DNoBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeIndexedNightStereoscopicBlue3DNoBlending)
+        case .spriteNodeIndexedNightStereoscopicRed3DNoBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeIndexedNightStereoscopicRed3DNoBlending)
+            
             
        
         case .spriteNodeColoredWhiteIndexed2DNoBlending:
