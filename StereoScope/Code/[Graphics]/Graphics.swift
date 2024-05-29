@@ -105,7 +105,14 @@ class Graphics {
         
         
         case spriteNodeIndexedPhong3DNoBlending
+        case spriteNodeIndexedPhongStereoscopicRed3DNoBlending
+        case spriteNodeIndexedPhongStereoscopicBlue3DNoBlending
+        
         case spriteNodeIndexedPhongColored3DNoBlending
+        
+        case spriteNodeIndexedPhongColoredStereoscopicRed3DNoBlending
+        case spriteNodeIndexedPhongColoredStereoscopicBlue3DNoBlending
+        
         
         case spriteNodeIndexedNight3DNoBlending
         
@@ -250,7 +257,13 @@ class Graphics {
                     
                 case .shapeNodeIndexedPhong3DNoBlending:
                     renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeIndexedPhong3DNoBlending)
-                    
+            
+                case .spriteNodeIndexedPhongStereoscopicBlue3DNoBlending:
+                    renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeIndexedPhongStereoscopicBlue3DNoBlending)
+
+                case .spriteNodeIndexedPhongStereoscopicRed3DNoBlending:
+                    renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeIndexedPhongStereoscopicRed3DNoBlending)
+            
                 case .shapeNodeIndexedPhongColored3DNoBlending:
                     renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateShapeNodeIndexedPhongColored3DNoBlending)
                 
@@ -376,8 +389,15 @@ class Graphics {
         case .spriteNodeIndexedPhong3DNoBlending:
             renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeIndexedPhong3DNoBlending)
             
+            
         case .spriteNodeIndexedPhongColored3DNoBlending:
             renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeIndexedPhongColored3DNoBlending)
+            
+        case .spriteNodeIndexedPhongColoredStereoscopicRed3DNoBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeIndexedPhongColoredStereoscopicRed3DNoBlending)
+        case .spriteNodeIndexedPhongColoredStereoscopicBlue3DNoBlending:
+            renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeIndexedPhongColoredStereoscopicBlue3DNoBlending)
+            
             
             
         case .spriteNodeIndexedNight3DNoBlending:

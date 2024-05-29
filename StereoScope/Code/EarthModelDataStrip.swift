@@ -35,7 +35,7 @@ class EarthModelDataStrip {
     
     let stereoLightedColoredTriangleBuffer = IndexedSpriteBuffer<Sprite3DLightedColoredStereoscopicVertex,
                                                                UniformsLightsVertex,
-                                                          UniformsDiffuseFragment>()
+                                                          UniformsPhongFragment>()
     
     
     
@@ -578,6 +578,7 @@ class EarthModelDataStrip {
                                       pipelineState: pipelineState)
         
         /*
+        
         stereoLightedColoredTriangleBuffer.uniformsVertex.projectionMatrix = projectionMatrix
         stereoLightedColoredTriangleBuffer.uniformsVertex.modelViewMatrix = modelViewMatrix
         stereoLightedColoredTriangleBuffer.uniformsVertex.normalMatrix = normalMatrix
@@ -594,8 +595,6 @@ class EarthModelDataStrip {
         stereoLightedColoredTriangleBuffer.render(renderEncoder: renderEncoder,
                                       pipelineState: pipelineState)
         */
-        
-        
         /*
         stereoLightedTriangleBuffer.uniformsVertex.projectionMatrix = projectionMatrix
         stereoLightedTriangleBuffer.uniformsVertex.modelViewMatrix = modelViewMatrix
@@ -614,7 +613,7 @@ class EarthModelDataStrip {
         
         stereoLightedTriangleBuffer.render(renderEncoder: renderEncoder,
                                       pipelineState: pipelineState)
-        */
+         */
         
         
         
