@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-var overshoot = Float(0.2)
+var overshoot = Float(0.1)
 
 @main
 struct StereoScopeApp: App {
@@ -24,15 +24,13 @@ struct StereoScopeApp: App {
     
     @State private var selectedStereoscopicMode = StereoscopicModes.stereoscopic3D
     @State private var selectedBloomMode = BloomModes.bloom
-    @State private var _overshoot = Float(0.2)
+    @State private var _overshoot = Float(0.1)
     
     
     @State private var _stereoSpreadBase = Float(1.0)
     @State private var _stereoSpreadMax = Float(4.0)
     
-    @State private var _bloomPasses = 3
-    
-    
+    @State private var _bloomPasses = 6
     
     var body: some Scene {
         WindowGroup {
@@ -74,7 +72,7 @@ struct StereoScopeApp: App {
                     
                     Spacer()
                     
-                    Stepper("Bloom Passes", value: $_bloomPasses, in: 0...10)
+                    Stepper("Bloom Passes", value: $_bloomPasses, in: 0...32)
                     
                     Slider(value: $_stereoSpreadBase, in: 0.0...8.0)
                     Slider(value: $_stereoSpreadMax, in: 0.0...16.0)

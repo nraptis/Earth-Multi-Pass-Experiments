@@ -97,9 +97,15 @@ class IndexedSpriteInstance<NodeType: PositionConforming2D & TextureCoordinateCo
     }
     
     func setPositionQuad(x1: Float, y1: Float,
-                         x2: Float, y2: Float,
-                         x3: Float, y3: Float,
-                         x4: Float, y4: Float) {
+                         x2: Float, y2: Float) {
+        setPositionQuad(x1: x1, y1: y1,
+                        x2: x2, y2: y1,
+                        x3: x1, y3: y2,
+                        x4: x2, y4: y2)
+    }
+    
+    func setPositionQuad(x1: Float, y1: Float, x2: Float, y2: Float,
+                         x3: Float, y3: Float, x4: Float, y4: Float) {
         if vertices[0].x != x1 {
             vertices[0].x = x1
             isVertexBufferDirty = true

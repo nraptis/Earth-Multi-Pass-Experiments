@@ -55,15 +55,11 @@ class IndexedShapeInstance<NodeType: PositionConforming2D,
     }
     
     func load(graphics: Graphics) {
-        
         self.graphics = graphics
-        
         uniformsVertexBuffer = graphics.buffer(uniform: uniformsVertex)
         uniformsFragmentBuffer = graphics.buffer(uniform: uniformsFragment)
-        
         indexBuffer = graphics.metalDevice.makeBuffer(bytes: indices, length: MemoryLayout<UInt32>.size * 4)
         vertexBuffer = graphics.metalDevice.makeBuffer(bytes: vertices, length: MemoryLayout<NodeType>.size * 4)
-        
         isVertexBufferDirty = true
         isUniformsVertexBufferDirty = true
         isUniformsFragmentBufferDirty = true
@@ -74,6 +70,14 @@ class IndexedShapeInstance<NodeType: PositionConforming2D,
                         x2: x + width, y2: y,
                         x3: x, y3: y + height,
                         x4: x + width, y4: y + height)
+    }
+    
+    func setPositionQuad(x1: Float, y1: Float,
+                         x2: Float, y2: Float) {
+        setPositionQuad(x1: x1, y1: y1,
+                        x2: x2, y2: y1,
+                        x3: x1, y3: y2,
+                        x4: x2, y4: y2)
     }
     
     func setPositionQuad(x1: Float, y1: Float,
