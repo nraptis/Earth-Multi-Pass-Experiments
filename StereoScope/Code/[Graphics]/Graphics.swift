@@ -291,6 +291,9 @@ class Graphics {
             renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeIndexed2DAdditiveBlending)
         case .spriteNodeIndexed2DPremultipliedBlending:
             renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeIndexed2DPremultipliedBlending)
+            
+            
+            
         case .spriteNodeIndexed3DNoBlending:
             renderEncoder.setRenderPipelineState(metalPipeline.pipelineStateSpriteNodeIndexed3DNoBlending)
         case .spriteNodeIndexed3DAlphaBlending:

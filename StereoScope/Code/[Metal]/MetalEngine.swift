@@ -10,6 +10,10 @@ import UIKit
 import Metal
 import simd
 
+var stereoSpreadBase = Float(1.0)
+var stereoSpreadMax = Float(4.0)
+var bloomPasses = 3
+
 class MetalEngine {
     
     unowned var metalLayer: CAMetalLayer!
@@ -34,8 +38,8 @@ class MetalEngine {
     
     var storageTexture: MTLTexture!
     
-    var storageTextureStereoscopicBlue: MTLTexture!
-    var storageTextureStereoscopicRed: MTLTexture!
+    
+    var storageTextureStereoscopic: MTLTexture!
     
     
     var storageTexturePrebloom: MTLTexture!
@@ -48,19 +52,17 @@ class MetalEngine {
     
     var bloomTexture1: MTLTexture!
     var bloomTexture2: MTLTexture!
-    //var bloomTexture3: MTLTexture!
-    //var bloomTexture4: MTLTexture!
     
     private var tileSprite = IndexedSpriteInstance<Sprite2DVertex,
                                                    UniformsSpriteVertex,
                                                    UniformsSpriteFragment>(sentinelNode: Sprite2DVertex(x: 0.0, y: 0.0, u: 0.0, v: 0.0))
     
-    private var StereoscopicBlueSpriteA = IndexedSpriteInstance<Sprite3DVertexStereoscopic,
+    private var stereoscopicSprite3D = IndexedSpriteInstance<Sprite3DVertexStereoscopic,
                                                                UniformsSpriteVertex,
-                                                                UniformsSpriteFragment>(sentinelNode: Sprite3DVertexStereoscopic(x: 0.0, y: 0.0, z: 0.0, u: 0.0, v: 0.0, shiftRed: 2.0, shiftBlue: 2.0))
+                                                             UniformsSpriteFragment>(sentinelNode: Sprite3DVertexStereoscopic(x: 0.0, y: 0.0, z: 0.0, u: 0.0, v: 0.0, shiftRed: 0.0, shiftBlue: 0.0))
     private var StereoscopicRedSpriteA = IndexedSpriteInstance<Sprite3DVertexStereoscopic,
                                                                UniformsSpriteVertex,
-                                                                UniformsSpriteFragment>(sentinelNode: Sprite3DVertexStereoscopic(x: 0.0, y: 0.0, z: 0.0, u: 0.0, v: 0.0, shiftRed: 2.0, shiftBlue: 2.0))
+                                                                UniformsSpriteFragment>(sentinelNode: Sprite3DVertexStereoscopic(x: 0.0, y: 0.0, z: 0.0, u: 0.0, v: 0.0, shiftRed: 0.0, shiftBlue: 0.0))
     
     
     private var StereoscopicBlueSpriteB = IndexedSpriteInstance<Sprite2DVertex,
@@ -78,23 +80,17 @@ class MetalEngine {
                                                                UniformsSpriteVertex,
                                                               UniformsSpriteFragment>(sentinelNode: Sprite3DVertex(x: 0.0, y: 0.0, z: 0.0, u: 0.0, v: 0.0))
     
+    private var bloomSprite2D = IndexedSpriteInstance<Sprite2DVertex,
+                                                      UniformsSpriteVertex,
+                                                      UniformsSpriteFragment>(sentinelNode: Sprite2DVertex(x: 0.0, y: 0.0, u: 0.0, v: 0.0))
+    private var bloomSprite3D = IndexedSpriteInstance<Sprite3DVertex,
+                                                      UniformsSpriteVertex,
+                                                      UniformsSpriteFragment>(sentinelNode: Sprite3DVertex(x: 0.0, y: 0.0, z: 0.0, u: 0.0, v: 0.0))
     
-    
-    private var bloomSprite = IndexedSpriteInstance<Sprite2DVertex,
-                                                   UniformsSpriteVertex,
-                                                   UniformsSpriteFragment>(sentinelNode: Sprite2DVertex(x: 0.0, y: 0.0, u: 0.0, v: 0.0))
     
     private var bloomCombineSprite3D = IndexedSpriteInstance<Sprite3DVertex,
-                                                             UniformsSpriteVertex,
-                                                             UniformsSpriteFragment>(sentinelNode: Sprite3DVertex(x: 0.0, y: 0.0, z: 0.0, u: 0.0, v: 0.0))
-    
-    private var bloomStampSprite3D = IndexedSpriteInstance<Sprite3DVertex,
-                                                          UniformsSpriteVertex,
-                                                          UniformsSpriteFragment>(sentinelNode: Sprite3DVertex(x: 0.0, y: 0.0, z: 0.0, u: 0.0, v: 0.0))
-    
-    private var prebloomStampSprite3D = IndexedSpriteInstance<Sprite3DVertex,
-                                                          UniformsSpriteVertex,
-                                                          UniformsSpriteFragment>(sentinelNode: Sprite3DVertex(x: 0.0, y: 0.0, z: 0.0, u: 0.0, v: 0.0))
+                                                                      UniformsSpriteVertex,
+                                                                      UniformsSpriteFragment>(sentinelNode: Sprite3DVertex(x: 0.0, y: 0.0, z: 0.0, u: 0.0, v: 0.0))
     
     
     required init(metalLayer: CAMetalLayer,
@@ -133,15 +129,15 @@ class MetalEngine {
         
         tileSprite.load(graphics: graphics, texture: nil)
         
-        StereoscopicBlueSpriteA.load(graphics: graphics, texture: nil)
+        stereoscopicSprite3D.load(graphics: graphics, texture: nil)
         StereoscopicBlueSpriteB.load(graphics: graphics, texture: nil)
         
         StereoscopicRedSpriteA.load(graphics: graphics, texture: nil)
         StereoscopicRedSpriteB.load(graphics: graphics, texture: nil)
         
-        bloomSprite.load(graphics: graphics, texture: nil)
-        bloomStampSprite3D.load(graphics: graphics, texture: nil)
-        prebloomStampSprite3D.load(graphics: graphics, texture: nil)
+        bloomSprite2D.load(graphics: graphics, texture: nil)
+        bloomSprite3D.load(graphics: graphics, texture: nil)
+        
         bloomCombineSprite3D.load(graphics: graphics, texture: nil)
         
         StereoscopicBlueBloomSprite.load(graphics: graphics, texture: nil)
@@ -163,10 +159,10 @@ class MetalEngine {
             
             storageTexture = createStorageTexture(width: drawable.texture.width,
                                                   height: drawable.texture.height)
-            storageTextureStereoscopicBlue = createStorageTexture(width: drawable.texture.width,
-                                                                  height: drawable.texture.height)
-            storageTextureStereoscopicRed = createStorageTexture(width: drawable.texture.width,
-                                                                   height: drawable.texture.height)
+            //storageTextureStereoscopicBlue = createStorageTexture(width: drawable.texture.width, height: drawable.texture.height)
+            
+            storageTextureStereoscopic = createStorageTexture(width: drawable.texture.width,
+                                                              height: drawable.texture.height)
             
             storageTexturePrebloom = createStorageTexture(width: drawable.texture.width,
                                                           height: drawable.texture.height)
@@ -185,67 +181,71 @@ class MetalEngine {
                                                   height: drawable.texture.height >> 2)
         }
         
-        if isStereoscopicEnabled {
+        
+        
+        let renderPassDescriptorPrebloom = MTLRenderPassDescriptor()
+        renderPassDescriptorPrebloom.colorAttachments[0].texture = storageTexturePrebloom
+        renderPassDescriptorPrebloom.colorAttachments[0].loadAction = .dontCare
+        renderPassDescriptorPrebloom.colorAttachments[0].storeAction = .store
+        renderPassDescriptorPrebloom.depthAttachment.loadAction = .dontCare
+        renderPassDescriptorPrebloom.depthAttachment.clearDepth = 1.0
+        renderPassDescriptorPrebloom.depthAttachment.texture = depthTexture
+        graphics.renderTargetWidth = storageTexture.width
+        graphics.renderTargetHeight = storageTexture.height
+        if let renderEncoderPrebloom = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorPrebloom) {
+            delegate.draw3DPrebloom(renderEncoder: renderEncoderPrebloom)
+            renderEncoderPrebloom.endEncoding()
+        }
+        
+        if isBloomEnabled {
+            drawBloom(commandBuffer: commandBuffer)
+        }
+        
+        let renderPassDescriptorBloomCombine = MTLRenderPassDescriptor()
+        renderPassDescriptorBloomCombine.colorAttachments[0].texture = storageTextureBloom
+        renderPassDescriptorBloomCombine.colorAttachments[0].loadAction = .dontCare
+        renderPassDescriptorBloomCombine.colorAttachments[0].storeAction = .store
+        renderPassDescriptorBloomCombine.colorAttachments[0].clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
+        renderPassDescriptorBloomCombine.depthAttachment.loadAction = .clear
+        renderPassDescriptorBloomCombine.depthAttachment.clearDepth = 1.0
+        renderPassDescriptorBloomCombine.depthAttachment.texture = depthTexture
+        if let renderEncoderBloomCombine = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorBloomCombine) {
             
-            let renderPassDescriptorPrebloom = MTLRenderPassDescriptor()
-            renderPassDescriptorPrebloom.colorAttachments[0].texture = storageTexturePrebloom
-            renderPassDescriptorPrebloom.colorAttachments[0].loadAction = .dontCare
-            renderPassDescriptorPrebloom.colorAttachments[0].storeAction = .store
-            renderPassDescriptorPrebloom.depthAttachment.loadAction = .dontCare
-            renderPassDescriptorPrebloom.depthAttachment.clearDepth = 1.0
-            renderPassDescriptorPrebloom.depthAttachment.texture = depthTexture
-            graphics.renderTargetWidth = storageTexture.width
-            graphics.renderTargetHeight = storageTexture.height
-            if let renderEncoderPrebloom = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorPrebloom) {
-                delegate.draw3DPrebloom(renderEncoder: renderEncoderPrebloom)
-                renderEncoderPrebloom.endEncoding()
-            }
+            let width = Float(storageTextureBloom.width)
+            let height = Float(storageTextureBloom.height)
             
+            bloomCombineSprite3D.uniformsVertex.projectionMatrix.ortho(width: width,
+                                                                         height: height)
+            bloomCombineSprite3D.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
+            bloomCombineSprite3D.setPositionQuad(x1: 0.0, y1: 0.0, x2: width, y2: 0.0,
+                                                 x3: 0.0, y3: height, x4: width, y4: height)
+            bloomCombineSprite3D.texture = storageTexturePrebloom
+            bloomCombineSprite3D.render(renderEncoder: renderEncoderBloomCombine, pipelineState: .spriteNodeIndexed3DNoBlending)
             
             if isBloomEnabled {
-                drawBloom(commandBuffer: commandBuffer)
-                
+                bloomCombineSprite3D.texture = bloomTexture2
+                bloomCombineSprite3D.render(renderEncoder: renderEncoderBloomCombine, pipelineState: .spriteNodeIndexed3DAdditiveBlending)
             }
+            renderEncoderBloomCombine.endEncoding()
+        }
+        
+        
+        if isStereoscopicEnabled {
             
             
-            let renderPassDescriptorBloomCombine = MTLRenderPassDescriptor()
-            renderPassDescriptorBloomCombine.colorAttachments[0].texture = storageTextureBloom
-            renderPassDescriptorBloomCombine.colorAttachments[0].loadAction = .dontCare
-            renderPassDescriptorBloomCombine.colorAttachments[0].storeAction = .store
-            renderPassDescriptorBloomCombine.colorAttachments[0].clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
-            renderPassDescriptorBloomCombine.depthAttachment.loadAction = .clear
-            renderPassDescriptorBloomCombine.depthAttachment.clearDepth = 1.0
-            renderPassDescriptorBloomCombine.depthAttachment.texture = depthTexture
-            if let renderEncoderBloomCombine = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorBloomCombine) {
-                
-                let width = Float(storageTextureBloom.width)
-                let height = Float(storageTextureBloom.height)
-                
-                bloomCombineSprite3D.uniformsVertex.projectionMatrix.ortho(width: width,
-                                                                             height: height)
-                bloomCombineSprite3D.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
-                bloomCombineSprite3D.setPositionQuad(x1: 0.0, y1: 0.0, x2: width, y2: 0.0,
-                                                       x3: 0.0, y3: height, x4: width, y4: height)
-                bloomCombineSprite3D.texture = storageTexturePrebloom
-                bloomCombineSprite3D.render(renderEncoder: renderEncoderBloomCombine, pipelineState: .spriteNodeIndexed3DNoBlending)
-                
-                if isBloomEnabled {
-                    bloomStampSprite3D.uniformsVertex.projectionMatrix.ortho(width: width,
-                                                                             height: height)
-                    bloomStampSprite3D.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
-                    bloomStampSprite3D.setPositionQuad(x1: 0.0, y1: 0.0, x2: width, y2: 0.0,
-                                                       x3: 0.0, y3: height, x4: width, y4: height)
-                    bloomStampSprite3D.texture = bloomTexture2
-                    bloomStampSprite3D.render(renderEncoder: renderEncoderBloomCombine, pipelineState: .spriteNodeIndexed3DAdditiveBlending)
-                }
-                renderEncoderBloomCombine.endEncoding()
-            }
-            
+            stereoscopicSprite3D.vertices[0].shiftBlue = stereoSpreadBase
+            stereoscopicSprite3D.vertices[0].shiftRed = stereoSpreadBase
+            stereoscopicSprite3D.vertices[1].shiftBlue = stereoSpreadBase
+            stereoscopicSprite3D.vertices[1].shiftRed = stereoSpreadBase
+            stereoscopicSprite3D.vertices[2].shiftBlue = stereoSpreadBase
+            stereoscopicSprite3D.vertices[2].shiftRed = stereoSpreadBase
+            stereoscopicSprite3D.vertices[3].shiftBlue = stereoSpreadBase
+            stereoscopicSprite3D.vertices[3].shiftRed = stereoSpreadBase
             
             // We then combine the pre-bloom and bloom into the "storageTextureBloom" texture....
             
             let renderPassDescriptor3DBlue = MTLRenderPassDescriptor()
-            renderPassDescriptor3DBlue.colorAttachments[0].texture = storageTextureStereoscopicBlue
+            renderPassDescriptor3DBlue.colorAttachments[0].texture = storageTexture
             renderPassDescriptor3DBlue.colorAttachments[0].loadAction = .clear
             renderPassDescriptor3DBlue.colorAttachments[0].storeAction = .store
             renderPassDescriptor3DBlue.colorAttachments[0].clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
@@ -253,31 +253,30 @@ class MetalEngine {
             renderPassDescriptor3DBlue.depthAttachment.clearDepth = 1.0
             renderPassDescriptor3DBlue.depthAttachment.texture = depthTexture
             
-            graphics.renderTargetWidth = storageTextureStereoscopicBlue.width
-            graphics.renderTargetHeight = storageTextureStereoscopicBlue.height
+            graphics.renderTargetWidth = storageTexture.width
+            graphics.renderTargetHeight = storageTexture.height
             
             if let renderEncoder3D = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor3DBlue) {
                 
                 let width = Float(storageTextureBloom.width)
                 let height = Float(storageTextureBloom.height)
                 
-                StereoscopicBlueSpriteA.uniformsVertex.projectionMatrix.ortho(width: width,
+                stereoscopicSprite3D.uniformsVertex.projectionMatrix.ortho(width: width,
                                                                              height: height)
-                StereoscopicBlueSpriteA.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
-                StereoscopicBlueSpriteA.uniformsVertex.modelViewMatrix.translate(x: 2.0, y: 0.0, z: 0.0)
+                stereoscopicSprite3D.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
+                //stereoscopicSprite3D.uniformsVertex.modelViewMatrix.translate(x: -stereoSpreadBase, y: 0.0, z: 0.0)
                 
-                StereoscopicBlueSpriteA.setPositionQuad(x1: 0.0, y1: 0.0, x2: width, y2: 0.0,
-                                                       x3: 0.0, y3: height, x4: width, y4: height)
-                StereoscopicBlueSpriteA.texture = storageTextureBloom
-                StereoscopicBlueSpriteA.setDirty(isVertexBufferDirty: true, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: true)
-                StereoscopicBlueSpriteA.render(renderEncoder: renderEncoder3D, pipelineState: .spriteNodeStereoscopicBlueIndexed3DNoBlending)
-                
+                stereoscopicSprite3D.setPositionQuad(x1: 0.0, y1: 0.0, x2: width, y2: 0.0,
+                                                        x3: 0.0, y3: height, x4: width, y4: height)
+                stereoscopicSprite3D.texture = storageTextureBloom
+                stereoscopicSprite3D.setDirty(isVertexBufferDirty: true, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: true)
+                stereoscopicSprite3D.render(renderEncoder: renderEncoder3D, pipelineState: .spriteNodeStereoscopicBlueIndexed3DNoBlending)
                 delegate.draw3DStereoscopicBlue(renderEncoder: renderEncoder3D)
                 renderEncoder3D.endEncoding()
             }
             
             let renderPassDescriptor3DRed = MTLRenderPassDescriptor()
-            renderPassDescriptor3DRed.colorAttachments[0].texture = storageTextureStereoscopicRed
+            renderPassDescriptor3DRed.colorAttachments[0].texture = storageTextureStereoscopic
             renderPassDescriptor3DRed.colorAttachments[0].loadAction = .clear
             renderPassDescriptor3DRed.colorAttachments[0].storeAction = .store
             renderPassDescriptor3DRed.colorAttachments[0].clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
@@ -285,138 +284,86 @@ class MetalEngine {
             renderPassDescriptor3DRed.depthAttachment.clearDepth = 1.0
             renderPassDescriptor3DRed.depthAttachment.texture = depthTexture
             
-            graphics.renderTargetWidth = storageTextureStereoscopicRed.width
-            graphics.renderTargetHeight = storageTextureStereoscopicRed.height
+            graphics.renderTargetWidth = storageTextureStereoscopic.width
+            graphics.renderTargetHeight = storageTextureStereoscopic.height
             
             if let renderEncoder3D = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor3DRed) {
+                
+                let width = Float(storageTextureStereoscopic.width)
+                let height = Float(storageTextureStereoscopic.height)
+                
+                stereoscopicSprite3D.uniformsVertex.projectionMatrix.ortho(width: width,
+                                                                               height: height)
+                stereoscopicSprite3D.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
+                //stereoscopicSprite3D.uniformsVertex.modelViewMatrix.translate(x: stereoSpreadBase, y: 0.0, z: 0.0)
+                
+                stereoscopicSprite3D.setPositionQuad(x1: 0.0, y1: 0.0, x2: width, y2: 0.0,
+                                                     x3: 0.0, y3: height, x4: width, y4: height)
+                stereoscopicSprite3D.texture = storageTextureBloom
+                stereoscopicSprite3D.setDirty(isVertexBufferDirty: true, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: true)
+                stereoscopicSprite3D.render(renderEncoder: renderEncoder3D, pipelineState: .spriteNodeStereoscopicRedIndexed3DNoBlending)
+                delegate.draw3DStereoscopicRed(renderEncoder: renderEncoder3D)
+                renderEncoder3D.endEncoding()
+            }
+        } else {
+            
+            
+            let renderPassDescriptor3DBlue = MTLRenderPassDescriptor()
+            renderPassDescriptor3DBlue.colorAttachments[0].texture = storageTexture
+            renderPassDescriptor3DBlue.colorAttachments[0].loadAction = .clear
+            renderPassDescriptor3DBlue.colorAttachments[0].storeAction = .store
+            renderPassDescriptor3DBlue.colorAttachments[0].clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
+            renderPassDescriptor3DBlue.depthAttachment.loadAction = .clear
+            renderPassDescriptor3DBlue.depthAttachment.clearDepth = 1.0
+            renderPassDescriptor3DBlue.depthAttachment.texture = depthTexture
+            
+            graphics.renderTargetWidth = storageTexture.width
+            graphics.renderTargetHeight = storageTexture.height
+            
+            if let renderEncoder3D = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor3DBlue) {
                 
                 let width = Float(storageTextureBloom.width)
                 let height = Float(storageTextureBloom.height)
                 
-                /*
+                bloomSprite3D.uniformsVertex.projectionMatrix.ortho(width: width,
+                                                                             height: height)
+                bloomSprite3D.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
+                //stereoscopicSprite3D.uniformsVertex.modelViewMatrix.translate(x: -stereoSpreadBase, y: 0.0, z: 0.0)
                 
-                */
+                bloomSprite3D.setPositionQuad(x1: 0.0, y1: 0.0, x2: width, y2: 0.0,
+                                                        x3: 0.0, y3: height, x4: width, y4: height)
+                bloomSprite3D.texture = storageTextureBloom
+                bloomSprite3D.setDirty(isVertexBufferDirty: true, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: true)
+                bloomSprite3D.render(renderEncoder: renderEncoder3D, pipelineState: .spriteNodeIndexed3DNoBlending)
                 
-                StereoscopicRedSpriteA.uniformsVertex.projectionMatrix.ortho(width: width,
-                                                                               height: height)
-                StereoscopicRedSpriteA.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
-                StereoscopicRedSpriteA.uniformsVertex.modelViewMatrix.translate(x: -2.0, y: 0.0, z: 0.0)
-                StereoscopicRedSpriteA.setPositionQuad(x1: 0.0, y1: 0.0, x2: width, y2: 0.0,
-                                                         x3: 0.0, y3: height, x4: width, y4: height)
-                StereoscopicRedSpriteA.texture = storageTextureBloom
-                StereoscopicRedSpriteA.setDirty(isVertexBufferDirty: true, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: true)
-                StereoscopicRedSpriteA.render(renderEncoder: renderEncoder3D, pipelineState: .spriteNodeStereoscopicRedIndexed3DNoBlending)
+                delegate.draw3D(renderEncoder: renderEncoder3D)
                 
-                
-                delegate.draw3DStereoscopicRed(renderEncoder: renderEncoder3D)
                 renderEncoder3D.endEncoding()
             }
             
-            let renderPassDescriptor2D = MTLRenderPassDescriptor()
-            renderPassDescriptor2D.colorAttachments[0].texture = antialiasingTexture
-            renderPassDescriptor2D.colorAttachments[0].loadAction = .clear
-            renderPassDescriptor2D.colorAttachments[0].storeAction = .multisampleResolve
-            renderPassDescriptor2D.colorAttachments[0].resolveTexture = drawable.texture
-            graphics.renderTargetWidth = antialiasingTexture.width
-            graphics.renderTargetHeight = antialiasingTexture.height
-            if let renderEncoder2D = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor2D) {
-                drawTilesStereoscopic(renderEncoder: renderEncoder2D)
-                delegate.draw2D(renderEncoder: renderEncoder2D)
-                renderEncoder2D.endEncoding()
-            }
-            
-            
-        } else {
-            
-            if isBloomEnabled {
-                
-                let renderPassDescriptorPrebloom = MTLRenderPassDescriptor()
-                                renderPassDescriptorPrebloom.colorAttachments[0].texture = storageTexturePrebloom
-                                renderPassDescriptorPrebloom.colorAttachments[0].loadAction = .dontCare
-                                renderPassDescriptorPrebloom.colorAttachments[0].storeAction = .store
-                                renderPassDescriptorPrebloom.depthAttachment.loadAction = .dontCare
-                                renderPassDescriptorPrebloom.depthAttachment.clearDepth = 1.0
-                                renderPassDescriptorPrebloom.depthAttachment.texture = depthTexture
-                                graphics.renderTargetWidth = storageTexture.width
-                                graphics.renderTargetHeight = storageTexture.height
-                                if let renderEncoderPrebloom = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorPrebloom) {
-                                    delegate.draw3DPrebloom(renderEncoder: renderEncoderPrebloom)
-                                    renderEncoderPrebloom.endEncoding()
-                                }
-                
-                drawBloom(commandBuffer: commandBuffer)
-                
-                let renderPassDescriptor3D = MTLRenderPassDescriptor()
-                renderPassDescriptor3D.colorAttachments[0].texture = storageTexture
-                renderPassDescriptor3D.colorAttachments[0].loadAction = .dontCare
-                renderPassDescriptor3D.colorAttachments[0].storeAction = .store
-                renderPassDescriptor3D.depthAttachment.loadAction = .dontCare
-                renderPassDescriptor3D.depthAttachment.clearDepth = 1.0
-                renderPassDescriptor3D.depthAttachment.texture = depthTexture
-                graphics.renderTargetWidth = storageTexture.width
-                graphics.renderTargetHeight = storageTexture.height
-                if let renderEncoder3D = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor3D) {
-                    
-                    let width = Float(graphics.width)
-                    let height =  Float(graphics.height)
-                    
-                    
-                    prebloomStampSprite3D.uniformsVertex.projectionMatrix.ortho(width: width,
-                                                                                height: height)
-                    prebloomStampSprite3D.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
-                    prebloomStampSprite3D.setPositionQuad(x1: 0.0, y1: 0.0, x2: width, y2: 0.0,
-                                                          x3: 0.0, y3: height, x4: width, y4: height)
-                    prebloomStampSprite3D.texture = storageTexturePrebloom
-                    prebloomStampSprite3D.render(renderEncoder: renderEncoder3D, pipelineState: .spriteNodeIndexed3DNoBlending)
-                    
-                    bloomStampSprite3D.uniformsVertex.projectionMatrix.ortho(width: width,
-                                                                             height: height)
-                    bloomStampSprite3D.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
-                    bloomStampSprite3D.setPositionQuad(x1: 0.0, y1: 0.0, x2: width * 2.0, y2: 0.0,
-                                                       x3: 0.0, y3: height * 2.0, x4: width * 2.0, y4: height * 2.0)
-                    bloomStampSprite3D.texture = bloomTexture2
-                    bloomStampSprite3D.render(renderEncoder: renderEncoder3D, pipelineState: .spriteNodeIndexed3DAdditiveBlending)
-                    
-                    delegate.draw3D(renderEncoder: renderEncoder3D)
-                    renderEncoder3D.endEncoding()
-                }
-                
-            } else {
-                
-                let renderPassDescriptor3D = MTLRenderPassDescriptor()
-                renderPassDescriptor3D.colorAttachments[0].texture = storageTexture
-                renderPassDescriptor3D.colorAttachments[0].loadAction = .clear
-                renderPassDescriptor3D.colorAttachments[0].storeAction = .store
-                renderPassDescriptor3D.colorAttachments[0].clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
-                renderPassDescriptor3D.depthAttachment.loadAction = .clear
-                renderPassDescriptor3D.depthAttachment.clearDepth = 1.0
-                renderPassDescriptor3D.depthAttachment.texture = depthTexture
-                graphics.renderTargetWidth = storageTexture.width
-                graphics.renderTargetHeight = storageTexture.height
-                if let renderEncoder3D = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor3D) {
-                    delegate.draw3DPrebloom(renderEncoder: renderEncoder3D)
-                    delegate.draw3D(renderEncoder: renderEncoder3D)
-                    renderEncoder3D.endEncoding()
-                }
-            }
-            
-            let renderPassDescriptor2D = MTLRenderPassDescriptor()
-            renderPassDescriptor2D.colorAttachments[0].texture = antialiasingTexture
-            renderPassDescriptor2D.colorAttachments[0].loadAction = .dontCare
-            renderPassDescriptor2D.colorAttachments[0].storeAction = .multisampleResolve
-            renderPassDescriptor2D.colorAttachments[0].resolveTexture = drawable.texture
-            graphics.renderTargetWidth = antialiasingTexture.width
-            graphics.renderTargetHeight = antialiasingTexture.height
-            if let renderEncoder2D = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor2D) {
-                drawTile(renderEncoder: renderEncoder2D)
-                delegate.draw2D(renderEncoder: renderEncoder2D)
-                renderEncoder2D.endEncoding()
-            }
         }
         
+        let renderPassDescriptor2D = MTLRenderPassDescriptor()
+        renderPassDescriptor2D.colorAttachments[0].texture = antialiasingTexture
+        renderPassDescriptor2D.colorAttachments[0].storeAction = .multisampleResolve
+        renderPassDescriptor2D.colorAttachments[0].resolveTexture = drawable.texture
+        graphics.renderTargetWidth = antialiasingTexture.width
+        graphics.renderTargetHeight = antialiasingTexture.height
+        if isStereoscopicEnabled {
+            renderPassDescriptor2D.colorAttachments[0].loadAction = .clear
+        } else {
+            renderPassDescriptor2D.colorAttachments[0].loadAction = .dontCare
+        }
         
-        
-        
+        if let renderEncoder2D = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor2D) {
+            if isStereoscopicEnabled {
+                drawTilesStereoscopic(renderEncoder: renderEncoder2D)
+            } else {
+                drawTile(renderEncoder: renderEncoder2D)
+            }
+            delegate.draw2D(renderEncoder: renderEncoder2D)
+            renderEncoder2D.endEncoding()
+        }
         commandBuffer.present(drawable)
         commandBuffer.commit()
     }
@@ -431,29 +378,62 @@ class MetalEngine {
         renderPassDescriptorBloom.depthAttachment.loadAction = .clear
         renderPassDescriptorBloom.depthAttachment.clearDepth = 1.0
         renderPassDescriptorBloom.depthAttachment.texture = depthTexture
-        
         if let renderEncoderBloom = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorBloom) {
             
             graphics.renderTargetWidth = storageTexture.width
             graphics.renderTargetHeight = storageTexture.height
-            
             delegate.draw3DBloom(renderEncoder: renderEncoderBloom)
             renderEncoderBloom.endEncoding()
+        }
+        
+        let bloomWidth = Float(bloomTexture1.width)
+        let bloomHeight =  Float(bloomTexture1.height)
+        
+        if bloomPasses <= 0 {
             
-            let width = Float(bloomTexture1.width)
-            let height =  Float(bloomTexture1.height)
+            let width = Float(storageTexture.width)
+            let height = Float(storageTexture.height)
             
-            bloomSprite.uniformsVertex.projectionMatrix.ortho(width: width,
-                                                             height: height)
-            bloomSprite.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
-            bloomSprite.setPositionQuad(x1: 0.0, y1: 0.0,
-                                       x2: width, y2: 0.0,
-                                       x3: 0.0, y3: height,
-                                       x4: width, y4: height)
-            bloomSprite.setTextureCoordQuad(u1: 0.0, v1: 0.0,
-                                           u2: 1.0, v2: 0.0,
-                                           u3: 0.0, v3: 1.0,
-                                           u4: 1.0, v4: 1.0)
+            
+            bloomSprite3D.uniformsVertex.projectionMatrix.ortho(width: width,
+                                                                height: height)
+            bloomSprite3D.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
+            bloomSprite3D.setPositionQuad(x1: 0.0, y1: 0.0,
+                                          x2: width, y2: 0.0,
+                                          x3: 0.0, y3: height,
+                                          x4: width, y4: height)
+            bloomSprite3D.setTextureCoordQuad(u1: 0.0, v1: 0.0,
+                                              u2: 1.0, v2: 0.0,
+                                              u3: 0.0, v3: 1.0,
+                                              u4: 1.0, v4: 1.0)
+            
+            let renderPassDescriptor3D = MTLRenderPassDescriptor()
+            renderPassDescriptor3D.colorAttachments[0].texture = bloomTexture2
+            renderPassDescriptor3D.colorAttachments[0].loadAction = .dontCare
+            renderPassDescriptor3D.colorAttachments[0].storeAction = .store
+            renderPassDescriptor3D.depthAttachment.loadAction = .dontCare
+            renderPassDescriptor3D.depthAttachment.texture = depthTexture
+            graphics.renderTargetWidth = bloomTexture2.width
+            graphics.renderTargetHeight = bloomTexture2.height
+            if let renderEncoder3D = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor3D) {
+                bloomSprite3D.texture = storageTexture
+                bloomSprite3D.render(renderEncoder: renderEncoder3D, pipelineState: .spriteNodeIndexed3DNoBlending)
+                renderEncoder3D.endEncoding()
+            }
+            return
+        } else {
+            
+            bloomSprite2D.uniformsVertex.projectionMatrix.ortho(width: bloomWidth,
+                                                                height: bloomHeight)
+            bloomSprite2D.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
+            bloomSprite2D.setPositionQuad(x1: 0.0, y1: 0.0,
+                                          x2: bloomWidth, y2: 0.0,
+                                          x3: 0.0, y3: bloomHeight,
+                                          x4: bloomWidth, y4: bloomHeight)
+            bloomSprite2D.setTextureCoordQuad(u1: 0.0, v1: 0.0,
+                                              u2: 1.0, v2: 0.0,
+                                              u3: 0.0, v3: 1.0,
+                                              u4: 1.0, v4: 1.0)
             
             let renderPassDescriptorHorizontal1 = MTLRenderPassDescriptor()
             renderPassDescriptorHorizontal1.colorAttachments[0].texture = bloomTexture1
@@ -463,8 +443,9 @@ class MetalEngine {
             graphics.renderTargetWidth = bloomTexture1.width
             graphics.renderTargetHeight = bloomTexture1.height
             if let renderEncoderHorizontal1 = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorHorizontal1) {
-                bloomSprite.texture = storageTexture
-                bloomSprite.render(renderEncoder: renderEncoderHorizontal1, pipelineState: .gaussianBlurHorizontalIndexedNoBlending)
+                bloomSprite2D.texture = storageTexture
+                bloomSprite2D.render(renderEncoder: renderEncoderHorizontal1,
+                                     pipelineState: .gaussianBlurHorizontalIndexedNoBlending)
                 renderEncoderHorizontal1.endEncoding()
             }
             
@@ -475,61 +456,40 @@ class MetalEngine {
             graphics.renderTargetWidth = bloomTexture2.width
             graphics.renderTargetHeight = bloomTexture2.height
             if let renderEncoderVertical1 = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorVertical1) {
-                bloomSprite.texture = bloomTexture1
-                bloomSprite.render(renderEncoder: renderEncoderVertical1, pipelineState: .gaussianBlurVerticalIndexedNoBlending)
+                bloomSprite2D.texture = bloomTexture1
+                bloomSprite2D.render(renderEncoder: renderEncoderVertical1, pipelineState: .gaussianBlurVerticalIndexedNoBlending)
                 renderEncoderVertical1.endEncoding()
             }
             
-            let renderPassDescriptorHorizontal2 = MTLRenderPassDescriptor()
-            renderPassDescriptorHorizontal2.colorAttachments[0].texture = bloomTexture1
-            renderPassDescriptorHorizontal2.colorAttachments[0].loadAction = .clear
-            renderPassDescriptorHorizontal2.colorAttachments[0].storeAction = .store
-            renderPassDescriptorHorizontal2.colorAttachments[0].clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
-            graphics.renderTargetWidth = bloomTexture1.width
-            graphics.renderTargetHeight = bloomTexture1.height
-            if let renderEncoderHorizontal2 = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorHorizontal2) {
-                bloomSprite.texture = bloomTexture2
-                bloomSprite.render(renderEncoder: renderEncoderHorizontal2, pipelineState: .gaussianBlurHorizontalIndexedNoBlending)
-                renderEncoderHorizontal2.endEncoding()
-            }
-            
-            let renderPassDescriptorVertical2 = MTLRenderPassDescriptor()
-            renderPassDescriptorVertical2.colorAttachments[0].texture = bloomTexture2
-            renderPassDescriptorVertical2.colorAttachments[0].loadAction = .load
-            renderPassDescriptorVertical2.colorAttachments[0].storeAction = .store
-            graphics.renderTargetWidth = bloomTexture1.width
-            graphics.renderTargetHeight = bloomTexture1.height
-            if let renderEncoderVertical2 = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorVertical2) {
-                bloomSprite.texture = bloomTexture1
-                bloomSprite.render(renderEncoder: renderEncoderVertical2, pipelineState: .gaussianBlurVerticalIndexedNoBlending)
-                renderEncoderVertical2.endEncoding()
-            }
-            
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                let renderPassDescriptorHorizontal3 = MTLRenderPassDescriptor()
-                renderPassDescriptorHorizontal3.colorAttachments[0].texture = bloomTexture1
-                renderPassDescriptorHorizontal3.colorAttachments[0].loadAction = .clear
-                renderPassDescriptorHorizontal3.colorAttachments[0].storeAction = .store
-                renderPassDescriptorHorizontal3.colorAttachments[0].clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
+            var bloomLoopIndex = 1
+            while bloomLoopIndex < bloomPasses {
+                
+                let renderPassDescriptorHorizontal2 = MTLRenderPassDescriptor()
+                renderPassDescriptorHorizontal2.colorAttachments[0].texture = bloomTexture1
+                renderPassDescriptorHorizontal2.colorAttachments[0].loadAction = .clear
+                renderPassDescriptorHorizontal2.colorAttachments[0].storeAction = .store
+                renderPassDescriptorHorizontal2.colorAttachments[0].clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
                 graphics.renderTargetWidth = bloomTexture1.width
                 graphics.renderTargetHeight = bloomTexture1.height
-                if let renderEncoderHorizontal3 = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorHorizontal3) {
-                    bloomSprite.texture = bloomTexture2
-                    bloomSprite.render(renderEncoder: renderEncoderHorizontal3, pipelineState: .gaussianBlurHorizontalIndexedNoBlending)
-                    renderEncoderHorizontal3.endEncoding()
+                if let renderEncoderHorizontal2 = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorHorizontal2) {
+                    bloomSprite2D.texture = bloomTexture2
+                    bloomSprite2D.render(renderEncoder: renderEncoderHorizontal2, pipelineState: .gaussianBlurHorizontalIndexedNoBlending)
+                    renderEncoderHorizontal2.endEncoding()
                 }
                 
-                let renderPassDescriptorVertical3 = MTLRenderPassDescriptor()
-                renderPassDescriptorVertical3.colorAttachments[0].texture = bloomTexture2
-                renderPassDescriptorVertical3.colorAttachments[0].loadAction = .load
-                renderPassDescriptorVertical3.colorAttachments[0].storeAction = .store
+                let renderPassDescriptorVertical2 = MTLRenderPassDescriptor()
+                renderPassDescriptorVertical2.colorAttachments[0].texture = bloomTexture2
+                renderPassDescriptorVertical2.colorAttachments[0].loadAction = .load
+                renderPassDescriptorVertical2.colorAttachments[0].storeAction = .store
                 graphics.renderTargetWidth = bloomTexture1.width
                 graphics.renderTargetHeight = bloomTexture1.height
-                if let renderEncoderVertical3 = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorVertical3) {
-                    bloomSprite.texture = bloomTexture1
-                    bloomSprite.render(renderEncoder: renderEncoderVertical3, pipelineState: .gaussianBlurVerticalIndexedNoBlending)
-                    renderEncoderVertical3.endEncoding()
+                if let renderEncoderVertical2 = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorVertical2) {
+                    bloomSprite2D.texture = bloomTexture1
+                    bloomSprite2D.render(renderEncoder: renderEncoderVertical2, pipelineState: .gaussianBlurVerticalIndexedNoBlending)
+                    renderEncoderVertical2.endEncoding()
                 }
+                
+                bloomLoopIndex += 1
             }
         }
     }
@@ -557,45 +517,29 @@ class MetalEngine {
     
     func drawTilesStereoscopic(renderEncoder: MTLRenderCommandEncoder) {
         
-        let widthLeft = Float(storageTextureStereoscopicBlue.width)
-        let heightLeft =  Float(storageTextureStereoscopicBlue.height)
+        let width = Float(storageTexture.width)
+        let height =  Float(storageTexture.height)
         
-        StereoscopicBlueSpriteB.uniformsVertex.projectionMatrix.ortho(width: widthLeft,
-                                                                     height: heightLeft)
-        StereoscopicBlueSpriteB.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
-        StereoscopicBlueSpriteB.uniformsVertex.modelViewMatrix.translate(x: 2.0, y: 0.0, z: 0.0)
+        tileSprite.uniformsVertex.projectionMatrix.ortho(width: width, height: height)
+        tileSprite.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
+        //tileSprite.uniformsVertex.modelViewMatrix.translate(x: stereoSpreadBase, y: 0.0, z: 0.0)
+        tileSprite.setPositionQuad(x1: 0.0, y1: 0.0,
+                                   x2: width, y2: 0.0,
+                                   x3: 0.0, y3: height,
+                                   x4: width, y4: height)
+        tileSprite.setDirty(isVertexBufferDirty: false, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: false)
+        tileSprite.texture = storageTexture
+        tileSprite.render(renderEncoder: renderEncoder, pipelineState: .spriteNodeIndexed2DNoBlending)
         
-        StereoscopicBlueSpriteB.setPositionQuad(x1: 0.0, y1: 0.0,
-                                               x2: widthLeft, y2: 0.0,
-                                               x3: 0.0, y3: heightLeft,
-                                               x4: widthLeft, y4: heightLeft)
-        StereoscopicBlueSpriteB.setTextureCoordQuad(u1: 0.0, v1: 0.0,
-                                                   u2: 1.0, v2: 0.0,
-                                                   u3: 0.0, v3: 1.0,
-                                                   u4: 1.0, v4: 1.0)
-        
-        StereoscopicBlueSpriteB.texture = storageTextureStereoscopicBlue
-        StereoscopicBlueSpriteB.render(renderEncoder: renderEncoder, pipelineState: .spriteNodeIndexed2DNoBlending)
-        
-        
-        let widthRight = Float(storageTextureStereoscopicRed.width)
-        let heightRight =  Float(storageTextureStereoscopicRed.height)
-        
-        StereoscopicRedSpriteB.uniformsVertex.projectionMatrix.ortho(width: widthRight,
-                                                                      height: heightRight)
+        StereoscopicRedSpriteB.uniformsVertex.projectionMatrix.ortho(width: width, height: height)
         StereoscopicRedSpriteB.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
-        StereoscopicRedSpriteB.uniformsVertex.modelViewMatrix.translate(x: -2.0, y: 0.0, z: 0.0)
-        
+        //StereoscopicRedSpriteB.uniformsVertex.modelViewMatrix.translate(x: -stereoSpreadBase, y: 0.0, z: 0.0)
         StereoscopicRedSpriteB.setPositionQuad(x1: 0.0, y1: 0.0,
-                                                x2: widthRight, y2: 0.0,
-                                                x3: 0.0, y3: heightRight,
-                                                x4: widthRight, y4: heightRight)
-        StereoscopicRedSpriteB.setTextureCoordQuad(u1: 0.0, v1: 0.0,
-                                                    u2: 1.0, v2: 0.0,
-                                                    u3: 0.0, v3: 1.0,
-                                                    u4: 1.0, v4: 1.0)
-        
-        StereoscopicRedSpriteB.texture = storageTextureStereoscopicRed
+                                               x2: width, y2: 0.0,
+                                               x3: 0.0, y3: height,
+                                               x4: width, y4: height)
+        StereoscopicRedSpriteB.setDirty(isVertexBufferDirty: false, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: false)
+        StereoscopicRedSpriteB.texture = storageTextureStereoscopic
         StereoscopicRedSpriteB.render(renderEncoder: renderEncoder, pipelineState: .spriteNodeIndexed2DAdditiveBlending)
     }
     

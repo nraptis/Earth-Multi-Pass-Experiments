@@ -47,20 +47,24 @@ class EarthScene: GraphicsDelegate {
     
     func load() {
         let loader = MTKTextureLoader(device: graphics.metalDevice)
+        
+        
         if let image = UIImage(named: "earth_texture") {
+        
+        //if let image = UIImage(named: "large_white_texture") {
             if let cgImage = image.cgImage {
                 earthTexture = try? loader.newTexture(cgImage: cgImage)
             }
         }
+        
         if let image = UIImage(named: "lights_texture") {
             if let cgImage = image.cgImage {
                 lightsTexture = try? loader.newTexture(cgImage: cgImage)
             }
         }
         
-        
         if let image = UIImage(named: "galaxy") {
-        //if let image = UIImage(named: "earth_texture") {
+        //if let image = UIImage(named: "lights_texture") {
             if let cgImage = image.cgImage {
                 galaxyTexture = try? loader.newTexture(cgImage: cgImage)
             }
@@ -89,6 +93,8 @@ class EarthScene: GraphicsDelegate {
     func update(deltaTime: Float) {
         
         earthRotation += 0.0025
+        //earthRotation += 0.0075
+        
         //earthRotation += 0.05
         
         if earthRotation >= (Float.pi * 2.0) {
@@ -100,6 +106,7 @@ class EarthScene: GraphicsDelegate {
             lightRotation += (Float.pi * 2.0)
         }
         
+        earth.update(deltaTime: deltaTime)
         earth.updateStereo(radians: earthRotation)
         
     }
@@ -130,6 +137,8 @@ class EarthScene: GraphicsDelegate {
     struct MatrixPack {
         let projectionMatrix: matrix_float4x4
         let modelViewMatrix: matrix_float4x4
+        let modelViewNoRotationMatrix: matrix_float4x4
+        
         let normalMatrix: matrix_float4x4
     }
     
@@ -154,7 +163,11 @@ class EarthScene: GraphicsDelegate {
         var modelViewMatrix = matrix_identity_float4x4
         //
         modelViewMatrix.translate(x: width / 2.0, y: height / 2.0, z: 0.0)
+        var modelViewNoRotationMatrix = modelViewMatrix
+        
         modelViewMatrix.rotateY(radians: earthRotation)
+        
+        
         
         var normalMatrix = modelViewMatrix
         normalMatrix = simd_inverse(normalMatrix)
@@ -162,6 +175,7 @@ class EarthScene: GraphicsDelegate {
         
         let result = MatrixPack(projectionMatrix: projectionMatrix,
                                 modelViewMatrix: modelViewMatrix,
+                                modelViewNoRotationMatrix: modelViewNoRotationMatrix,
                                 normalMatrix: normalMatrix)
         return result
     }
@@ -182,6 +196,7 @@ class EarthScene: GraphicsDelegate {
         earth.draw3DBloom(renderEncoder: renderEncoder,
                           projectionMatrix: matrixPack.projectionMatrix,
                           modelViewMatrix: matrixPack.modelViewMatrix)
+        graphics.set(depthState: .disabled, renderEncoder: renderEncoder)
     }
     
     func draw3D(renderEncoder: MTLRenderCommandEncoder) {
@@ -190,7 +205,7 @@ class EarthScene: GraphicsDelegate {
         graphics.set(depthState: .lessThan, renderEncoder: renderEncoder)
         earth.draw3D(renderEncoder: renderEncoder,
                      projectionMatrix: matrixPack.projectionMatrix,
-                     modelViewMatrix: matrixPack.modelViewMatrix,
+                     modelViewMatrix: matrixPack.modelViewNoRotationMatrix,
                      normalMatrix: matrixPack.normalMatrix,
                      lightDirX: sin(lightRotation),
                      lightDirY: 0.0,
@@ -200,8 +215,7 @@ class EarthScene: GraphicsDelegate {
                      lightSpecularIntensity: 999_999_999.0,
                      lightNightIntensity: 1.0,
                      lightShininess: 24.0)
-        
-        
+        graphics.set(depthState: .disabled, renderEncoder: renderEncoder)
     }
     
     func draw3DStereoscopicBlue(renderEncoder: MTLRenderCommandEncoder) {
@@ -209,33 +223,35 @@ class EarthScene: GraphicsDelegate {
         graphics.set(depthState: .lessThan, renderEncoder: renderEncoder)
         earth.draw3DStereoscopicBlue(renderEncoder: renderEncoder,
                                      projectionMatrix: matrixPack.projectionMatrix,
-                                     modelViewMatrix: matrixPack.modelViewMatrix,
+                                     modelViewMatrix: matrixPack.modelViewNoRotationMatrix,
                                      normalMatrix: matrixPack.normalMatrix,
                                      lightDirX: sin(lightRotation),
                                      lightDirY: 0.0,
                                      lightDirZ: -cosf(lightRotation),
                                      lightAmbientIntensity: 0.0,
                                      lightDiffuseIntensity: 1.0,
-                                     lightSpecularIntensity: 999_999_999.0,
+                                     lightSpecularIntensity: 0.0,
                                      lightNightIntensity: 1.0,
                                      lightShininess: 24.0)
+        graphics.set(depthState: .disabled, renderEncoder: renderEncoder)
     }
     
     func draw3DStereoscopicRed(renderEncoder: MTLRenderCommandEncoder) {
         let matrixPack = getMatrixPack()
         graphics.set(depthState: .lessThan, renderEncoder: renderEncoder)
         earth.draw3DStereoscopicRed(renderEncoder: renderEncoder,
-                                      projectionMatrix: matrixPack.projectionMatrix,
-                                      modelViewMatrix: matrixPack.modelViewMatrix,
-                                      normalMatrix: matrixPack.normalMatrix,
-                                      lightDirX: sin(lightRotation),
-                                      lightDirY: 0.0,
-                                      lightDirZ: -cosf(lightRotation),
-                                      lightAmbientIntensity: 0.0,
-                                      lightDiffuseIntensity: 1.0,
-                                      lightSpecularIntensity: 999_999_999.0,
-                                      lightNightIntensity: 1.0,
-                                      lightShininess: 24.0)
+                                    projectionMatrix: matrixPack.projectionMatrix,
+                                    modelViewMatrix: matrixPack.modelViewNoRotationMatrix,
+                                    normalMatrix: matrixPack.normalMatrix,
+                                    lightDirX: sin(lightRotation),
+                                    lightDirY: 0.0,
+                                    lightDirZ: -cosf(lightRotation),
+                                    lightAmbientIntensity: 0.0,
+                                    lightDiffuseIntensity: 1.0,
+                                    lightSpecularIntensity: 0.0,
+                                    lightNightIntensity: 1.0,
+                                    lightShininess: 24.0)
+        graphics.set(depthState: .disabled, renderEncoder: renderEncoder)
     }
     
 }

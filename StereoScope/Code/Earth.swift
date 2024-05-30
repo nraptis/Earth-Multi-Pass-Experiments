@@ -15,7 +15,13 @@ class Earth {
     let earthModelDataStrips: [EarthModelDataStrip]
     weak var texture: MTLTexture?
     
+    let width: Float
+    let height: Float
+    
     init(width: Float, height: Float) {
+        
+        self.width = width
+        self.height = height
         
         earthModelData = EarthModelData(width: width, height: height)
         
@@ -41,9 +47,16 @@ class Earth {
         }
     }
     
+    func update(deltaTime: Float) {
+        for earthModelDataStrip in earthModelDataStrips {
+            earthModelDataStrip.update(deltaTime: deltaTime)
+        }
+        
+    }
+    
     func updateStereo(radians: Float) {
         for earthModelDataStrip in earthModelDataStrips {
-            earthModelDataStrip.updateStereo(radians: radians)
+            earthModelDataStrip.updateStereo(radians: radians, width: width, height: height)
         }
     }
     
@@ -139,7 +152,9 @@ class Earth {
                                        
                                        //pipelineState: .spriteNodeStereoscopicBlueIndexed3DNoBlending
                                                    
-                                                   pipelineState: .spriteNodeIndexedNightStereoscopicBlue3DNoBlending
+                                        pipelineState: .spriteNodeIndexedNightStereoscopicBlue3DNoBlending
+                                          
+                                        //           pipelineState: .spriteNodeIndexedPhongColoredStereoscopicBlue3DNoBlending
                                                    
             
             )
@@ -159,7 +174,6 @@ class Earth {
                                 lightSpecularIntensity: Float,
                                 lightNightIntensity: Float,
                                 lightShininess: Float) {
-        
         
         for earthModelDataStrip in earthModelDataStrips {
             earthModelDataStrip.draw3DStereoscopic(renderEncoder: renderEncoder,
@@ -185,7 +199,7 @@ class Earth {
                                                    
                                                    pipelineState: .spriteNodeIndexedNightStereoscopicRed3DNoBlending
                                                    
-                                                   //pipelineState: .spriteNodeIndexedPhongStereoscopicRed3DNoBlending
+                                                   //pipelineState: .spriteNodeIndexedPhongColoredStereoscopicRed3DNoBlending
                                                    
             
             

@@ -303,8 +303,7 @@ vertex InOut sprite_node_stereoscopic_blue_3d_vertex(constant Vertex3DStereoscop
     
     InOut out;
     float4 position = float4(verts[vid].position, 1.0);
-    position[0] += verts[vid].shift[0];
-    
+    position[0] -= verts[vid].shift[0];
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
     out.textureCoord = verts[vid].textureCoord;
     return out;
@@ -328,7 +327,7 @@ vertex InOut sprite_node_stereoscopic_red_3d_vertex(constant Vertex3DStereoscopi
                                                                    constant VertexUniforms & uniforms [[ buffer(SlotVertexUniforms) ]]) {
     InOut out;
     float4 position = float4(verts[vid].position, 1.0);
-    position[0] -= verts[vid].shift[1];
+    position[0] += verts[vid].shift[1];
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
     out.textureCoord = verts[vid].textureCoord;
     return out;
@@ -345,9 +344,6 @@ fragment float4 sprite_node_stereoscopic_red_3d_fragment(InOut in [[stage_in]],
                            colorSample.a * uniforms.a);
     return result;
 }
-
-
-
 
 vertex InOutDiffuseColors sprite_node_diffuse_colored_3d_vertex(constant Vertex3DDiffuseColors *verts [[buffer(SlotVertexData)]],
                                                                    uint vid [[vertex_id]],
@@ -421,7 +417,7 @@ vertex InOutColors sprite_node_colored_stereoscopic_blue_3d_vertex(constant Vert
                                                                    constant VertexUniforms & uniforms [[ buffer(SlotVertexUniforms) ]]) {
     InOutColors out;
     float4 position = float4(verts[vid].position, 1.0);
-    position[0] += verts[vid].shift[0];
+    position[0] -= verts[vid].shift[0];
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
     out.textureCoord = verts[vid].textureCoord;
     out.color = verts[vid].color;
@@ -445,7 +441,7 @@ vertex InOutColors sprite_node_colored_stereoscopic_red_3d_vertex(constant Verte
                                                                    constant VertexUniforms & uniforms [[ buffer(SlotVertexUniforms) ]]) {
     InOutColors out;
     float4 position = float4(verts[vid].position, 1.0);
-    position[0] -= verts[vid].shift[1];
+    position[0] += verts[vid].shift[1];
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
     out.textureCoord = verts[vid].textureCoord;
     out.color = verts[vid].color;
@@ -464,8 +460,6 @@ fragment float4 sprite_node_colored_stereoscopic_red_3d_fragment(InOutColors in 
     return result;
 }
 
-
-
 fragment float4 sprite_node_colored_white_3d_fragment(InOutColors in [[stage_in]],
                                                 constant FragmentUniforms & uniforms [[buffer(SlotFragmentUniforms)]],
                                                 texture2d<half> colorMap [[ texture(SlotFragmentTexture) ]],
@@ -477,8 +471,6 @@ fragment float4 sprite_node_colored_white_3d_fragment(InOutColors in [[stage_in]
                            colorSample.a * uniforms.a * in.color[3]);
     return result;
 }
-
-
 
 vertex InOutDiffuse sprite_node_diffuse_3d_vertex(constant Vertex3DDiffuse *verts [[buffer(SlotVertexData)]],
                                                                    uint vid [[vertex_id]],
@@ -511,22 +503,18 @@ fragment float4 sprite_node_diffuse_3d_fragment(InOutDiffuse in [[stage_in]],
     return result;
 }
 
-
-
-
 vertex InOutDiffuse sprite_node_diffuse_stereoscopic_blue_3d_vertex(constant Vertex3DDiffuseStereoscopic *verts [[buffer(SlotVertexData)]],
                                                                    uint vid [[vertex_id]],
                                                                    constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
     InOutDiffuse out;
     float4 position = float4(verts[vid].position, 1.0);
-    position[0] += verts[vid].shift[0];
+    position[0] -= verts[vid].shift[0];
     float4 normal = float4(verts[vid].normal, 1.0);
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
     out.textureCoord = verts[vid].textureCoord;
     out.normal = float3(uniforms.normalMatrix * normal);
     return out;
 }
-
 
 fragment float4 sprite_node_diffuse_stereoscopic_blue_3d_fragment(InOutDiffuse in [[stage_in]],
                                                 constant FragmentUniformsDiffuse & uniforms [[buffer(SlotFragmentUniforms)]],
@@ -552,7 +540,7 @@ vertex InOutDiffuse sprite_node_diffuse_stereoscopic_red_3d_vertex(constant Vert
                                                                    constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
     InOutDiffuse out;
     float4 position = float4(verts[vid].position, 1.0);
-    position[0] -= verts[vid].shift[1];
+    position[0] += verts[vid].shift[1];
     float4 normal = float4(verts[vid].normal, 1.0);
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
     out.textureCoord = verts[vid].textureCoord;
@@ -579,14 +567,12 @@ fragment float4 sprite_node_diffuse_stereoscopic_red_3d_fragment(InOutDiffuse in
     return result;
 }
 
-
-
 vertex InOutDiffuseColors sprite_node_diffuse_colored_stereoscopic_blue_3d_vertex(constant Vertex3DDiffuseColorsStereoscopic *verts [[buffer(SlotVertexData)]],
                                                                    uint vid [[vertex_id]],
                                                                    constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
     InOutDiffuseColors out;
     float4 position = float4(verts[vid].position, 1.0);
-    position[0] += verts[vid].shift[0];
+    position[0] -= verts[vid].shift[0];
     float4 normal = float4(verts[vid].normal, 1.0);
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
     out.textureCoord = verts[vid].textureCoord;
@@ -594,7 +580,6 @@ vertex InOutDiffuseColors sprite_node_diffuse_colored_stereoscopic_blue_3d_verte
     out.color = verts[vid].color;
     return out;
 }
-
 
 fragment float4 sprite_node_diffuse_colored_stereoscopic_blue_3d_fragment(InOutDiffuseColors in [[stage_in]],
                                                 constant FragmentUniformsDiffuse & uniforms [[buffer(SlotFragmentUniforms)]],
@@ -620,7 +605,7 @@ vertex InOutDiffuseColors sprite_node_diffuse_colored_stereoscopic_red_3d_vertex
                                                                    constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
     InOutDiffuseColors out;
     float4 position = float4(verts[vid].position, 1.0);
-    position[0] -= verts[vid].shift[1];
+    position[0] += verts[vid].shift[1];
     float4 normal = float4(verts[vid].normal, 1.0);
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
     out.textureCoord = verts[vid].textureCoord;
@@ -672,38 +657,28 @@ fragment float4 sprite_node_night_3d_fragment(InOutNight in [[stage_in]],
                                                 sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
     float3 inNormal = normalize(in.normal);
     float3 inNormalInverse = normalize(in.normalInverse);
-    
     float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
     float ambientIntensity = uniforms.lightAmbientIntensity;
     ambientIntensity = clamp(ambientIntensity, 0.0, 1.0);
     float diffuseIntensity = max(dot(inNormal, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
     diffuseIntensity = clamp(diffuseIntensity, 0.0, 1.0);
-    
     float combinedLightIntensity = ambientIntensity + diffuseIntensity;
-    
-    float nightIntensity = max(dot(inNormalInverse, antiDirection), 0.0) * uniforms.lightNightIntensity;
+    float nightIntensity = max(dot(inNormalInverse, antiDirection), 0.0) * uniforms.lightNightIntensity + uniforms.overshoot;
     nightIntensity = clamp(nightIntensity, 0.0, 1.0);
-    
     half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
     half4 lightSample = lightMap.sample(colorSampler, in.textureCoord.xy);
-    
     float redBase = uniforms.r * uniforms.lightR;
     float greenBase = uniforms.g * uniforms.lightG;
     float blueBase = uniforms.b * uniforms.lightB;
-    
     float redLeft = redBase * colorSample.r * combinedLightIntensity;
     float greenLeft = greenBase * colorSample.g * combinedLightIntensity;
     float blueLeft = blueBase * colorSample.b * combinedLightIntensity;
-    
     float redRight = redBase * lightSample.r * nightIntensity;
     float greenRight = greenBase * lightSample.g * nightIntensity;
     float blueRight = blueBase * lightSample.b * nightIntensity;
-    
     float red = clamp(redLeft + redRight, 0.0, 1.0);
     float green = clamp(greenLeft + greenRight, 0.0, 1.0);
     float blue = clamp(blueLeft + blueRight, 0.0, 1.0);
-    
-    
     float4 result = float4(red,
                            green,
                            blue,
@@ -719,7 +694,7 @@ vertex InOutNight sprite_node_night_stereoscopic_blue_3d_vertex(constant Vertex3
                                                                    constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
     InOutNight out;
     float4 position = float4(verts[vid].position, 1.0);
-    position[0] += verts[vid].shift[0];
+    position[0] -= verts[vid].shift[0];
     float4 normal = float4(verts[vid].normal, 1.0);
     float4 normalInverse = float4(-verts[vid].normal[0],
                                   -verts[vid].normal[1],
@@ -739,33 +714,24 @@ fragment float4 sprite_node_night_stereoscopic_blue_3d_fragment(InOutNight in [[
                                                 sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
     float3 inNormal = normalize(in.normal);
     float3 inNormalInverse = normalize(in.normalInverse);
-    
     float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
     float ambientIntensity = uniforms.lightAmbientIntensity;
     ambientIntensity = clamp(ambientIntensity, 0.0, 1.0);
     float diffuseIntensity = max(dot(inNormal, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
     diffuseIntensity = clamp(diffuseIntensity, 0.0, 1.0);
-    
     float combinedLightIntensity = ambientIntensity + diffuseIntensity;
-    
-    float nightIntensity = max(dot(inNormalInverse, antiDirection), 0.0) * uniforms.lightNightIntensity;
+    float nightIntensity = max(dot(inNormalInverse, antiDirection), 0.0) * uniforms.lightNightIntensity + uniforms.overshoot;
     nightIntensity = clamp(nightIntensity, 0.0, 1.0);
-    
     half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
     half4 lightSample = lightMap.sample(colorSampler, in.textureCoord.xy);
-    
     float greenBase = uniforms.g * uniforms.lightG;
     float blueBase = uniforms.b * uniforms.lightB;
-    
     float greenLeft = greenBase * colorSample.g * combinedLightIntensity;
     float blueLeft = blueBase * colorSample.b * combinedLightIntensity;
-    
     float greenRight = greenBase * lightSample.g * nightIntensity;
     float blueRight = blueBase * lightSample.b * nightIntensity;
-    
     float green = clamp(greenLeft + greenRight, 0.0, 1.0);
     float blue = clamp(blueLeft + blueRight, 0.0, 1.0);
-    
     float4 result = float4(0.0,
                            green,
                            blue,
@@ -778,7 +744,7 @@ vertex InOutNight sprite_node_night_stereoscopic_red_3d_vertex(constant Vertex3D
                                                                    constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
     InOutNight out;
     float4 position = float4(verts[vid].position, 1.0);
-    position[0] -= verts[vid].shift[1];
+    position[0] += verts[vid].shift[1];
     float4 normal = float4(verts[vid].normal, 1.0);
     float4 normalInverse = float4(-verts[vid].normal[0],
                                   -verts[vid].normal[1],
@@ -798,21 +764,16 @@ fragment float4 sprite_node_night_stereoscopic_red_3d_fragment(InOutNight in [[s
                                                 sampler colorSampler [[ sampler(SlotFragmentSampler) ]]) {
     float3 inNormal = normalize(in.normal);
     float3 inNormalInverse = normalize(in.normalInverse);
-    
     float3 antiDirection = float3(-uniforms.lightDirX, -uniforms.lightDirY, -uniforms.lightDirZ);
     float ambientIntensity = uniforms.lightAmbientIntensity;
     ambientIntensity = clamp(ambientIntensity, 0.0, 1.0);
     float diffuseIntensity = max(dot(inNormal, antiDirection), 0.0) * uniforms.lightDiffuseIntensity;
     diffuseIntensity = clamp(diffuseIntensity, 0.0, 1.0);
-    
     float combinedLightIntensity = ambientIntensity + diffuseIntensity;
-    
-    float nightIntensity = max(dot(inNormalInverse, antiDirection), 0.0) * uniforms.lightNightIntensity;
+    float nightIntensity = max(dot(inNormalInverse, antiDirection), 0.0) * uniforms.lightNightIntensity + uniforms.overshoot;
     nightIntensity = clamp(nightIntensity, 0.0, 1.0);
-    
     half4 colorSample = colorMap.sample(colorSampler, in.textureCoord.xy);
     half4 lightSample = lightMap.sample(colorSampler, in.textureCoord.xy);
-    
     float redBase = uniforms.r * uniforms.lightR;
     float redLeft = redBase * colorSample.r * combinedLightIntensity;
     float redRight = redBase * lightSample.r * nightIntensity;
@@ -904,7 +865,7 @@ vertex InOutPhong sprite_node_phong_stereoscopic_blue_3d_vertex(constant Vertex3
                                                                    constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
     InOutPhong out;
     float4 position = float4(verts[vid].position, 1.0);
-    position[0] += verts[vid].shift[0];
+    position[0] -= verts[vid].shift[0];
     float4 normal = float4(verts[vid].normal, 1.0);
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
     out.textureCoord = verts[vid].textureCoord;
@@ -937,11 +898,11 @@ fragment float4 sprite_node_phong_stereoscopic_blue_3d_fragment(InOutPhong in [[
 }
 
 vertex InOutPhong sprite_node_phong_stereoscopic_red_3d_vertex(constant Vertex3DDiffuseStereoscopic *verts [[buffer(SlotVertexData)]],
-                                                                   uint vid [[vertex_id]],
-                                                                   constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
+                                                               uint vid [[vertex_id]],
+                                                               constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
     InOutPhong out;
     float4 position = float4(verts[vid].position, 1.0);
-    position[0] -= verts[vid].shift[1];
+    position[0] += verts[vid].shift[1];
     float4 normal = float4(verts[vid].normal, 1.0);
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
     out.textureCoord = verts[vid].textureCoord;
@@ -973,16 +934,12 @@ fragment float4 sprite_node_phong_stereoscopic_red_3d_fragment(InOutPhong in [[s
     return result;
 }
 
-
-
-
-
 vertex InOutPhongColors sprite_node_phong_colored_stereoscopic_blue_3d_vertex(constant Vertex3DDiffuseColorsStereoscopic *verts [[buffer(SlotVertexData)]],
                                                                    uint vid [[vertex_id]],
                                                                    constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
     InOutPhongColors out;
     float4 position = float4(verts[vid].position, 1.0);
-    position[0] += verts[vid].shift[0];
+    position[0] -= verts[vid].shift[0];
     float4 normal = float4(verts[vid].normal, 1.0);
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
     out.textureCoord = verts[vid].textureCoord;
@@ -1020,7 +977,7 @@ vertex InOutPhongColors sprite_node_phong_colored_stereoscopic_red_3d_vertex(con
                                                                    constant VertexUniformsDiffuse & uniforms [[ buffer(SlotVertexUniforms) ]]) {
     InOutPhongColors out;
     float4 position = float4(verts[vid].position, 1.0);
-    position[0] -= verts[vid].shift[1];
+    position[0] += verts[vid].shift[1];
     float4 normal = float4(verts[vid].normal, 1.0);
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
     out.textureCoord = verts[vid].textureCoord;
@@ -1052,5 +1009,3 @@ fragment float4 sprite_node_phong_colored_stereoscopic_red_3d_fragment(InOutPhon
                            colorSample.a * uniforms.a);
     return result;
 }
-
-

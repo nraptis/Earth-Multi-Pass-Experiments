@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-var overshoot = Float(20.0)
+var overshoot = Float(0.2)
 
 @main
 struct StereoScopeApp: App {
@@ -24,7 +24,15 @@ struct StereoScopeApp: App {
     
     @State private var selectedStereoscopicMode = StereoscopicModes.stereoscopic3D
     @State private var selectedBloomMode = BloomModes.bloom
-    @State private var _overshoot = Float(20.0)
+    @State private var _overshoot = Float(0.2)
+    
+    
+    @State private var _stereoSpreadBase = Float(1.0)
+    @State private var _stereoSpreadMax = Float(4.0)
+    
+    @State private var _bloomPasses = 3
+    
+    
     
     var body: some Scene {
         WindowGroup {
@@ -61,9 +69,16 @@ struct StereoScopeApp: App {
                     }
                     .pickerStyle(.segmented)
                     
-                    Slider(value: $_overshoot, in: 0.0...150.0)
+                    Slider(value: $_overshoot, in: 0.0...0.5)
+                    
                     
                     Spacer()
+                    
+                    Stepper("Bloom Passes", value: $_bloomPasses, in: 0...10)
+                    
+                    Slider(value: $_stereoSpreadBase, in: 0.0...8.0)
+                    Slider(value: $_stereoSpreadMax, in: 0.0...16.0)
+                    
                 }
                 .preferredColorScheme(.dark)
                 .padding(.top, 16.0)
@@ -87,8 +102,19 @@ struct StereoScopeApp: App {
                 }
                 .onChange(of: _overshoot) {
                     overshoot = _overshoot
-                    
                     print("overshoot = \(overshoot)")
+                }
+                .onChange(of: _stereoSpreadBase) {
+                    stereoSpreadBase = _stereoSpreadBase
+                    print("stereoSpreadBase = \(stereoSpreadBase)")
+                }
+                .onChange(of: _stereoSpreadMax) {
+                    stereoSpreadMax = _stereoSpreadMax
+                    print("stereoSpreadMax = \(stereoSpreadMax)")
+                }
+                .onChange(of: _bloomPasses) {
+                    bloomPasses = _bloomPasses
+                    print("bloomPasses = \(bloomPasses)")
                 }
             }
         }

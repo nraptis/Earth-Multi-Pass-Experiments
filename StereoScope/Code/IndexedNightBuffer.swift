@@ -13,7 +13,7 @@ class IndexedNightBuffer<NodeType,
                           UniformsVertexType: UniformsVertex,
                           UniformsFragmentType: UniformsFragment> {
     
-    private(set) var vertices = [NodeType]()
+    var vertices = [NodeType]()
     private(set) var vertexCount = 0
     private(set) var vertexCapacity = 0
     
