@@ -59,11 +59,9 @@ class EarthModelData {
                 _points[indexH][indexV].x = point.x * radius
                 _points[indexH][indexV].y = point.y * radius
                 _points[indexH][indexV].z = point.z * radius
-                
                 _normals[indexH][indexV].x = point.x
                 _normals[indexH][indexV].y = point.y
                 _normals[indexH][indexV].z = point.z
-                
                 _textureCoords[indexH][indexV].x = percentH
                 _textureCoords[indexH][indexV].y = percentV
                 indexH += 1

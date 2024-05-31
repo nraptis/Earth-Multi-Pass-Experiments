@@ -29,11 +29,7 @@ class SpriteInstance2D {
     private var vertexBuffer: MTLBuffer?
     private var indexBuffer: MTLBuffer?
     
-    private var vertices = [Sprite2DVertex](repeating: Sprite2DVertex(x: 0.0,
-                                                                      y: 0.0,
-                                                                      u: 0.0,
-                                                                      v: 0.0), count: 4)
-    
+    private var vertices = [Sprite2DVertex](repeating: Sprite2DVertex(x: 0.0, y: 0.0, u: 0.0, v: 0.0), count: 4)
     private var indices: [UInt32] = [0, 1, 2, 3]
     
     var samplerState = Graphics.SamplerState.linearClamp
@@ -184,17 +180,14 @@ class SpriteInstance2D {
             setY1(0.0)
             setU1(0.0)
             setV1(0.0)
-            
             setX2(Float(texture.width))
             setY2(0.0)
             setU2(1.0)
             setV2(0.0)
-            
             setX3(0.0)
             setY3(Float(texture.height))
             setU3(0.0)
             setV3(1.0)
-            
             setX4(Float(texture.width))
             setY4(Float(texture.height))
             setU4(1.0)

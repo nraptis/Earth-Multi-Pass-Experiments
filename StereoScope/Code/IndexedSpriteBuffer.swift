@@ -183,18 +183,12 @@ class IndexedSpriteBuffer<NodeType,
         }
         
         graphics.set(pipelineState: pipelineState, renderEncoder: renderEncoder)
-        
         graphics.setVertexDataBuffer(vertexBuffer, renderEncoder: renderEncoder)
-        
         graphics.setVertexUniformsBuffer(uniformsVertexBuffer, renderEncoder: renderEncoder)
         graphics.setFragmentUniformsBuffer(uniformsFragmentBuffer, renderEncoder: renderEncoder)
-        
         graphics.setFragmentTexture(texture, renderEncoder: renderEncoder)
-        
         graphics.set(samplerState: samplerState, renderEncoder: renderEncoder)
-        
         renderEncoder.setCullMode(cullMode)
-        
         renderEncoder.drawIndexedPrimitives(type: primitiveType,
                                             indexCount: indexCount,
                                             indexType: .uint32,
@@ -247,6 +241,4 @@ class IndexedSpriteBuffer<NodeType,
             indexBuffer = graphics.metalDevice.makeBuffer(bytes: indices, length: indexBufferLength)
         }
     }
-    
-    
 }

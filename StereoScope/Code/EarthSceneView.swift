@@ -14,15 +14,11 @@ struct EarthSceneView: UIViewControllerRepresentable {
         
         let width = Float(Int(width + 0.5))
         let height = Float(Int(height + 0.5))
-        let earthScene = EarthScene(width: width, 
-                                    height: height)
-        let metalViewController = MetalViewController(delegate: earthScene,
-                                                      width: width,
-                                                      height: height)
-        //metalViewController.loadViewIfNeeded()
+        let earthScene = EarthScene(width: width, height: height)
+        let metalViewController = MetalViewController(delegate: earthScene, width: width, height: height)
+        metalViewController.loadViewIfNeeded()
         metalViewController.load()
         metalViewController.loadComplete()
-        
         return metalViewController
     }
     

@@ -9,8 +9,6 @@ import Foundation
 import Metal
 import simd
 
-
-
 class SpriteInstance3D {
     
     enum BlendMode {
@@ -187,17 +185,14 @@ class SpriteInstance3D {
             setY1(0.0)
             setU1(0.0)
             setV1(0.0)
-            
             setX2(Float(texture.width))
             setY2(0.0)
             setU2(1.0)
             setV2(0.0)
-            
             setX3(0.0)
             setY3(Float(texture.height))
             setU3(0.0)
             setV3(1.0)
-            
             setX4(Float(texture.width))
             setY4(Float(texture.height))
             setU4(1.0)
@@ -206,14 +201,12 @@ class SpriteInstance3D {
     }
     
     func render(renderEncoder: MTLRenderCommandEncoder) {
-        
         guard let graphics = graphics else { return }
         guard let texture = texture else { return }
         guard let vertexBuffer = vertexBuffer else { return }
         guard let indexBuffer = indexBuffer else { return }
         guard let uniformsVertexBuffer = uniformsVertexBuffer else { return }
         guard let uniformsFragmentBuffer = uniformsFragmentBuffer else { return }
-        
         switch blendMode {
         case .none:
             graphics.set(pipelineState: .spriteNodeIndexed2DNoBlending, renderEncoder: renderEncoder)
@@ -242,12 +235,10 @@ class SpriteInstance3D {
         graphics.setFragmentUniformsBuffer(uniformsFragmentBuffer, renderEncoder: renderEncoder)
         graphics.setVertexDataBuffer(vertexBuffer, renderEncoder: renderEncoder)
         graphics.set(samplerState: samplerState, renderEncoder: renderEncoder)
-        
         renderEncoder.setCullMode(MTLCullMode.back)
         renderEncoder.drawIndexedPrimitives(type: .triangleStrip,
                                             indexCount: 4,
                                             indexType: .uint32,
                                             indexBuffer: indexBuffer, indexBufferOffset: 0)
     }
-    
 }

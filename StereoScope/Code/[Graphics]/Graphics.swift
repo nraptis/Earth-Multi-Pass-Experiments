@@ -46,109 +46,132 @@ class Graphics {
         case shapeNodeIndexed2DAlphaBlending
         case shapeNodeIndexed2DAdditiveBlending
         case shapeNodeIndexed2DPremultipliedBlending
+        // 4
+        
         case shapeNodeIndexed3DNoBlending
         case shapeNodeIndexed3DAlphaBlending
         case shapeNodeIndexed3DAdditiveBlending
         case shapeNodeIndexed3DPremultipliedBlending
+        // 8
+        
         case shapeNodeIndexedDiffuse3DNoBlending
         case shapeNodeIndexedDiffuseColored3DNoBlending
         case shapeNodeIndexedPhong3DNoBlending
         case shapeNodeIndexedPhongColored3DNoBlending
+        // 12
         
         case shapeNodeColoredIndexed2DNoBlending
         case shapeNodeColoredIndexed2DAlphaBlending
         case shapeNodeColoredIndexed2DAdditiveBlending
         case shapeNodeColoredIndexed2DPremultipliedBlending
+        // 16
+        
         case shapeNodeColoredIndexed3DNoBlending
         case shapeNodeColoredIndexed3DAlphaBlending
         case shapeNodeColoredIndexed3DAdditiveBlending
         case shapeNodeColoredIndexed3DPremultipliedBlending
-        
+        // 20
         
         case spriteNodeIndexed2DNoBlending
         case spriteNodeIndexed2DAlphaBlending
         case spriteNodeIndexed2DAdditiveBlending
         case spriteNodeIndexed2DPremultipliedBlending
+        // 24
+        
         case spriteNodeIndexed3DNoBlending
         case spriteNodeIndexed3DAlphaBlending
         case spriteNodeIndexed3DAdditiveBlending
         case spriteNodeIndexed3DPremultipliedBlending
+        // 28
         
         case spriteNodeStereoscopicBlueIndexed3DNoBlending
         case spriteNodeStereoscopicBlueIndexed3DAlphaBlending
         case spriteNodeStereoscopicBlueIndexed3DAdditiveBlending
         case spriteNodeStereoscopicBlueIndexed3DPremultipliedBlending
+        // 32
         
         case spriteNodeStereoscopicRedIndexed3DNoBlending
         case spriteNodeStereoscopicRedIndexed3DAlphaBlending
         case spriteNodeStereoscopicRedIndexed3DAdditiveBlending
         case spriteNodeNodeStereoscopicRedIndexed3DPremultipliedBlending
+        // 36
         
         case spriteNodeColoredStereoscopicBlueIndexed3DNoBlending
         case spriteNodeColoredStereoscopicBlueIndexed3DAlphaBlending
         case spriteNodeColoredStereoscopicBlueIndexed3DAdditiveBlending
         case spriteNodeColoredStereoscopicBlueIndexed3DPremultipliedBlending
+        // 40
         
         case spriteNodeColoredStereoscopicRedIndexed3DNoBlending
         case spriteNodeColoredStereoscopicRedIndexed3DAlphaBlending
         case spriteNodeColoredStereoscopicRedIndexed3DAdditiveBlending
         case spriteNodeNodeColoredStereoscopicRedIndexed3DPremultipliedBlending
-        
+        // 44
         
         case spriteNodeIndexedDiffuse3DNoBlending
         case spriteNodeIndexedDiffuseStereoscopicBlue3DNoBlending
         case spriteNodeIndexedDiffuseStereoscopicRed3DNoBlending
+        // 47
         
         case spriteNodeIndexedDiffuseColored3DNoBlending
         case spriteNodeIndexedDiffuseColoredStereoscopicBlue3DNoBlending
         case spriteNodeIndexedDiffuseColoredStereoscopicRed3DNoBlending
-        
+        // 50
         
         case spriteNodeIndexedPhong3DNoBlending
         case spriteNodeIndexedPhongStereoscopicRed3DNoBlending
         case spriteNodeIndexedPhongStereoscopicBlue3DNoBlending
+        // 53
         
         case spriteNodeIndexedPhongColored3DNoBlending
-        
         case spriteNodeIndexedPhongColoredStereoscopicRed3DNoBlending
         case spriteNodeIndexedPhongColoredStereoscopicBlue3DNoBlending
-        
+        // 56
         
         case spriteNodeIndexedNight3DNoBlending
-        
         case spriteNodeIndexedNightStereoscopicBlue3DNoBlending
         case spriteNodeIndexedNightStereoscopicRed3DNoBlending
-        
+        // 59
         
         case spriteNodeWhiteIndexed2DNoBlending
         case spriteNodeWhiteIndexed2DAlphaBlending
         case spriteNodeWhiteIndexed2DAdditiveBlending
         case spriteNodeWhiteIndexed2DPremultipliedBlending
+        // 63
+        
         case spriteNodeWhiteIndexed3DNoBlending
         case spriteNodeWhiteIndexed3DAlphaBlending
         case spriteNodeWhiteIndexed3DAdditiveBlending
         case spriteNodeWhiteIndexed3DPremultipliedBlending
+        //67
+        
         case spriteNodeColoredIndexed2DNoBlending
         case spriteNodeColoredIndexed2DAlphaBlending
         case spriteNodeColoredIndexed2DAdditiveBlending
         case spriteNodeColoredIndexed2DPremultipliedBlending
+        //71
+        
         case spriteNodeColoredIndexed3DNoBlending
         case spriteNodeColoredIndexed3DAlphaBlending
         case spriteNodeColoredIndexed3DAdditiveBlending
         case spriteNodeColoredIndexed3DPremultipliedBlending
+        //75
         
         case spriteNodeColoredWhiteIndexed2DNoBlending
         case spriteNodeColoredWhiteIndexed2DAlphaBlending
         case spriteNodeColoredWhiteIndexed2DAdditiveBlending
         case spriteNodeColoredWhiteIndexed2DPremultipliedBlending
+        //79
+        
         case spriteNodeColoredWhiteIndexed3DNoBlending
         case spriteNodeColoredWhiteIndexed3DAlphaBlending
         case spriteNodeColoredWhiteIndexed3DAdditiveBlending
         case spriteNodeColoredWhiteIndexed3DPremultipliedBlending
-        
+        //83
         
         case gaussianBlurHorizontalIndexedNoBlending
         case gaussianBlurVerticalIndexedNoBlending
+        //85
     }
     
     enum SamplerState {

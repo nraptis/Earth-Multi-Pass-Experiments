@@ -49,8 +49,8 @@ class EarthModelDataStrip {
                                           UniformsLightsVertex,
                                           UniformsPhongFragment>()
     let phongBufferColored = IndexedSpriteBuffer<Sprite3DLightedColoredVertex,
-                                                    UniformsLightsVertex,
-                                                    UniformsPhongFragment>()
+                                                 UniformsLightsVertex,
+                                                 UniformsPhongFragment>()
     let phongBufferStereoscopic = IndexedSpriteBuffer<Sprite3DLightedStereoscopicVertex,
                                                       UniformsLightsVertex,
                                                       UniformsPhongFragment>()
@@ -129,7 +129,6 @@ class EarthModelDataStrip {
             diffuseBufferColoredStereoscopic.add(vertex: Sprite3DLightedColoredStereoscopicVertex(u: u1, v: v1))
             diffuseBufferColoredStereoscopic.add(vertex: Sprite3DLightedColoredStereoscopicVertex(u: u2, v: v2))
             
-            
             phongBuffer.add(index: UInt32(indexH * 2))
             phongBuffer.add(index: UInt32(indexH * 2 + 1))
             phongBuffer.add(vertex: Sprite3DLightedVertex(u: u1, v: v1))
@@ -159,7 +158,6 @@ class EarthModelDataStrip {
             nightBufferStereoscopic.add(index: UInt32(indexH * 2 + 1))
             nightBufferStereoscopic.add(vertex: Sprite3DLightedStereoscopicVertex(u: u1, v: v1))
             nightBufferStereoscopic.add(vertex: Sprite3DLightedStereoscopicVertex(u: u2, v: v2))
-
         }
     }
     

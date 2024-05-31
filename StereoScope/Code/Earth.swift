@@ -299,7 +299,6 @@ class Earth {
                                                         lightShininess: lightShininess)
             
         }
-        
     }
 
     func draw3D_Phong_YesColored(renderEncoder: MTLRenderCommandEncoder,
@@ -325,8 +324,7 @@ class Earth {
                                                         lightShininess: lightShininess)
         }
     }
-
-
+    
     func draw3DStereoscopicBlue_Phong_NotColored(renderEncoder: MTLRenderCommandEncoder,
                                                  projectionMatrix: matrix_float4x4,
                                                  modelViewMatrix: matrix_float4x4,
@@ -352,7 +350,7 @@ class Earth {
             
         }
     }
-
+    
     func draw3DStereoscopicRed_Phong_NotColored(renderEncoder: MTLRenderCommandEncoder,
                                                 projectionMatrix: matrix_float4x4,
                                                 modelViewMatrix: matrix_float4x4,
@@ -454,10 +452,8 @@ class Earth {
                                              overshoot: overshoot)
             
         }
-        
     }
-
-
+    
     func draw3DStereoscopicBlue_Night(renderEncoder: MTLRenderCommandEncoder,
                                       projectionMatrix: matrix_float4x4,
                                       modelViewMatrix: matrix_float4x4,
@@ -506,7 +502,6 @@ class Earth {
                                                          lightNightIntensity: lightNightIntensity,
                                                          overshoot: overshoot,
                                                          pipelineState: .spriteNodeIndexedNightStereoscopicRed3DNoBlending)
-            
         }
     }
 }
