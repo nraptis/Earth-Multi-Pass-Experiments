@@ -21,8 +21,11 @@ class MetalViewController: UIViewController {
     private var _isTimerRunning = false
     private var _isMetalEngineLoaded = false
     
-    var isStereoscopicEnabled = true
+    var isStereoscopicEnabled = false
     var isBloomEnabled = true
+    var bloomPasses = ((UIDevice.current.userInterfaceIdiom == .pad) ? 6 : 4)
+    var stereoSpreadBase = Float((UIDevice.current.userInterfaceIdiom == .pad) ? 2.0 : 1.0)
+    var stereoSpreadMax = Float((UIDevice.current.userInterfaceIdiom == .pad) ? 8.0 : 4.0)
     
     let metalView: MetalView
     required init(delegate: GraphicsDelegate,
@@ -57,10 +60,7 @@ class MetalViewController: UIViewController {
         self.metalPipeline = _metalPipeline
         self.graphics = _graphics
         
-        super.init(nibName: nil,
-                   bundle: nil)
-        
-        print("[++] MetalViewController \( [self.classForCoder] )")
+        super.init(nibName: nil, bundle: nil)
         
         NotificationCenter.default.addObserver(self, 
                                                selector: #selector(applicationWillResignActive(notification:)),
@@ -106,10 +106,6 @@ class MetalViewController: UIViewController {
         }
     }
     
-    deinit {
-        print("[--] MetalViewController \( [self.classForCoder] )")
-    }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -141,9 +137,13 @@ class MetalViewController: UIViewController {
             if let previousTimeStamp = previousTimeStamp {
                 time = timer.timestamp - previousTimeStamp
             }
-            delegate.update(deltaTime: Float(time))
+            delegate.update(deltaTime: Float(time), stereoSpreadBase: stereoSpreadBase, stereoSpreadMax: stereoSpreadMax)
             previousTimeStamp = timer.timestamp
-            metalEngine.draw(isStereoscopicEnabled: isStereoscopicEnabled, isBloomEnabled: isBloomEnabled)
+            metalEngine.draw(isStereoscopicEnabled: isStereoscopicEnabled,
+                             isBloomEnabled: isBloomEnabled,
+                             bloomPasses: bloomPasses, 
+                             stereoSpreadBase: stereoSpreadBase,
+                             stereoSpreadMax: stereoSpreadMax)
         }
     }
 }

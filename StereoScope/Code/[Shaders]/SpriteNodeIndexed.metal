@@ -167,7 +167,7 @@ typedef struct {
     packed_float3 position [[]];
     packed_float2 textureCoord [[]];
     packed_float4 color [[]];
-    packed_float2 shift [[]];
+    float shift;
 } Vertex3DColorsStereoscopic;
 
 typedef struct {
@@ -418,7 +418,7 @@ vertex InOutColors sprite_node_colored_stereoscopic_blue_3d_vertex(constant Vert
                                                                    constant VertexUniforms & uniforms [[ buffer(SlotVertexUniforms) ]]) {
     InOutColors out;
     float4 position = float4(verts[vid].position, 1.0);
-    position[0] -= verts[vid].shift[0];
+    position[0] -= verts[vid].shift;
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
     out.textureCoord = verts[vid].textureCoord;
     out.color = verts[vid].color;
@@ -442,7 +442,7 @@ vertex InOutColors sprite_node_colored_stereoscopic_red_3d_vertex(constant Verte
                                                                    constant VertexUniforms & uniforms [[ buffer(SlotVertexUniforms) ]]) {
     InOutColors out;
     float4 position = float4(verts[vid].position, 1.0);
-    position[0] += verts[vid].shift[1];
+    position[0] += verts[vid].shift;
     out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
     out.textureCoord = verts[vid].textureCoord;
     out.color = verts[vid].color;

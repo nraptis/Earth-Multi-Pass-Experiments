@@ -11,7 +11,6 @@ class MetalView: UIView {
     
     required init(width: CGFloat, height: CGFloat) {
         super.init(frame: CGRect(x: 0.0, y: 0.0, width: width, height: height))
-        print("[++] MetalView")
     }
     
     required init?(coder: NSCoder) {
@@ -20,10 +19,6 @@ class MetalView: UIView {
     
     override class var layerClass: AnyClass {
         return CAMetalLayer.self
-    }
-    
-    deinit {
-        print("[--] MetalView")
     }
     
 }

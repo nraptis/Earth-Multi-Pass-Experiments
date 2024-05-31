@@ -41,12 +41,10 @@ protocol TextureCoordinateConforming {
 struct Shape2DVertex: PositionConforming2D {
     var x: Float
     var y: Float
-    
     init(x: Float, y: Float) {
         self.x = x
         self.y = y
     }
-    
     init() {
         self.x = 0.0
         self.y = 0.0
@@ -89,11 +87,17 @@ struct Sprite2DVertex: PositionConforming2D, TextureCoordinateConforming {
         self.u = u
         self.v = v
     }
+    init(u: Float, v: Float) {
+        self.x = 0.0
+        self.y = 0.0
+        self.u = u
+        self.v = v
+    }
     init() {
-        x = 0.0
-        y = 0.0
-        u = 0.0
-        v = 0.0
+        self.x = 0.0
+        self.y = 0.0
+        self.u = 0.0
+        self.v = 0.0
     }
 }
 
@@ -115,6 +119,16 @@ struct Sprite2DColoredVertex: PositionConforming2D, TextureCoordinateConforming,
         self.g = g
         self.b = b
         self.a = a
+    }
+    init(u: Float, v: Float) {
+        self.x = 0.0
+        self.y = 0.0
+        self.u = u
+        self.v = v
+        self.r = 1.0
+        self.g = 1.0
+        self.b = 1.0
+        self.a = 1.0
     }
     init() {
         self.x = 0.0
@@ -141,6 +155,13 @@ struct Sprite3DVertex: PositionConforming3D, TextureCoordinateConforming {
         self.u = u
         self.v = v
     }
+    init(u: Float, v: Float) {
+        self.x = 0.0
+        self.y = 0.0
+        self.z = 0.0
+        self.u = u
+        self.v = v
+    }
     init() {
         self.x = 0.0
         self.y = 0.0
@@ -164,6 +185,14 @@ struct Sprite3DVertexStereoscopic: PositionConforming3D, TextureCoordinateConfor
         self.u = u
         self.v = v
         self.shift = shift
+    }
+    init(u: Float, v: Float) {
+        self.x = 0.0
+        self.y = 0.0
+        self.z = 0.0
+        self.u = u
+        self.v = v
+        self.shift = 1.0
     }
     init() {
         self.x = 0.0
@@ -197,6 +226,18 @@ struct Sprite3DVertexColoredStereoscopic: PositionConforming3D, TextureCoordinat
         self.b = b
         self.a = a
         self.shift = shift
+    }
+    init(u: Float, v: Float) {
+        self.x = 0.0
+        self.y = 0.0
+        self.z = 0.0
+        self.u = u
+        self.v = v
+        self.r = 1.0
+        self.g = 1.0
+        self.b = 1.0
+        self.a = 1.0
+        self.shift = 1.0
     }
     init() {
         self.x = 0.0
@@ -232,6 +273,17 @@ struct Sprite3DColoredVertex: PositionConforming3D, TextureCoordinateConforming,
         self.g = g
         self.b = b
         self.a = a
+    }
+    init(u: Float, v: Float) {
+        self.x = 0.0
+        self.y = 0.0
+        self.z = 0.0
+        self.u = u
+        self.v = v
+        self.r = 1.0
+        self.g = 1.0
+        self.b = 1.0
+        self.a = 1.0
     }
     init() {
         self.x = 0.0
@@ -308,6 +360,17 @@ struct Sprite3DLightedStereoscopicVertex: PositionConforming3D, TextureCoordinat
         self.normalZ = normalZ
         self.shift = shift
     }
+    init(u: Float, v: Float) {
+        self.x = 0.0
+        self.y = 0.0
+        self.z = 0.0
+        self.u = u
+        self.v = v
+        self.normalX = 0.0
+        self.normalY = -1.0
+        self.normalZ = 0.0
+        self.shift = 1.0
+    }
     init() {
         self.x = 0.0
         self.y = 0.0
@@ -367,6 +430,15 @@ struct Shape3DColoredVertex: PositionConforming3D, ColorConforming {
     var b: Float
     var a: Float
     init(x: Float, y: Float, z: Float, r: Float, g: Float, b: Float, a: Float) {
+        self.x = x
+        self.y = y
+        self.z = z
+        self.r = r
+        self.g = g
+        self.b = b
+        self.a = a
+    }
+    init() {
         self.x = 0.0
         self.y = 0.0
         self.z = 0.0
@@ -395,6 +467,16 @@ struct Sprite3DLightedVertex: PositionConforming3D, NormalConforming, TextureCoo
         self.normalX = normalX
         self.normalY = normalY
         self.normalZ = normalZ
+    }
+    init(u: Float, v: Float) {
+        self.x = 0.0
+        self.y = 0.0
+        self.z = 0.0
+        self.u = u
+        self.v = v
+        self.normalX = 0.0
+        self.normalY = -1.0
+        self.normalZ = 0.0
     }
     init() {
         self.x = 0.0
@@ -434,6 +516,20 @@ struct Sprite3DLightedColoredVertex: PositionConforming3D, TextureCoordinateConf
         self.g = g
         self.b = b
         self.a = a
+    }
+    init(u: Float, v: Float) {
+        self.x = 0.0
+        self.y = 0.0
+        self.z = 0.0
+        self.u = u
+        self.v = v
+        self.normalX = 0.0
+        self.normalY = -1.0
+        self.normalZ = 0.0
+        self.r = 1.0
+        self.g = 1.0
+        self.b = 1.0
+        self.a = 1.0
     }
     init() {
         self.x = 0.0
@@ -479,6 +575,21 @@ struct Sprite3DLightedColoredStereoscopicVertex: PositionConforming3D, TextureCo
         self.b = b
         self.a = a
         self.shift = shift
+    }
+    init(u: Float, v: Float) {
+        self.x = 0.0
+        self.y = 0.0
+        self.z = 0.0
+        self.u = u
+        self.v = v
+        self.normalX = 0.0
+        self.normalY = -1.0
+        self.normalZ = 0.0
+        self.r = 1.0
+        self.g = 1.0
+        self.b = 1.0
+        self.a = 1.0
+        self.shift = 1.0
     }
     init() {
         self.x = 0.0

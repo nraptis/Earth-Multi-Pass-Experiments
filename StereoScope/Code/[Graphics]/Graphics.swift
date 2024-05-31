@@ -17,13 +17,13 @@ protocol GraphicsDelegate: AnyObject {
     
     func loadComplete()
     
-    func update(deltaTime: Float)
+    func update(deltaTime: Float, stereoSpreadBase: Float, stereoSpreadMax: Float)
     
     func draw3DPrebloom(renderEncoder: MTLRenderCommandEncoder)
     func draw3DBloom(renderEncoder: MTLRenderCommandEncoder)
     
-    func draw3DStereoscopicBlue(renderEncoder: MTLRenderCommandEncoder)
-    func draw3DStereoscopicRed(renderEncoder: MTLRenderCommandEncoder)
+    func draw3DStereoscopicBlue(renderEncoder: MTLRenderCommandEncoder, stereoSpreadBase: Float, stereoSpreadMax: Float)
+    func draw3DStereoscopicRed(renderEncoder: MTLRenderCommandEncoder, stereoSpreadBase: Float, stereoSpreadMax: Float)
     
     func draw3D(renderEncoder: MTLRenderCommandEncoder)
     func draw2D(renderEncoder: MTLRenderCommandEncoder)

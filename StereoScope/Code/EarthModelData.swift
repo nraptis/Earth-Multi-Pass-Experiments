@@ -11,8 +11,8 @@ import UIKit
 
 class EarthModelData {
     
-    static let tileCountV = 64
-    static let tileCountH = 128
+    static let tileCountV = 48
+    static let tileCountH = 96
     
     let points: [[simd_float3]]
     let normals: [[simd_float3]]

@@ -10,10 +10,6 @@ import UIKit
 import Metal
 import simd
 
-var stereoSpreadBase = Float(1.0)
-var stereoSpreadMax = Float(4.0)
-var bloomPasses = 3
-
 class MetalEngine {
     
     unowned var metalLayer: CAMetalLayer!
@@ -105,7 +101,10 @@ class MetalEngine {
     }
     
     func draw(isStereoscopicEnabled: Bool,
-              isBloomEnabled: Bool) {
+              isBloomEnabled: Bool,
+              bloomPasses: Int,
+              stereoSpreadBase: Float,
+              stereoSpreadMax: Float) {
         
         guard let drawable = metalLayer.nextDrawable() else { return }
         guard let commandBuffer = commandQueue.makeCommandBuffer() else { return }
@@ -135,7 +134,7 @@ class MetalEngine {
         }
         
         if isBloomEnabled {
-            drawBloom(commandBuffer: commandBuffer)
+            drawBloom(commandBuffer: commandBuffer, passes: bloomPasses)
         }
         
         let renderPassDescriptorBloomCombine = MTLRenderPassDescriptor()
@@ -190,7 +189,7 @@ class MetalEngine {
                 stereoscopicSprite3D.texture = storageTextureBloom
                 stereoscopicSprite3D.setDirty(isVertexBufferDirty: true, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: true)
                 stereoscopicSprite3D.render(renderEncoder: renderEncoder3D, pipelineState: .spriteNodeStereoscopicBlueIndexed3DNoBlending)
-                delegate.draw3DStereoscopicBlue(renderEncoder: renderEncoder3D)
+                delegate.draw3DStereoscopicBlue(renderEncoder: renderEncoder3D, stereoSpreadBase: stereoSpreadBase, stereoSpreadMax: stereoSpreadMax)
                 renderEncoder3D.endEncoding()
             }
             
@@ -215,7 +214,7 @@ class MetalEngine {
                 stereoscopicSprite3D.texture = storageTextureBloom
                 stereoscopicSprite3D.setDirty(isVertexBufferDirty: true, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: true)
                 stereoscopicSprite3D.render(renderEncoder: renderEncoder3D, pipelineState: .spriteNodeStereoscopicRedIndexed3DNoBlending)
-                delegate.draw3DStereoscopicRed(renderEncoder: renderEncoder3D)
+                delegate.draw3DStereoscopicRed(renderEncoder: renderEncoder3D, stereoSpreadBase: stereoSpreadBase, stereoSpreadMax: stereoSpreadMax)
                 renderEncoder3D.endEncoding()
             }
         } else {
@@ -274,7 +273,7 @@ class MetalEngine {
     //       removed it. It makes no sense to do 0 passes of
     //       bloom since an equivalent effect can be achieved with
     //       the main 3D draw pass. OR pre-bloom pass.
-    func drawBloom(commandBuffer: MTLCommandBuffer) {
+    func drawBloom(commandBuffer: MTLCommandBuffer, passes: Int) {
         
         let renderPassDescriptorBloom = MTLRenderPassDescriptor()
         renderPassDescriptorBloom.colorAttachments[0].texture = storageTexture
@@ -322,7 +321,7 @@ class MetalEngine {
         }
         
         var bloomLoopIndex = 1
-        while bloomLoopIndex < bloomPasses {
+        while bloomLoopIndex < passes {
             
             let renderPassDescriptorHorizontal2 = MTLRenderPassDescriptor()
             renderPassDescriptorHorizontal2.colorAttachments[0].texture = bloomTexture1

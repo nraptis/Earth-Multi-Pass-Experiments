@@ -1,6 +1,6 @@
 //
-//  JiggleScene.swift
-//  Jiggle3
+//  EarthScene.swift
+//  Earth
 //
 //  Created by Nicky Taylor on 11/9/23.
 //
@@ -9,6 +9,21 @@ import Foundation
 import Metal
 import MetalKit
 import simd
+
+enum LightType: CaseIterable {
+    case none
+    case diffuse
+    case specular
+    case night
+}
+
+enum ColorType: CaseIterable {
+    case none
+    case colored
+}
+
+var lightType = LightType.night
+var colorType = ColorType.none
 
 class EarthScene: GraphicsDelegate {
     
@@ -27,6 +42,11 @@ class EarthScene: GraphicsDelegate {
                                                      UniformsSpriteVertex,
                                                      UniformsSpriteFragment>(sentinelNode: Sprite3DVertex(x: 0.0, y: 0.0, z: 0.0, u: 0.0, v: 0.0))
     
+    
+    private var glassesSprite = IndexedSpriteInstance<Sprite2DVertex,
+                                                     UniformsSpriteVertex,
+                                                     UniformsSpriteFragment>(sentinelNode: Sprite2DVertex(x: 0.0, y: 0.0, u: 0.0, v: 0.0))
+    
     let testSprite = SpriteInstance2D()
     let earth: Earth
     init(width: Float,
@@ -36,10 +56,6 @@ class EarthScene: GraphicsDelegate {
         centerX = Float(Int(width * 0.5 + 0.5))
         centerY = Float(Int(height * 0.5 + 0.5))
         earth = Earth(width: width, height: height)
-    }
-    
-    deinit {
-        print("[--] JiggleScene")
     }
     
     func load() {
@@ -57,22 +73,18 @@ class EarthScene: GraphicsDelegate {
             }
         }
         
-        if let image = UIImage(named: "colorful_galaxy_01") {
+        if let image = UIImage(named: "galaxy") {
             if let cgImage = image.cgImage {
                 galaxyTexture = try? loader.newTexture(cgImage: cgImage)
             }
         }
-        
-        testSprite.load(graphics: graphics,
-                        texture: earthTexture)
-        
+
         earth.load(graphics: graphics,
                    texture: earthTexture,
                    textureLight: lightsTexture)
         
         galaxySprite.load(graphics: graphics,
                           texture: galaxyTexture)
-        
     }
     
     func loadComplete() { }
@@ -80,7 +92,7 @@ class EarthScene: GraphicsDelegate {
     var earthRotation = Float(0.0)
     var lightRotation = Float(0.0)
     
-    func update(deltaTime: Float) {
+    func update(deltaTime: Float, stereoSpreadBase: Float, stereoSpreadMax: Float) {
         
         earthRotation += 0.0025
         if earthRotation >= (Float.pi * 2.0) {
@@ -92,8 +104,8 @@ class EarthScene: GraphicsDelegate {
             lightRotation += (Float.pi * 2.0)
         }
         
-        earth.update(deltaTime: deltaTime)
-        earth.updateStereo(radians: earthRotation)
+        earth.update(deltaTime: deltaTime, stereoSpreadBase: stereoSpreadBase, stereoSpreadMax: stereoSpreadMax)
+        earth.updateStereo(radians: earthRotation, stereoSpreadBase: stereoSpreadBase, stereoSpreadMax: stereoSpreadMax)
     }
     
     func draw2D(renderEncoder: MTLRenderCommandEncoder) {
@@ -136,65 +148,238 @@ class EarthScene: GraphicsDelegate {
     func draw3DBloom(renderEncoder: MTLRenderCommandEncoder) {
         let matrixPack = getMatrixPack()
         graphics.set(depthState: .lessThan, renderEncoder: renderEncoder)
-        earth.draw3DBloom(renderEncoder: renderEncoder,
-                          projectionMatrix: matrixPack.projectionMatrix,
-                          modelViewMatrix: matrixPack.modelViewMatrix)
+        switch colorType {
+        case .none:
+            earth.draw3DBloom_NotColored(renderEncoder: renderEncoder,
+                                         projectionMatrix: matrixPack.projectionMatrix,
+                                         modelViewMatrix: matrixPack.modelViewMatrix)
+        case .colored:
+            earth.draw3DBloom_YesColored(renderEncoder: renderEncoder,
+                                         projectionMatrix: matrixPack.projectionMatrix,
+                                         modelViewMatrix: matrixPack.modelViewMatrix)
+        }
         graphics.set(depthState: .disabled, renderEncoder: renderEncoder)
     }
     
     func draw3D(renderEncoder: MTLRenderCommandEncoder) {
         
+        var lightDirX = sinf(lightRotation)
+        var lightDirY = Float(0.20)
+        var lightDirZ = -cosf(lightRotation)
+        let lightLength = sqrtf(lightDirX * lightDirX + lightDirY * lightDirY + lightDirZ * lightDirZ)
+        lightDirX /= lightLength
+        lightDirY /= lightLength
+        lightDirZ /= lightLength
         let matrixPack = getMatrixPack()
         graphics.set(depthState: .lessThan, renderEncoder: renderEncoder)
-        earth.draw3D(renderEncoder: renderEncoder,
-                     projectionMatrix: matrixPack.projectionMatrix,
-                     modelViewMatrix: matrixPack.modelViewMatrix,
-                     normalMatrix: matrixPack.normalMatrix,
-                     lightDirX: sin(lightRotation),
-                     lightDirY: 0.0,
-                     lightDirZ: -cosf(lightRotation),
-                     lightAmbientIntensity: 0.0,
-                     lightDiffuseIntensity: 1.0,
-                     lightSpecularIntensity: 999_999_999.0,
-                     lightNightIntensity: 1.0,
-                     lightShininess: 24.0)
+        
+        switch lightType {
+        case .none:
+            switch colorType {
+            case .none:
+                earth.draw3D_NoLight_NotColored(renderEncoder: renderEncoder,
+                                                projectionMatrix: matrixPack.projectionMatrix,
+                                                modelViewMatrix: matrixPack.modelViewMatrix)
+            case .colored:
+                earth.draw3D_NoLight_YesColored(renderEncoder: renderEncoder,
+                                                projectionMatrix: matrixPack.projectionMatrix,
+                                                modelViewMatrix: matrixPack.modelViewMatrix)
+            }
+        case .diffuse:
+            switch colorType {
+            case .none:
+                earth.draw3D_Diffuse_NotColored(renderEncoder: renderEncoder,
+                                                projectionMatrix: matrixPack.projectionMatrix,
+                                                modelViewMatrix: matrixPack.modelViewMatrix,
+                                                normalMatrix: matrixPack.normalMatrix,
+                                                lightDirX: lightDirX, lightDirY: lightDirY, lightDirZ: lightDirZ,
+                                                lightAmbientIntensity: 0.25, lightDiffuseIntensity: 0.75)
+            case .colored:
+                earth.draw3D_Diffuse_YesColored(renderEncoder: renderEncoder,
+                                                projectionMatrix: matrixPack.projectionMatrix,
+                                                modelViewMatrix: matrixPack.modelViewMatrix,
+                                                normalMatrix: matrixPack.normalMatrix,
+                                                lightDirX: lightDirX, lightDirY: lightDirY, lightDirZ: lightDirZ,
+                                                lightAmbientIntensity: 0.25, lightDiffuseIntensity: 0.75)
+            }
+            
+            break
+        case .specular:
+            switch colorType {
+            case .none:
+                earth.draw3D_Phong_NotColored(renderEncoder: renderEncoder,
+                                              projectionMatrix: matrixPack.projectionMatrix,
+                                              modelViewMatrix: matrixPack.modelViewMatrix,
+                                              normalMatrix: matrixPack.normalMatrix,
+                                              lightDirX: lightDirX, lightDirY: lightDirY, lightDirZ: lightDirZ,
+                                              lightAmbientIntensity: 0.25, lightDiffuseIntensity: 0.5, lightSpecularIntensity: 0.25, lightShininess: 32.0)
+            case .colored:
+                earth.draw3D_Phong_YesColored(renderEncoder: renderEncoder,
+                                              projectionMatrix: matrixPack.projectionMatrix,
+                                              modelViewMatrix: matrixPack.modelViewMatrix,
+                                              normalMatrix: matrixPack.normalMatrix,
+                                              lightDirX: lightDirX, lightDirY: lightDirY, lightDirZ: lightDirZ,
+                                              lightAmbientIntensity: 0.25, lightDiffuseIntensity: 0.5, lightSpecularIntensity: 0.25, lightShininess: 32.0)
+            }
+            
+        case .night:
+            earth.draw3D_Night(renderEncoder: renderEncoder,
+                               projectionMatrix: matrixPack.projectionMatrix,
+                               modelViewMatrix: matrixPack.modelViewMatrix,
+                               normalMatrix: matrixPack.normalMatrix,
+                               lightDirX: lightDirX, lightDirY: lightDirY, lightDirZ: lightDirZ,
+                               lightAmbientIntensity: 0.0, lightDiffuseIntensity: 1.0,
+                               lightNightIntensity: 1.0, overshoot: overshoot)
+        }
+        
         graphics.set(depthState: .disabled, renderEncoder: renderEncoder)
     }
     
-    func draw3DStereoscopicBlue(renderEncoder: MTLRenderCommandEncoder) {
+    func draw3DStereoscopicBlue(renderEncoder: MTLRenderCommandEncoder, stereoSpreadBase: Float, stereoSpreadMax: Float) {
+        
+        var lightDirX = sinf(lightRotation)
+        var lightDirY = Float(0.20)
+        var lightDirZ = -cosf(lightRotation)
+        let lightLength = sqrtf(lightDirX * lightDirX + lightDirY * lightDirY + lightDirZ * lightDirZ)
+        lightDirX /= lightLength
+        lightDirY /= lightLength
+        lightDirZ /= lightLength
         let matrixPack = getMatrixPack()
         graphics.set(depthState: .lessThan, renderEncoder: renderEncoder)
-        earth.draw3DStereoscopicBlue(renderEncoder: renderEncoder,
-                                     projectionMatrix: matrixPack.projectionMatrix,
-                                     modelViewMatrix: matrixPack.modelViewMatrix,
-                                     normalMatrix: matrixPack.normalMatrix,
-                                     lightDirX: sin(lightRotation),
-                                     lightDirY: 0.0,
-                                     lightDirZ: -cosf(lightRotation),
-                                     lightAmbientIntensity: 0.0,
-                                     lightDiffuseIntensity: 1.0,
-                                     lightSpecularIntensity: 0.0,
-                                     lightNightIntensity: 1.0,
-                                     lightShininess: 24.0)
+        
+        switch lightType {
+        case .none:
+            switch colorType {
+            case .none:
+                earth.draw3DStereoscopicBlue_NoLight_NotColored(renderEncoder: renderEncoder,
+                                                                projectionMatrix: matrixPack.projectionMatrix,
+                                                                modelViewMatrix: matrixPack.modelViewMatrix)
+            case .colored:
+                earth.draw3DStereoscopicBlue_NoLight_YesColored(renderEncoder: renderEncoder,
+                                                                projectionMatrix: matrixPack.projectionMatrix,
+                                                                modelViewMatrix: matrixPack.modelViewMatrix)
+            }
+        case .diffuse:
+            switch colorType {
+            case .none:
+                earth.draw3DStereoscopicBlue_Diffuse_NotColored(renderEncoder: renderEncoder,
+                                                                projectionMatrix: matrixPack.projectionMatrix,
+                                                                modelViewMatrix: matrixPack.modelViewMatrix,
+                                                                normalMatrix: matrixPack.normalMatrix,
+                                                                lightDirX: lightDirX, lightDirY: lightDirY, lightDirZ: lightDirZ,
+                                                                lightAmbientIntensity: 0.25, lightDiffuseIntensity: 0.75)
+            case .colored:
+                earth.draw3DStereoscopicBlue_Diffuse_YesColored(renderEncoder: renderEncoder,
+                                                                projectionMatrix: matrixPack.projectionMatrix,
+                                                                modelViewMatrix: matrixPack.modelViewMatrix,
+                                                                normalMatrix: matrixPack.normalMatrix,
+                                                                lightDirX: lightDirX, lightDirY: lightDirY, lightDirZ: lightDirZ,
+                                                                lightAmbientIntensity: 0.25, lightDiffuseIntensity: 0.75)
+            }
+        case .specular:
+            
+            switch colorType {
+            case .none:
+                earth.draw3DStereoscopicBlue_Phong_NotColored(renderEncoder: renderEncoder,
+                                                              projectionMatrix: matrixPack.projectionMatrix,
+                                                              modelViewMatrix: matrixPack.modelViewMatrix,
+                                                              normalMatrix: matrixPack.normalMatrix,
+                                                              lightDirX: lightDirX, lightDirY: lightDirY, lightDirZ: lightDirZ,
+                                                              lightAmbientIntensity: 0.25, lightDiffuseIntensity: 0.5,
+                                                              lightSpecularIntensity: 0.25, lightShininess: 32.0)
+            case .colored:
+                earth.draw3DStereoscopicBlue_Phong_YesColored(renderEncoder: renderEncoder,
+                                                              projectionMatrix: matrixPack.projectionMatrix,
+                                                              modelViewMatrix: matrixPack.modelViewMatrix,
+                                                              normalMatrix: matrixPack.normalMatrix,
+                                                              lightDirX: lightDirX, lightDirY: lightDirY, lightDirZ: lightDirZ,
+                                                              lightAmbientIntensity: 0.25, lightDiffuseIntensity: 0.5,
+                                                              lightSpecularIntensity: 0.25, lightShininess: 32.0)
+            }
+            
+        case .night:
+            earth.draw3DStereoscopicBlue_Night(renderEncoder: renderEncoder,
+                                               projectionMatrix: matrixPack.projectionMatrix,
+                                               modelViewMatrix: matrixPack.modelViewMatrix,
+                                               normalMatrix: matrixPack.normalMatrix,
+                                               lightDirX: lightDirX, lightDirY: lightDirY, lightDirZ: lightDirZ,
+                                               lightAmbientIntensity: 0.0, lightDiffuseIntensity: 1.0,
+                                               lightNightIntensity: 1.0, overshoot: overshoot)
+            
+        }
         graphics.set(depthState: .disabled, renderEncoder: renderEncoder)
     }
     
-    func draw3DStereoscopicRed(renderEncoder: MTLRenderCommandEncoder) {
+    func draw3DStereoscopicRed(renderEncoder: MTLRenderCommandEncoder, stereoSpreadBase: Float, stereoSpreadMax: Float) {
+        
+        var lightDirX = sinf(lightRotation)
+        var lightDirY = Float(0.20)
+        var lightDirZ = -cosf(lightRotation)
+        let lightLength = sqrtf(lightDirX * lightDirX + lightDirY * lightDirY + lightDirZ * lightDirZ)
+        lightDirX /= lightLength
+        lightDirY /= lightLength
+        lightDirZ /= lightLength
         let matrixPack = getMatrixPack()
         graphics.set(depthState: .lessThan, renderEncoder: renderEncoder)
-        earth.draw3DStereoscopicRed(renderEncoder: renderEncoder,
-                                    projectionMatrix: matrixPack.projectionMatrix,
-                                    modelViewMatrix: matrixPack.modelViewMatrix,
-                                    normalMatrix: matrixPack.normalMatrix,
-                                    lightDirX: sin(lightRotation),
-                                    lightDirY: 0.0,
-                                    lightDirZ: -cosf(lightRotation),
-                                    lightAmbientIntensity: 0.0,
-                                    lightDiffuseIntensity: 1.0,
-                                    lightSpecularIntensity: 0.0,
-                                    lightNightIntensity: 1.0,
-                                    lightShininess: 24.0)
+        
+        switch lightType {
+        case .none:
+            switch colorType {
+            case .none:
+                earth.draw3DStereoscopicRed_NoLight_NotColored(renderEncoder: renderEncoder,
+                                                               projectionMatrix: matrixPack.projectionMatrix,
+                                                               modelViewMatrix: matrixPack.modelViewMatrix)
+            case .colored:
+                earth.draw3DStereoscopicRed_NoLight_YesColored(renderEncoder: renderEncoder,
+                                                               projectionMatrix: matrixPack.projectionMatrix,
+                                                               modelViewMatrix: matrixPack.modelViewMatrix)
+            }
+        case .diffuse:
+            switch colorType {
+            case .none:
+                earth.draw3DStereoscopicRed_Diffuse_NotColored(renderEncoder: renderEncoder,
+                                                               projectionMatrix: matrixPack.projectionMatrix,
+                                                               modelViewMatrix: matrixPack.modelViewMatrix,
+                                                               normalMatrix: matrixPack.normalMatrix,
+                                                               lightDirX: lightDirX, lightDirY: lightDirY, lightDirZ: lightDirZ,
+                                                               lightAmbientIntensity: 0.25, lightDiffuseIntensity: 0.75)
+            case .colored:
+                earth.draw3DStereoscopicRed_Diffuse_YesColored(renderEncoder: renderEncoder,
+                                                               projectionMatrix: matrixPack.projectionMatrix,
+                                                               modelViewMatrix: matrixPack.modelViewMatrix,
+                                                               normalMatrix: matrixPack.normalMatrix,
+                                                               lightDirX: lightDirX, lightDirY: lightDirY, lightDirZ: lightDirZ,
+                                                               lightAmbientIntensity: 0.25, lightDiffuseIntensity: 0.75)
+            }
+        case .specular:
+            switch colorType {
+            case .none:
+                earth.draw3DStereoscopicRed_Phong_NotColored(renderEncoder: renderEncoder,
+                                                             projectionMatrix: matrixPack.projectionMatrix,
+                                                             modelViewMatrix: matrixPack.modelViewMatrix,
+                                                             normalMatrix: matrixPack.normalMatrix,
+                                                             lightDirX: lightDirX, lightDirY: lightDirY, lightDirZ: lightDirZ,
+                                                             lightAmbientIntensity: 0.25, lightDiffuseIntensity: 0.5,
+                                                             lightSpecularIntensity: 0.25, lightShininess: 32.0)
+            case .colored:
+                earth.draw3DStereoscopicRed_Phong_YesColored(renderEncoder: renderEncoder,
+                                                             projectionMatrix: matrixPack.projectionMatrix,
+                                                             modelViewMatrix: matrixPack.modelViewMatrix,
+                                                             normalMatrix: matrixPack.normalMatrix,
+                                                             lightDirX: lightDirX, lightDirY: lightDirY, lightDirZ: lightDirZ,
+                                                             lightAmbientIntensity: 0.25, lightDiffuseIntensity: 0.5,
+                                                             lightSpecularIntensity: 0.25, lightShininess: 32.0)
+            }
+        case .night:
+            earth.draw3DStereoscopicRed_Night(renderEncoder: renderEncoder,
+                                              projectionMatrix: matrixPack.projectionMatrix,
+                                              modelViewMatrix: matrixPack.modelViewMatrix,
+                                              normalMatrix: matrixPack.normalMatrix,
+                                              lightDirX: lightDirX, lightDirY: lightDirY, lightDirZ: lightDirZ,
+                                              lightAmbientIntensity: 0.0, lightDiffuseIntensity: 1.0,
+                                              lightNightIntensity: 1.0, overshoot: overshoot)
+        }
+        
         graphics.set(depthState: .disabled, renderEncoder: renderEncoder)
     }
-    
 }
