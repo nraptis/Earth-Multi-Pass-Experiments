@@ -123,7 +123,7 @@ class MetalEngine {
         renderPassDescriptorPrebloom.colorAttachments[0].texture = storageTexturePrebloom
         renderPassDescriptorPrebloom.colorAttachments[0].loadAction = .dontCare
         renderPassDescriptorPrebloom.colorAttachments[0].storeAction = .store
-        renderPassDescriptorPrebloom.depthAttachment.loadAction = .dontCare
+        renderPassDescriptorPrebloom.depthAttachment.loadAction = .clear
         renderPassDescriptorPrebloom.depthAttachment.clearDepth = 1.0
         renderPassDescriptorPrebloom.depthAttachment.texture = depthTexture
         graphics.renderTargetWidth = storageTexture.width

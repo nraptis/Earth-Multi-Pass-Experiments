@@ -209,9 +209,9 @@ class SpriteInstance3D {
         guard let uniformsFragmentBuffer = uniformsFragmentBuffer else { return }
         switch blendMode {
         case .none:
-            graphics.set(pipelineState: .spriteNodeIndexed2DNoBlending, renderEncoder: renderEncoder)
+            graphics.set(pipelineState: .spriteNodeIndexed3DNoBlending, renderEncoder: renderEncoder)
         case .additive:
-            graphics.set(pipelineState: .spriteNodeIndexed2DAdditiveBlending, renderEncoder: renderEncoder)
+            graphics.set(pipelineState: .spriteNodeIndexed3DAdditiveBlending, renderEncoder: renderEncoder)
         }
         
         if isVertexBufferDirty {
