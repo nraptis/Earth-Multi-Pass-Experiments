@@ -37,9 +37,9 @@
 		E8A29FDA2C0D349500AADDC5 /* EarthModelDataStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A29FB62C0D349500AADDC5 /* EarthModelDataStrip.swift */; };
 		E8A29FDB2C0D349500AADDC5 /* EarthScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A29FB72C0D349500AADDC5 /* EarthScene.swift */; };
 		E8A29FDC2C0D349500AADDC5 /* EarthSceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A29FB82C0D349500AADDC5 /* EarthSceneView.swift */; };
-		E8A29FDE2C0D349500AADDC5 /* Primitives.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A29FBA2C0D349500AADDC5 /* Primitives.swift */; };
 		E8A29FE12C0D349500AADDC5 /* StereoScopeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A29FBD2C0D349500AADDC5 /* StereoScopeApp.swift */; };
 		E8A29FE32C0D373300AADDC5 /* IndexedDrawable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A29FE22C0D373300AADDC5 /* IndexedDrawable.swift */; };
+		E8A29FE72C0D3D1D00AADDC5 /* Primitives.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A29FE62C0D3D1D00AADDC5 /* Primitives.swift */; };
 		E8CD72B42C00E59E00D13962 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8CD72B32C00E59E00D13962 /* Assets.xcassets */; };
 		E8CD72B72C00E59E00D13962 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8CD72B62C00E59E00D13962 /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -75,9 +75,9 @@
 		E8A29FB62C0D349500AADDC5 /* EarthModelDataStrip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EarthModelDataStrip.swift; sourceTree = "<group>"; };
 		E8A29FB72C0D349500AADDC5 /* EarthScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EarthScene.swift; sourceTree = "<group>"; };
 		E8A29FB82C0D349500AADDC5 /* EarthSceneView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EarthSceneView.swift; sourceTree = "<group>"; };
-		E8A29FBA2C0D349500AADDC5 /* Primitives.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Primitives.swift; sourceTree = "<group>"; };
 		E8A29FBD2C0D349500AADDC5 /* StereoScopeApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StereoScopeApp.swift; sourceTree = "<group>"; };
 		E8A29FE22C0D373300AADDC5 /* IndexedDrawable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexedDrawable.swift; sourceTree = "<group>"; };
+		E8A29FE62C0D3D1D00AADDC5 /* Primitives.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Primitives.swift; sourceTree = "<group>"; };
 		E8CD72AC2C00E59D00D13962 /* StereoScope.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StereoScope.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8CD72B32C00E59E00D13962 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E8CD72B62C00E59E00D13962 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -97,6 +97,7 @@
 		E8A29FA42C0D349500AADDC5 /* [Graphics] */ = {
 			isa = PBXGroup;
 			children = (
+				E8A29FE62C0D3D1D00AADDC5 /* Primitives.swift */,
 				E8A29F972C0D349500AADDC5 /* Graphics.swift */,
 				E8A29FE22C0D373300AADDC5 /* IndexedDrawable.swift */,
 				E8A29F992C0D349500AADDC5 /* IndexedBufferable.swift */,
@@ -160,7 +161,6 @@
 				E8A29FB62C0D349500AADDC5 /* EarthModelDataStrip.swift */,
 				E8A29FB72C0D349500AADDC5 /* EarthScene.swift */,
 				E8A29FB82C0D349500AADDC5 /* EarthSceneView.swift */,
-				E8A29FBA2C0D349500AADDC5 /* Primitives.swift */,
 				E8A29FBD2C0D349500AADDC5 /* StereoScopeApp.swift */,
 			);
 			path = Code;
@@ -292,10 +292,10 @@
 				E8A29FC62C0D349500AADDC5 /* IndexedShapeInstance.swift in Sources */,
 				E8A29FD12C0D349500AADDC5 /* ShapeNodeIndexed.metal in Sources */,
 				E8A29FD02C0D349500AADDC5 /* GaussianBlurIndexed.metal in Sources */,
+				E8A29FE72C0D3D1D00AADDC5 /* Primitives.swift in Sources */,
 				E8A29FCC2C0D349500AADDC5 /* MetalEngine.swift in Sources */,
 				E8A29FD62C0D349500AADDC5 /* UniformsSprite.swift in Sources */,
 				E8A29FDB2C0D349500AADDC5 /* EarthScene.swift in Sources */,
-				E8A29FDE2C0D349500AADDC5 /* Primitives.swift in Sources */,
 				E8A29FCA2C0D349500AADDC5 /* Matrix.swift in Sources */,
 				E8A29FC42C0D349500AADDC5 /* IndexedNightBuffer.swift in Sources */,
 				E8A29FD42C0D349500AADDC5 /* UniformsShape.swift in Sources */,
