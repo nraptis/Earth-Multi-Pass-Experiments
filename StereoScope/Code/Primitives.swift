@@ -120,6 +120,16 @@ struct Sprite2DColoredVertex: PositionConforming2D, TextureCoordinateConforming,
         self.b = b
         self.a = a
     }
+    init(x: Float, y: Float, u: Float, v: Float) {
+        self.x = x
+        self.y = y
+        self.u = u
+        self.v = v
+        self.r = 1.0
+        self.g = 1.0
+        self.b = 1.0
+        self.a = 1.0
+    }
     init(u: Float, v: Float) {
         self.x = 0.0
         self.y = 0.0
@@ -155,6 +165,13 @@ struct Sprite3DVertex: PositionConforming3D, TextureCoordinateConforming {
         self.u = u
         self.v = v
     }
+    init(x: Float, y: Float, u: Float, v: Float) {
+        self.x = x
+        self.y = y
+        self.z = 0.0
+        self.u = u
+        self.v = v
+    }
     init(u: Float, v: Float) {
         self.x = 0.0
         self.y = 0.0
@@ -185,6 +202,14 @@ struct Sprite3DVertexStereoscopic: PositionConforming3D, TextureCoordinateConfor
         self.u = u
         self.v = v
         self.shift = shift
+    }
+    init(x: Float, y: Float, u: Float, v: Float) {
+        self.x = x
+        self.y = y
+        self.z = 0.0
+        self.u = u
+        self.v = v
+        self.shift = 1.0
     }
     init(u: Float, v: Float) {
         self.x = 0.0
@@ -226,6 +251,18 @@ struct Sprite3DVertexColoredStereoscopic: PositionConforming3D, TextureCoordinat
         self.b = b
         self.a = a
         self.shift = shift
+    }
+    init(x: Float, y: Float, u: Float, v: Float) {
+        self.x = x
+        self.y = y
+        self.z = 0.0
+        self.u = u
+        self.v = v
+        self.r = 1.0
+        self.g = 1.0
+        self.b = 1.0
+        self.a = 1.0
+        self.shift = 1.0
     }
     init(u: Float, v: Float) {
         self.x = 0.0
@@ -273,6 +310,17 @@ struct Sprite3DColoredVertex: PositionConforming3D, TextureCoordinateConforming,
         self.g = g
         self.b = b
         self.a = a
+    }
+    init(x: Float, y: Float, u: Float, v: Float) {
+        self.x = x
+        self.y = y
+        self.z = 0.0
+        self.u = u
+        self.v = v
+        self.r = 1.0
+        self.g = 1.0
+        self.b = 1.0
+        self.a = 1.0
     }
     init(u: Float, v: Float) {
         self.x = 0.0

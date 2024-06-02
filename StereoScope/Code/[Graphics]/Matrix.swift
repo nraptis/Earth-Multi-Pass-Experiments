@@ -55,12 +55,6 @@ extension matrix_float4x4 {
         self = self.inverse
     }
     
-    /*
-    void FMatrix::OffsetPerspectiveCenter(float pOffsetX, float pOffsetY) {
-        m[8] = pOffsetX / gDeviceWidth2;
-        m[9] = -pOffsetY / gDeviceHeight2;
-    }
-    */
     mutating func offsetPerspectiveCenter(x: Float, y: Float, width2: Float, height2: Float) {
 
         var x = x
@@ -75,9 +69,6 @@ extension matrix_float4x4 {
         
         columns.2.x = x // 2
         columns.2.y = y // 6
-        
-        //columns.0.z = x // 8
-        //columns.1.z = y // 9
     }
     
     mutating func ortho(left: Float, right: Float, bottom: Float, top: Float,

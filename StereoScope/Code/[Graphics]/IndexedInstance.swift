@@ -11,7 +11,7 @@ import simd
 
 class IndexedInstance<Node: PositionConforming2D,
                         VertexUniforms: UniformsVertex,
-                        FragmentUniforms: UniformsFragment>: IndexedInstanceable {
+                      FragmentUniforms: UniformsFragment>: IndexedInstanceable {
     
     typealias NodeType = Node
     typealias UniformsVertexType = VertexUniforms
@@ -42,6 +42,7 @@ class IndexedInstance<Node: PositionConforming2D,
     var uniformsFragmentBuffer: (MTLBuffer)?
     
     var isVertexBufferDirty = false
+    var isIndexBufferDirty = false
     var isUniformsVertexBufferDirty = false
     var isUniformsFragmentBufferDirty = false
     

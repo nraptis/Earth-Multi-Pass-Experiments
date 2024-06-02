@@ -200,7 +200,7 @@ class MetalEngine {
                 stereoscopicSprite3D.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
                 stereoscopicSprite3D.setPositionQuad(x1: 0.0, y1: 0.0, x2: width, y2: height)
                 stereoscopicSprite3D.sprite = storageSpriteBloom
-                stereoscopicSprite3D.setDirty(isVertexBufferDirty: true, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: true)
+                stereoscopicSprite3D.setDirty(isVertexBufferDirty: true, isIndexBufferDirty: false, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: true)
                 stereoscopicSprite3D.render(renderEncoder: renderEncoder3D, pipelineState: .spriteNodeStereoscopicBlueIndexed3DNoBlending)
                 delegate.draw3DStereoscopicBlue(renderEncoder: renderEncoder3D, stereoSpreadBase: stereoSpreadBase, stereoSpreadMax: stereoSpreadMax)
                 renderEncoder3D.endEncoding()
@@ -225,7 +225,7 @@ class MetalEngine {
                 stereoscopicSprite3D.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
                 stereoscopicSprite3D.setPositionQuad(x1: 0.0, y1: 0.0, x2: width, y2: height)
                 stereoscopicSprite3D.sprite = storageSpriteBloom
-                stereoscopicSprite3D.setDirty(isVertexBufferDirty: true, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: true)
+                stereoscopicSprite3D.setDirty(isVertexBufferDirty: true, isIndexBufferDirty: false, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: true)
                 stereoscopicSprite3D.render(renderEncoder: renderEncoder3D, pipelineState: .spriteNodeStereoscopicRedIndexed3DNoBlending)
                 delegate.draw3DStereoscopicRed(renderEncoder: renderEncoder3D, stereoSpreadBase: stereoSpreadBase, stereoSpreadMax: stereoSpreadMax)
                 renderEncoder3D.endEncoding()
@@ -251,7 +251,7 @@ class MetalEngine {
                 bloomCombineSprite3D.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
                 bloomCombineSprite3D.setPositionQuad(x1: 0.0, y1: 0.0, x2: width, y2: height)
                 bloomCombineSprite3D.sprite = storageSpriteBloom
-                bloomCombineSprite3D.setDirty(isVertexBufferDirty: true, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: true)
+                bloomCombineSprite3D.setDirty(isVertexBufferDirty: true, isIndexBufferDirty: false, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: true)
                 bloomCombineSprite3D.render(renderEncoder: renderEncoder3D, pipelineState: .spriteNodeIndexed3DNoBlending)
                 delegate.draw3D(renderEncoder: renderEncoder3D)
                 renderEncoder3D.endEncoding()
@@ -377,13 +377,13 @@ class MetalEngine {
         tileSprite.uniformsVertex.projectionMatrix.ortho(width: width, height: height)
         tileSprite.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
         tileSprite.setPositionQuad(x1: 0.0, y1: 0.0, x2: width, y2: height)
-        tileSprite.setDirty(isVertexBufferDirty: false, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: false)
+        tileSprite.setDirty(isVertexBufferDirty: false, isIndexBufferDirty: false, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: false)
         tileSprite.sprite = storageSprite
         tileSprite.render(renderEncoder: renderEncoder, pipelineState: .spriteNodeIndexed2DNoBlending)
         
         tileSprite.uniformsVertex.projectionMatrix.ortho(width: width, height: height)
         tileSprite.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
-        tileSprite.setDirty(isVertexBufferDirty: false, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: false)
+        tileSprite.setDirty(isVertexBufferDirty: false, isIndexBufferDirty: false, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: false)
         tileSprite.sprite = storageSpritePrebloom
         tileSprite.render(renderEncoder: renderEncoder, pipelineState: .spriteNodeIndexed2DAdditiveBlending)
     }

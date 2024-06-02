@@ -9,15 +9,7 @@ import Foundation
 import Metal
 import simd
 
-protocol IndexedBufferable<NodeType>: AnyObject {
-    
-    associatedtype NodeType
-    associatedtype UniformsVertexType: UniformsVertex
-    associatedtype UniformsFragmentType: UniformsFragment
-    
-    func linkRender(renderEncoder: MTLRenderCommandEncoder, pipelineState: Graphics.PipelineState)
-    
-    var graphics: Graphics? { get set }
+protocol IndexedBufferable<NodeType>: IndexedDrawable {
     
     var vertices: [NodeType] { get set }
     var vertexCount: Int { get set }
@@ -27,24 +19,12 @@ protocol IndexedBufferable<NodeType>: AnyObject {
     var indexCount: Int { get set }
     var indexCapacity: Int { get set }
     
-    var uniformsVertex: UniformsVertexType { get set }
-    var uniformsFragment: UniformsFragmentType { get set }
-    
     var vertexBufferLength: Int { get set }
     var indexBufferLength: Int { get set }
     
-    var indexBuffer: MTLBuffer? { get set }
-    var vertexBuffer: MTLBuffer? { get set }
-    var uniformsVertexBuffer: MTLBuffer? { get set }
-    var uniformsFragmentBuffer: MTLBuffer? { get set }
-    
-    var isVertexBufferDirty: Bool { get set }
-    var isIndexBufferDirty: Bool { get set }
-    var isUniformsVertexBufferDirty: Bool { get set }
-    var isUniformsFragmentBufferDirty: Bool { get set }
+    var cullMode: MTLCullMode { get set }
     
     var primitiveType: MTLPrimitiveType { get set }
-    var cullMode: MTLCullMode { get set }
 }
 
 extension IndexedBufferable {
@@ -60,24 +40,6 @@ extension IndexedBufferable {
         isIndexBufferDirty = true
         isUniformsVertexBufferDirty = true
         isUniformsFragmentBufferDirty = true
-    }
-    
-    func setDirty(isVertexBufferDirty: Bool,
-                  isIndexBufferDirty: Bool,
-                  isUniformsVertexBufferDirty: Bool,
-                  isUniformsFragmentBufferDirty: Bool) {
-        if isVertexBufferDirty {
-            self.isVertexBufferDirty = true
-        }
-        if isIndexBufferDirty {
-            self.isIndexBufferDirty = true
-        }
-        if isUniformsVertexBufferDirty {
-            self.isUniformsVertexBufferDirty = true
-        }
-        if isUniformsFragmentBufferDirty {
-            self.isUniformsFragmentBufferDirty = true
-        }
     }
     
     func add(vertex: NodeType) {

@@ -39,6 +39,7 @@
 		E8A29FDC2C0D349500AADDC5 /* EarthSceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A29FB82C0D349500AADDC5 /* EarthSceneView.swift */; };
 		E8A29FDE2C0D349500AADDC5 /* Primitives.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A29FBA2C0D349500AADDC5 /* Primitives.swift */; };
 		E8A29FE12C0D349500AADDC5 /* StereoScopeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A29FBD2C0D349500AADDC5 /* StereoScopeApp.swift */; };
+		E8A29FE32C0D373300AADDC5 /* IndexedDrawable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A29FE22C0D373300AADDC5 /* IndexedDrawable.swift */; };
 		E8CD72B42C00E59E00D13962 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8CD72B32C00E59E00D13962 /* Assets.xcassets */; };
 		E8CD72B72C00E59E00D13962 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8CD72B62C00E59E00D13962 /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -76,6 +77,7 @@
 		E8A29FB82C0D349500AADDC5 /* EarthSceneView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EarthSceneView.swift; sourceTree = "<group>"; };
 		E8A29FBA2C0D349500AADDC5 /* Primitives.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Primitives.swift; sourceTree = "<group>"; };
 		E8A29FBD2C0D349500AADDC5 /* StereoScopeApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StereoScopeApp.swift; sourceTree = "<group>"; };
+		E8A29FE22C0D373300AADDC5 /* IndexedDrawable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexedDrawable.swift; sourceTree = "<group>"; };
 		E8CD72AC2C00E59D00D13962 /* StereoScope.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StereoScope.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8CD72B32C00E59E00D13962 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E8CD72B62C00E59E00D13962 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -96,9 +98,10 @@
 			isa = PBXGroup;
 			children = (
 				E8A29F972C0D349500AADDC5 /* Graphics.swift */,
+				E8A29FE22C0D373300AADDC5 /* IndexedDrawable.swift */,
 				E8A29F992C0D349500AADDC5 /* IndexedBufferable.swift */,
-				E8A29F982C0D349500AADDC5 /* IndexedBuffer.swift */,
 				E8A29F9B2C0D349500AADDC5 /* IndexedInstanceable.swift */,
+				E8A29F982C0D349500AADDC5 /* IndexedBuffer.swift */,
 				E8A29F9A2C0D349500AADDC5 /* IndexedInstance.swift */,
 				E8A29F9C2C0D349500AADDC5 /* IndexedNightBuffer.swift */,
 				E8A29F9D2C0D349500AADDC5 /* IndexedShapeBuffer.swift */,
@@ -276,6 +279,7 @@
 				E8A29FE12C0D349500AADDC5 /* StereoScopeApp.swift in Sources */,
 				E8A29FCB2C0D349500AADDC5 /* Sprite.swift in Sources */,
 				E8A29FC82C0D349500AADDC5 /* IndexedSpriteInstance.swift in Sources */,
+				E8A29FE32C0D373300AADDC5 /* IndexedDrawable.swift in Sources */,
 				E8A29FD22C0D349500AADDC5 /* SpriteNodeIndexed.metal in Sources */,
 				E8A29FD82C0D349500AADDC5 /* Earth.swift in Sources */,
 				E8A29FDA2C0D349500AADDC5 /* EarthModelDataStrip.swift in Sources */,

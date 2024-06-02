@@ -12,29 +12,11 @@ import simd
 //
 // Note: This is only for a single-quad triangle strip.
 //
-protocol IndexedInstanceable<NodeType>: AnyObject {
-    
-    associatedtype NodeType
-    associatedtype UniformsVertexType: UniformsVertex
-    associatedtype UniformsFragmentType: UniformsFragment
+protocol IndexedInstanceable<NodeType>: IndexedDrawable {
     
     func linkRender(renderEncoder: MTLRenderCommandEncoder, pipelineState: Graphics.PipelineState)
     
-    var graphics: Graphics? { get set }
-    
     var vertices: [NodeType] { get set }
-    
-    var uniformsVertex: UniformsVertexType { get set }
-    var uniformsFragment: UniformsFragmentType { get set }
-    
-    var indexBuffer: MTLBuffer? { get set }
-    var vertexBuffer: MTLBuffer? { get set }
-    var uniformsVertexBuffer: MTLBuffer? { get set }
-    var uniformsFragmentBuffer: MTLBuffer? { get set }
-    
-    var isVertexBufferDirty: Bool { get set }
-    var isUniformsVertexBufferDirty: Bool { get set }
-    var isUniformsFragmentBufferDirty: Bool { get set }
     
     var cullMode: MTLCullMode { get set }
 }
@@ -63,20 +45,6 @@ extension IndexedInstanceable {
         isVertexBufferDirty = false
         isUniformsVertexBufferDirty = true
         isUniformsFragmentBufferDirty = true
-    }
-    
-    func setDirty(isVertexBufferDirty: Bool,
-                  isUniformsVertexBufferDirty: Bool,
-                  isUniformsFragmentBufferDirty: Bool) {
-        if isVertexBufferDirty {
-            self.isVertexBufferDirty = true
-        }
-        if isUniformsVertexBufferDirty {
-            self.isUniformsVertexBufferDirty = true
-        }
-        if isUniformsFragmentBufferDirty {
-            self.isUniformsFragmentBufferDirty = true
-        }
     }
     
     func render(renderEncoder: MTLRenderCommandEncoder, pipelineState: Graphics.PipelineState) {
