@@ -137,7 +137,7 @@ class MetalViewController: UIViewController {
             if let previousTimeStamp = previousTimeStamp {
                 time = timer.timestamp - previousTimeStamp
             }
-            delegate.update(deltaTime: Float(time), stereoSpreadBase: stereoSpreadBase, stereoSpreadMax: stereoSpreadMax)
+            update(deltaTime: Float(time), stereoSpreadBase: stereoSpreadBase, stereoSpreadMax: stereoSpreadMax)
             previousTimeStamp = timer.timestamp
             metalEngine.draw(isStereoscopicEnabled: isStereoscopicEnabled,
                              isBloomEnabled: isBloomEnabled,
@@ -146,4 +146,9 @@ class MetalViewController: UIViewController {
                              stereoSpreadMax: stereoSpreadMax)
         }
     }
+    
+    func update(deltaTime: Float, stereoSpreadBase: Float, stereoSpreadMax: Float) {
+        delegate.update(deltaTime: deltaTime, stereoSpreadBase: stereoSpreadBase, stereoSpreadMax: stereoSpreadMax)
+    }
+    
 }

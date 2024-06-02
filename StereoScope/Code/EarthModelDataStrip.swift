@@ -13,22 +13,21 @@ import UIKit
 class EarthModelDataStrip {
     
     
-    weak var texture: MTLTexture?
-    weak var textureLight: MTLTexture?
+    weak var skinMap: Sprite?
+    weak var lightMap: Sprite?
     
     weak var earthModelData: EarthModelData?
     
     let indexV: Int
     
-    let bloomBuffer = IndexedShapeBuffer<Shape3DVertex, UniformsShapeNodeIndexedVertex, UniformsShapeNodeIndexedFragment>()
-    let bloomBufferColored = IndexedShapeBuffer<Shape3DColoredVertex, UniformsShapeNodeIndexedVertex, UniformsShapeNodeIndexedFragment>()
+    let bloomBuffer = IndexedShapeBuffer3D()
+    let bloomBufferColored = IndexedShapeBuffer3DColored()
     
-    let noLightBuffer = IndexedSpriteBuffer<Sprite3DVertex, UniformsSpriteVertex, UniformsSpriteFragment>()
-    let noLightBufferColored = IndexedSpriteBuffer<Sprite3DColoredVertex, UniformsSpriteVertex, UniformsSpriteFragment>()
+    let noLightBuffer = IndexedSpriteBuffer3D()
+    let noLightBufferColored = IndexedSpriteBuffer3DColored()
     
-    let noLightBufferStereoscopic = IndexedSpriteBuffer<Sprite3DVertexStereoscopic, UniformsSpriteVertex, UniformsSpriteFragment>()
-    let noLightBufferColoredStereoscopic = IndexedSpriteBuffer<Sprite3DVertexColoredStereoscopic, UniformsSpriteVertex, UniformsSpriteFragment>()
-    
+    let noLightBufferStereoscopic = IndexedSpriteBuffer3DStereoscopic()
+    let noLightBufferColoredStereoscopic = IndexedSpriteBuffer3DColoredStereoscopic()
     
     
     let diffuseBuffer = IndexedSpriteBuffer<Sprite3DLightedVertex,
@@ -162,33 +161,74 @@ class EarthModelDataStrip {
     }
     
     func load(graphics: Graphics,
-              texture: MTLTexture?,
-              textureLight: MTLTexture?) {
-        self.texture = texture
-        self.textureLight = textureLight
+              skinMap: Sprite?,
+              lightMap: Sprite?) {
+        self.skinMap = skinMap
+        self.lightMap = lightMap
         
         bloomBuffer.load(graphics: graphics)
+        bloomBuffer.primitiveType = .triangleStrip
+        bloomBuffer.cullMode = .none
+        
         bloomBufferColored.load(graphics: graphics)
+        bloomBufferColored.primitiveType = .triangleStrip
+        bloomBufferColored.cullMode = .none
         
-        noLightBuffer.load(graphics: graphics, texture: texture)
-        noLightBufferColored.load(graphics: graphics, texture: texture)
+        noLightBuffer.load(graphics: graphics, sprite: skinMap)
+        noLightBuffer.primitiveType = .triangleStrip
+        noLightBuffer.cullMode = .none
         
-        noLightBufferStereoscopic.load(graphics: graphics, texture: texture)
-        noLightBufferColoredStereoscopic.load(graphics: graphics, texture: texture)
+        noLightBufferColored.load(graphics: graphics, sprite: skinMap)
+        noLightBufferColored.primitiveType = .triangleStrip
+        noLightBufferColored.cullMode = .none
         
-        diffuseBuffer.load(graphics: graphics, texture: texture)
-        diffuseBufferColored.load(graphics: graphics, texture: texture)
-        diffuseBufferStereoscopic.load(graphics: graphics, texture: texture)
-        diffuseBufferColoredStereoscopic.load(graphics: graphics, texture: texture)
+        noLightBufferStereoscopic.load(graphics: graphics, sprite: skinMap)
+        noLightBufferStereoscopic.primitiveType = .triangleStrip
+        noLightBufferStereoscopic.cullMode = .none
         
+        noLightBufferColoredStereoscopic.load(graphics: graphics, sprite: skinMap)
+        noLightBufferColoredStereoscopic.primitiveType = .triangleStrip
+        noLightBufferColoredStereoscopic.cullMode = .none
         
-        phongBuffer.load(graphics: graphics, texture: texture)
-        phongBufferColored.load(graphics: graphics, texture: texture)
-        phongBufferStereoscopic.load(graphics: graphics, texture: texture)
-        phongBufferColoredStereoscopic.load(graphics: graphics, texture: texture)
-
-        nightBuffer.load(graphics: graphics, texture: texture, textureLight: textureLight)
-        nightBufferStereoscopic.load(graphics: graphics, texture: texture, textureLight: textureLight)
+        diffuseBuffer.load(graphics: graphics, sprite: skinMap)
+        diffuseBuffer.primitiveType = .triangleStrip
+        diffuseBuffer.cullMode = .none
+        
+        diffuseBufferColored.load(graphics: graphics, sprite: skinMap)
+        diffuseBufferColored.primitiveType = .triangleStrip
+        diffuseBufferColored.cullMode = .none
+        
+        diffuseBufferStereoscopic.load(graphics: graphics, sprite: skinMap)
+        diffuseBufferStereoscopic.primitiveType = .triangleStrip
+        diffuseBufferStereoscopic.cullMode = .none
+        
+        diffuseBufferColoredStereoscopic.load(graphics: graphics, sprite: skinMap)
+        diffuseBufferColoredStereoscopic.primitiveType = .triangleStrip
+        diffuseBufferColoredStereoscopic.cullMode = .none
+        
+        phongBuffer.load(graphics: graphics, sprite: skinMap)
+        phongBuffer.primitiveType = .triangleStrip
+        phongBuffer.cullMode = .none
+        
+        phongBufferColored.load(graphics: graphics, sprite: skinMap)
+        phongBufferColored.primitiveType = .triangleStrip
+        phongBufferColored.cullMode = .none
+        
+        phongBufferStereoscopic.load(graphics: graphics, sprite: skinMap)
+        phongBufferStereoscopic.primitiveType = .triangleStrip
+        phongBufferStereoscopic.cullMode = .none
+        
+        phongBufferColoredStereoscopic.load(graphics: graphics, sprite: skinMap)
+        phongBufferColoredStereoscopic.primitiveType = .triangleStrip
+        phongBufferColoredStereoscopic.cullMode = .none
+        
+        nightBuffer.load(graphics: graphics, sprite: skinMap, lights: lightMap)
+        nightBuffer.primitiveType = .triangleStrip
+        nightBuffer.cullMode = .none
+        
+        nightBufferStereoscopic.load(graphics: graphics, sprite: skinMap, lights: lightMap)
+        nightBufferStereoscopic.primitiveType = .triangleStrip
+        nightBufferStereoscopic.cullMode = .none
     }
     
     func update(deltaTime: Float) {

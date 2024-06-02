@@ -38,16 +38,12 @@ class EarthScene: GraphicsDelegate {
     var lightsTexture: MTLTexture?
     var galaxyTexture: MTLTexture?
     
-    private var galaxySprite = IndexedSpriteInstance<Sprite3DVertex,
-                                                     UniformsSpriteVertex,
-                                                     UniformsSpriteFragment>(sentinelNode: Sprite3DVertex(x: 0.0, y: 0.0, z: 0.0, u: 0.0, v: 0.0))
+    var skinMap = Sprite()
+    var lightMap = Sprite()
+    var galaxyMap = Sprite()
     
+    private var galaxyInstance = IndexedSpriteInstance3D()
     
-    private var glassesSprite = IndexedSpriteInstance<Sprite2DVertex,
-                                                     UniformsSpriteVertex,
-                                                     UniformsSpriteFragment>(sentinelNode: Sprite2DVertex(x: 0.0, y: 0.0, u: 0.0, v: 0.0))
-    
-    let testSprite = SpriteInstance2D()
     let earth: Earth
     init(width: Float,
          height: Float) {
@@ -66,25 +62,28 @@ class EarthScene: GraphicsDelegate {
                 earthTexture = try? loader.newTexture(cgImage: cgImage)
             }
         }
+        skinMap.load(graphics: graphics, texture: earthTexture, scaleFactor: graphics.scaleFactor)
         
         if let image = UIImage(named: "lights_texture") {
             if let cgImage = image.cgImage {
                 lightsTexture = try? loader.newTexture(cgImage: cgImage)
             }
         }
+        lightMap.load(graphics: graphics, texture: lightsTexture, scaleFactor: graphics.scaleFactor)
         
         if let image = UIImage(named: "galaxy") {
             if let cgImage = image.cgImage {
                 galaxyTexture = try? loader.newTexture(cgImage: cgImage)
             }
         }
+        galaxyMap.load(graphics: graphics, texture: galaxyTexture, scaleFactor: graphics.scaleFactor)
 
         earth.load(graphics: graphics,
-                   texture: earthTexture,
-                   textureLight: lightsTexture)
+                   skinMap: skinMap,
+                   lightMap: lightMap)
         
-        galaxySprite.load(graphics: graphics,
-                          texture: galaxyTexture)
+        galaxyInstance.load(graphics: graphics,
+                            sprite: galaxyMap)
     }
     
     func loadComplete() { }
@@ -139,10 +138,10 @@ class EarthScene: GraphicsDelegate {
         var projectionMatrix = matrix_float4x4()
         projectionMatrix.ortho(width: width, height: height)
         let modelViewMatrix = matrix_identity_float4x4
-        galaxySprite.setPositionFrame(x: 0.0, y: 0.0, width: width, height: height)
-        galaxySprite.uniformsVertex.projectionMatrix = projectionMatrix
-        galaxySprite.uniformsVertex.modelViewMatrix = modelViewMatrix
-        galaxySprite.render(renderEncoder: renderEncoder, pipelineState: .spriteNodeIndexed3DNoBlending)
+        galaxyInstance.setPositionFrame(x: 0.0, y: 0.0, width: width, height: height)
+        galaxyInstance.uniformsVertex.projectionMatrix = projectionMatrix
+        galaxyInstance.uniformsVertex.modelViewMatrix = modelViewMatrix
+        galaxyInstance.render(renderEncoder: renderEncoder, pipelineState: .spriteNodeIndexed3DNoBlending)
     }
     
     func draw3DBloom(renderEncoder: MTLRenderCommandEncoder) {

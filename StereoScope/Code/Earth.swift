@@ -13,7 +13,6 @@ class Earth {
     
     let earthModelData: EarthModelData
     let earthModelDataStrips: [EarthModelDataStrip]
-    weak var texture: MTLTexture?
     
     let width: Float
     let height: Float
@@ -32,12 +31,10 @@ class Earth {
     }
     
     func load(graphics: Graphics,
-              texture: MTLTexture?,
-              textureLight: MTLTexture?) {
-        self.texture = texture
-        
+              skinMap: Sprite?,
+              lightMap: Sprite?) {
         for earthModelDataStrip in earthModelDataStrips {
-            earthModelDataStrip.load(graphics: graphics, texture: texture, textureLight: textureLight)
+            earthModelDataStrip.load(graphics: graphics, skinMap: skinMap, lightMap: lightMap)
         }
     }
     

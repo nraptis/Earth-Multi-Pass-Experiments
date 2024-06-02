@@ -7,7 +7,8 @@
 
 import Foundation
 import Metal
-
+import MetalKit
+import UIKit
 
 protocol GraphicsDelegate: AnyObject {
     
@@ -216,6 +217,71 @@ class Graphics {
     private(set) var pipelineState = PipelineState.invalid
     private(set) var samplerState = SamplerState.invalid
     private(set) var depthState = DepthState.invalid
+    
+    lazy var scaledTextureSuffix: String = {
+        var deviceScale = Int(scaleFactor + 0.5)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            if deviceScale <= 1 {
+                return "_1_5"
+            } else {
+                return "_3_0"
+            }
+        } else {
+            if deviceScale <= 1 {
+                return "_1_0"
+            } else if deviceScale == 2 {
+                return "_2_0"
+            } else {
+                return "_3_0"
+            }
+        }
+    }()
+    
+    func loadTextureScaled(name: String, `extension`: String) -> MTLTexture? {
+        if let bundleResourcePath = Bundle.main.resourcePath {
+            let filePath = bundleResourcePath + "/" + name + scaledTextureSuffix + "." + `extension`
+            let fileURL: URL
+            if #available(iOS 16.0, *) {
+                fileURL = URL(filePath: filePath)
+            } else {
+                // Fallback on earlier versions
+                fileURL = URL(fileURLWithPath: filePath)
+            }
+            return loadTexture(url: fileURL)
+        }
+        return nil
+    }
+    
+    func loadTexture(url: URL) -> MTLTexture? {
+        let loader = MTKTextureLoader(device: metalDevice)
+        return try? loader.newTexture(URL: url, options: nil)
+    }
+    
+    func loadTexture(cgImage: CGImage?) -> MTLTexture? {
+        if let cgImage = cgImage {
+            let loader = MTKTextureLoader(device: metalDevice)
+            return try? loader.newTexture(cgImage: cgImage)
+        }
+        return nil
+    }
+    
+    func loadTexture(uiImage: UIImage?) -> MTLTexture? {
+        loadTexture(cgImage: uiImage?.cgImage)
+    }
+    
+    func loadTexture(fileName: String) -> MTLTexture? {
+        if let bundleResourcePath = Bundle.main.resourcePath {
+            let filePath = bundleResourcePath + "/" + fileName
+            let fileURL: URL
+            if #available(iOS 16.0, *) {
+                fileURL = URL(filePath: filePath)
+            } else {
+                fileURL = URL(fileURLWithPath: filePath)
+            }
+            return loadTexture(url: fileURL)
+        }
+        return nil
+    }
     
     func buffer<Element>(array: Array<Element>) -> MTLBuffer! {
         let length = MemoryLayout<Element>.size * array.count

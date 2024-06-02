@@ -33,15 +33,21 @@ class MetalEngine {
     
     
     var storageTexture: MTLTexture!
+    let storageSprite = Sprite()
     
     var storageTexturePrebloom: MTLTexture! // Note: We use this for stereoscopic blue as well...
+    let storageSpritePrebloom = Sprite()
     
     var storageTextureBloom: MTLTexture!
+    let storageSpriteBloom = Sprite()
     
     var antialiasingTexture: MTLTexture!
     
     var bloomTexture1: MTLTexture!
+    let bloomSprite1 = Sprite()
+    
     var bloomTexture2: MTLTexture!
+    let bloomSprite2 = Sprite()
     
     var depthTexture: MTLTexture!
     
@@ -90,14 +96,15 @@ class MetalEngine {
         buildSamplerStates()
         buildDepthStates()
         
-        tileSprite.load(graphics: graphics, texture: nil)
+        tileSprite.load(graphics: graphics, sprite: nil)
         
-        stereoscopicSprite3D.load(graphics: graphics, texture: nil)
+        stereoscopicSprite3D.load(graphics: graphics, sprite: nil)
         
-        bloomSprite2D.load(graphics: graphics, texture: nil)
+        bloomSprite2D.load(graphics: graphics, sprite: nil)
         //bloomSprite3D.load(graphics: graphics, texture: nil)
         
-        bloomCombineSprite3D.load(graphics: graphics, texture: nil)
+        bloomCombineSprite3D.load(graphics: graphics, sprite: nil)
+        
     }
     
     func draw(isStereoscopicEnabled: Bool,
@@ -117,6 +124,12 @@ class MetalEngine {
             depthTexture = createDepthTexture(width: drawable.texture.width, height: drawable.texture.height)
             bloomTexture1 = createStorageTexture(width: drawable.texture.width >> 2, height: drawable.texture.height >> 2)
             bloomTexture2 = createStorageTexture(width: drawable.texture.width >> 2, height: drawable.texture.height >> 2)
+            
+            storageSprite.load(graphics: graphics, texture: storageTexture, scaleFactor: scale)
+            storageSpritePrebloom.load(graphics: graphics, texture: storageTexturePrebloom, scaleFactor: scale)
+            storageSpriteBloom.load(graphics: graphics, texture: storageTextureBloom, scaleFactor: scale)
+            bloomSprite1.load(graphics: graphics, texture: bloomTexture1, scaleFactor: scale)
+            bloomSprite2.load(graphics: graphics, texture: bloomTexture2, scaleFactor: scale)
         }
         
         let renderPassDescriptorPrebloom = MTLRenderPassDescriptor()
@@ -151,10 +164,10 @@ class MetalEngine {
             bloomCombineSprite3D.uniformsVertex.projectionMatrix.ortho(width: width, height: height)
             bloomCombineSprite3D.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
             bloomCombineSprite3D.setPositionQuad(x1: 0.0, y1: 0.0, x2: width, y2: height)
-            bloomCombineSprite3D.texture = storageTexturePrebloom
+            bloomCombineSprite3D.sprite = storageSpritePrebloom
             bloomCombineSprite3D.render(renderEncoder: renderEncoderBloomCombine, pipelineState: .spriteNodeIndexed3DNoBlending)
             if isBloomEnabled {
-                bloomCombineSprite3D.texture = bloomTexture2
+                bloomCombineSprite3D.sprite = bloomSprite2
                 bloomCombineSprite3D.render(renderEncoder: renderEncoderBloomCombine, pipelineState: .spriteNodeIndexed3DAdditiveBlending)
             }
             renderEncoderBloomCombine.endEncoding()
@@ -186,7 +199,7 @@ class MetalEngine {
                 stereoscopicSprite3D.uniformsVertex.projectionMatrix.ortho(width: width, height: height)
                 stereoscopicSprite3D.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
                 stereoscopicSprite3D.setPositionQuad(x1: 0.0, y1: 0.0, x2: width, y2: height)
-                stereoscopicSprite3D.texture = storageTextureBloom
+                stereoscopicSprite3D.sprite = storageSpriteBloom
                 stereoscopicSprite3D.setDirty(isVertexBufferDirty: true, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: true)
                 stereoscopicSprite3D.render(renderEncoder: renderEncoder3D, pipelineState: .spriteNodeStereoscopicBlueIndexed3DNoBlending)
                 delegate.draw3DStereoscopicBlue(renderEncoder: renderEncoder3D, stereoSpreadBase: stereoSpreadBase, stereoSpreadMax: stereoSpreadMax)
@@ -211,7 +224,7 @@ class MetalEngine {
                 stereoscopicSprite3D.uniformsVertex.projectionMatrix.ortho(width: width, height: height)
                 stereoscopicSprite3D.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
                 stereoscopicSprite3D.setPositionQuad(x1: 0.0, y1: 0.0, x2: width, y2: height)
-                stereoscopicSprite3D.texture = storageTextureBloom
+                stereoscopicSprite3D.sprite = storageSpriteBloom
                 stereoscopicSprite3D.setDirty(isVertexBufferDirty: true, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: true)
                 stereoscopicSprite3D.render(renderEncoder: renderEncoder3D, pipelineState: .spriteNodeStereoscopicRedIndexed3DNoBlending)
                 delegate.draw3DStereoscopicRed(renderEncoder: renderEncoder3D, stereoSpreadBase: stereoSpreadBase, stereoSpreadMax: stereoSpreadMax)
@@ -237,7 +250,7 @@ class MetalEngine {
                 bloomCombineSprite3D.uniformsVertex.projectionMatrix.ortho(width: width, height: height)
                 bloomCombineSprite3D.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
                 bloomCombineSprite3D.setPositionQuad(x1: 0.0, y1: 0.0, x2: width, y2: height)
-                bloomCombineSprite3D.texture = storageTextureBloom
+                bloomCombineSprite3D.sprite = storageSpriteBloom
                 bloomCombineSprite3D.setDirty(isVertexBufferDirty: true, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: true)
                 bloomCombineSprite3D.render(renderEncoder: renderEncoder3D, pipelineState: .spriteNodeIndexed3DNoBlending)
                 delegate.draw3D(renderEncoder: renderEncoder3D)
@@ -305,7 +318,7 @@ class MetalEngine {
         graphics.renderTargetWidth = bloomTexture1.width
         graphics.renderTargetHeight = bloomTexture1.height
         if let renderEncoderHorizontal1 = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorHorizontal1) {
-            bloomSprite2D.texture = storageTexture
+            bloomSprite2D.sprite = storageSprite
             bloomSprite2D.render(renderEncoder: renderEncoderHorizontal1, pipelineState: .gaussianBlurHorizontalIndexedNoBlending)
             renderEncoderHorizontal1.endEncoding()
         }
@@ -315,7 +328,7 @@ class MetalEngine {
         renderPassDescriptorVertical1.colorAttachments[0].loadAction = .load
         renderPassDescriptorVertical1.colorAttachments[0].storeAction = .store
         if let renderEncoderVertical1 = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorVertical1) {
-            bloomSprite2D.texture = bloomTexture1
+            bloomSprite2D.sprite = bloomSprite1
             bloomSprite2D.render(renderEncoder: renderEncoderVertical1, pipelineState: .gaussianBlurVerticalIndexedNoBlending)
             renderEncoderVertical1.endEncoding()
         }
@@ -329,7 +342,7 @@ class MetalEngine {
             renderPassDescriptorHorizontal2.colorAttachments[0].storeAction = .store
             renderPassDescriptorHorizontal2.colorAttachments[0].clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
             if let renderEncoderHorizontal2 = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorHorizontal2) {
-                bloomSprite2D.texture = bloomTexture2
+                bloomSprite2D.sprite = bloomSprite2
                 bloomSprite2D.render(renderEncoder: renderEncoderHorizontal2, pipelineState: .gaussianBlurHorizontalIndexedNoBlending)
                 renderEncoderHorizontal2.endEncoding()
             }
@@ -339,7 +352,7 @@ class MetalEngine {
             renderPassDescriptorVertical2.colorAttachments[0].loadAction = .load
             renderPassDescriptorVertical2.colorAttachments[0].storeAction = .store
             if let renderEncoderVertical2 = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptorVertical2) {
-                bloomSprite2D.texture = bloomTexture1
+                bloomSprite2D.sprite = bloomSprite1
                 bloomSprite2D.render(renderEncoder: renderEncoderVertical2, pipelineState: .gaussianBlurVerticalIndexedNoBlending)
                 renderEncoderVertical2.endEncoding()
             }
@@ -354,7 +367,7 @@ class MetalEngine {
         tileSprite.uniformsVertex.projectionMatrix.ortho(width: width, height: height)
         tileSprite.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
         tileSprite.setPositionQuad(x1: 0.0, y1: 0.0, x2: width, y2: height)
-        tileSprite.texture = storageTexture
+        tileSprite.sprite = storageSprite
         tileSprite.render(renderEncoder: renderEncoder, pipelineState: .spriteNodeIndexed2DNoBlending)
     }
     
@@ -365,13 +378,13 @@ class MetalEngine {
         tileSprite.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
         tileSprite.setPositionQuad(x1: 0.0, y1: 0.0, x2: width, y2: height)
         tileSprite.setDirty(isVertexBufferDirty: false, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: false)
-        tileSprite.texture = storageTexture
+        tileSprite.sprite = storageSprite
         tileSprite.render(renderEncoder: renderEncoder, pipelineState: .spriteNodeIndexed2DNoBlending)
         
         tileSprite.uniformsVertex.projectionMatrix.ortho(width: width, height: height)
         tileSprite.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
         tileSprite.setDirty(isVertexBufferDirty: false, isUniformsVertexBufferDirty: true, isUniformsFragmentBufferDirty: false)
-        tileSprite.texture = storageTexturePrebloom
+        tileSprite.sprite = storageSpritePrebloom
         tileSprite.render(renderEncoder: renderEncoder, pipelineState: .spriteNodeIndexed2DAdditiveBlending)
     }
     
