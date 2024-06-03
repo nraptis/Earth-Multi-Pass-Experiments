@@ -18,6 +18,8 @@ protocol GraphicsDelegate: AnyObject {
     
     func loadComplete()
     
+    func initialize()
+    
     func update(deltaTime: Float, stereoSpreadBase: Float, stereoSpreadMax: Float)
     
     func draw3DPrebloom(renderEncoder: MTLRenderCommandEncoder)

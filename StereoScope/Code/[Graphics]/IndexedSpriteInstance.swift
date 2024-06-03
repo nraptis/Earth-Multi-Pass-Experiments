@@ -48,7 +48,10 @@ class IndexedSpriteInstance<NodeType: PositionConforming2D & TextureCoordinateCo
             vertices[3].y = height2
             //
             self.sprite = sprite
-        } else {
+        }
+        
+        /*
+        else {
             //
             // This isn't 100% necessary, but let's
             // keep it in-case we're dealing with new types...
@@ -73,6 +76,8 @@ class IndexedSpriteInstance<NodeType: PositionConforming2D & TextureCoordinateCo
             //
             self.sprite = nil
         }
+        */
+        
         super.load(graphics: graphics)
     }
     

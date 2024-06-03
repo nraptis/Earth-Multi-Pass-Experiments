@@ -20,12 +20,13 @@ class MetalViewController: UIViewController {
     private var timer: CADisplayLink?
     private var _isTimerRunning = false
     private var _isMetalEngineLoaded = false
+    private var _isInitialized = false
     
-    var isStereoscopicEnabled = false
+    var isStereoscopicEnabled = true
     var isBloomEnabled = true
     var bloomPasses = ((UIDevice.current.userInterfaceIdiom == .pad) ? 6 : 4)
-    var stereoSpreadBase = Float((UIDevice.current.userInterfaceIdiom == .pad) ? 2.0 : 1.0)
-    var stereoSpreadMax = Float((UIDevice.current.userInterfaceIdiom == .pad) ? 8.0 : 4.0)
+    var stereoSpreadBase = Float((UIDevice.current.userInterfaceIdiom == .pad) ? 4.0 : 2.0)
+    var stereoSpreadMax = Float((UIDevice.current.userInterfaceIdiom == .pad) ? 12.0 : 6.0)
     
     let metalView: MetalView
     required init(delegate: GraphicsDelegate,
@@ -148,6 +149,10 @@ class MetalViewController: UIViewController {
     }
     
     func update(deltaTime: Float, stereoSpreadBase: Float, stereoSpreadMax: Float) {
+        if _isInitialized == false {
+            _isInitialized = true
+            delegate.initialize()
+        }
         delegate.update(deltaTime: deltaTime, stereoSpreadBase: stereoSpreadBase, stereoSpreadMax: stereoSpreadMax)
     }
     

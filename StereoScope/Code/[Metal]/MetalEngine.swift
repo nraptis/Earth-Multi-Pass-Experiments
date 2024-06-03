@@ -51,21 +51,10 @@ class MetalEngine {
     
     var depthTexture: MTLTexture!
     
-    private var tileSprite = IndexedSpriteInstance<Sprite2DVertex,
-                                                   UniformsSpriteVertex,
-                                                   UniformsSpriteFragment>(sentinelNode: Sprite2DVertex(x: 0.0, y: 0.0, u: 0.0, v: 0.0))
-    
-    private var stereoscopicSprite3D = IndexedSpriteInstance<Sprite3DVertexStereoscopic,
-                                                             UniformsSpriteVertex,
-                                                             UniformsSpriteFragment>(sentinelNode: Sprite3DVertexStereoscopic(x: 0.0, y: 0.0, z: 0.0, u: 0.0, v: 0.0, shift: 0.0))
-    private var bloomSprite2D = IndexedSpriteInstance<Sprite2DVertex,
-                                                      UniformsSpriteVertex,
-                                                      UniformsSpriteFragment>(sentinelNode: Sprite2DVertex(x: 0.0, y: 0.0, u: 0.0, v: 0.0))
-    
-    private var bloomCombineSprite3D = IndexedSpriteInstance<Sprite3DVertex,
-                                                             UniformsSpriteVertex,
-                                                             UniformsSpriteFragment>(sentinelNode: Sprite3DVertex(x: 0.0, y: 0.0, z: 0.0, u: 0.0, v: 0.0))
-    
+    private var tileSprite = IndexedSpriteInstance2D()
+    private var stereoscopicSprite3D = IndexedSpriteInstance3DStereoscopic()
+    private var bloomSprite2D = IndexedSpriteInstance2D()
+    private var bloomCombineSprite3D = IndexedSpriteInstance3D()
     
     required init(metalLayer: CAMetalLayer,
                   width: Float,

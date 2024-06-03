@@ -86,19 +86,26 @@ class EarthScene: GraphicsDelegate {
                             sprite: galaxyMap)
     }
     
-    func loadComplete() { }
+    func loadComplete() { 
+        
+    }
     
     var earthRotation = Float(0.0)
     var lightRotation = Float(0.0)
     
+    
+    func initialize() {
+        earthRotation += 0.125
+    }
+    
     func update(deltaTime: Float, stereoSpreadBase: Float, stereoSpreadMax: Float) {
         
-        earthRotation += 0.0025
+        earthRotation += 0.0030
         if earthRotation >= (Float.pi * 2.0) {
             earthRotation -= (Float.pi * 2.0)
         }
         
-        lightRotation -= 0.005
+        lightRotation -= 0.0065
         if lightRotation < 0.0 {
             lightRotation += (Float.pi * 2.0)
         }
