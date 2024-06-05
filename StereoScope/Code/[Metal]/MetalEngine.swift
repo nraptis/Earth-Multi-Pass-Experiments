@@ -121,6 +121,8 @@ class MetalEngine {
             bloomSprite2.load(graphics: graphics, texture: bloomTexture2, scaleFactor: scale)
         }
         
+        delegate.predraw()
+        
         let renderPassDescriptorPrebloom = MTLRenderPassDescriptor()
         renderPassDescriptorPrebloom.colorAttachments[0].texture = storageTexturePrebloom
         renderPassDescriptorPrebloom.colorAttachments[0].loadAction = .dontCare

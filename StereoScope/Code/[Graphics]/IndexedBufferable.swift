@@ -52,6 +52,36 @@ extension IndexedBufferable {
         isVertexBufferDirty = true
     }
     
+    func add(vertex1: NodeType,
+             vertex2: NodeType,
+             vertex3: NodeType,
+             vertex4: NodeType) {
+        if (vertexCount + 3) >= vertexCapacity {
+            let newSize = (vertexCount + 3) + ((vertexCount + 3) / 2) + 1
+            reserveCapacityVertices(minimumCapacity: newSize, placeholder: vertex1)
+        }
+        vertices[vertexCount + 0] = vertex1
+        vertices[vertexCount + 1] = vertex2
+        vertices[vertexCount + 2] = vertex3
+        vertices[vertexCount + 3] = vertex4
+        vertexCount += 4
+        isVertexBufferDirty = true
+    }
+    
+    func add(vertex1: NodeType,
+             vertex2: NodeType,
+             vertex3: NodeType) {
+        if (vertexCount + 2) >= vertexCapacity {
+            let newSize = (vertexCount + 2) + ((vertexCount + 2) / 2) + 1
+            reserveCapacityVertices(minimumCapacity: newSize, placeholder: vertex1)
+        }
+        vertices[vertexCount + 0] = vertex1
+        vertices[vertexCount + 1] = vertex2
+        vertices[vertexCount + 2] = vertex3
+        vertexCount += 3
+        isVertexBufferDirty = true
+    }
+    
     func add(index: UInt32) {
         if indexCount >= indexCapacity {
             let newSize = indexCount + (indexCount / 2) + 1
@@ -74,7 +104,20 @@ extension IndexedBufferable {
         isIndexBufferDirty = true
     }
     
-    @discardableResult func addTriangleStripQuad(startingAt index: UInt32) -> UInt32 {
+    @discardableResult func addTriangleIndices(startingAt index: UInt32) -> UInt32 {
+        if (indexCount + 2) >= indexCapacity {
+            let newSize = (indexCount + 2) + ((indexCount + 2) / 2) + 1
+            reserveCapacityIndices(minimumCapacity: newSize)
+        }
+        indices[indexCount + 0] = index + 0
+        indices[indexCount + 1] = index + 1
+        indices[indexCount + 2] = index + 2
+        indexCount += 3
+        isIndexBufferDirty = true
+        return index + 3
+    }
+    
+    @discardableResult func addTriangleQuadIndices(startingAt index: UInt32) -> UInt32 {
         if (indexCount + 5) >= indexCapacity {
             let newSize = (indexCount + 5) + ((indexCount + 5) / 2) + 1
             reserveCapacityIndices(minimumCapacity: newSize)
@@ -88,6 +131,19 @@ extension IndexedBufferable {
         indexCount += 6
         isIndexBufferDirty = true
         return index + 4
+    }
+    
+    @discardableResult func addTriangleQuad(startingAt index: UInt32,
+                                            vertex1: NodeType, vertex2: NodeType,
+                                            vertex3: NodeType, vertex4: NodeType) -> UInt32 {
+        add(vertex1: vertex1, vertex2: vertex2, vertex3: vertex3, vertex4: vertex4)
+        return addTriangleQuadIndices(startingAt: index)
+    }
+    
+    @discardableResult func addTriangle(startingAt index: UInt32,
+                                        vertex1: NodeType, vertex2: NodeType, vertex3: NodeType) -> UInt32 {
+        add(vertex1: vertex1, vertex2: vertex2, vertex3: vertex3)
+        return addTriangleIndices(startingAt: index)
     }
     
     @discardableResult func addTriangle(startingAt index: UInt32) -> UInt32 {

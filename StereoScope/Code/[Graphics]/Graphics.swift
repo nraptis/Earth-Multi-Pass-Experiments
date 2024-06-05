@@ -22,6 +22,8 @@ protocol GraphicsDelegate: AnyObject {
     
     func update(deltaTime: Float, stereoSpreadBase: Float, stereoSpreadMax: Float)
     
+    
+    func predraw()
     func draw3DPrebloom(renderEncoder: MTLRenderCommandEncoder)
     func draw3DBloom(renderEncoder: MTLRenderCommandEncoder)
     
@@ -239,16 +241,28 @@ class Graphics {
         }
     }()
     
+    func loadTexture(name: String, `extension`: String) -> MTLTexture? {
+        if let bundleResourcePath = Bundle.main.resourcePath {
+            let filePath = bundleResourcePath + "/" + name + "." + `extension`
+            let fileURL = URL(filePath: filePath)
+            return loadTexture(url: fileURL)
+        }
+        return nil
+    }
+    
+    func loadTexture(nameWithExtension: String) -> MTLTexture? {
+        if let bundleResourcePath = Bundle.main.resourcePath {
+            let filePath = bundleResourcePath + "/" + nameWithExtension
+            let fileURL = URL(filePath: filePath)
+            return loadTexture(url: fileURL)
+        }
+        return nil
+    }
+    
     func loadTextureScaled(name: String, `extension`: String) -> MTLTexture? {
         if let bundleResourcePath = Bundle.main.resourcePath {
             let filePath = bundleResourcePath + "/" + name + scaledTextureSuffix + "." + `extension`
-            let fileURL: URL
-            if #available(iOS 16.0, *) {
-                fileURL = URL(filePath: filePath)
-            } else {
-                // Fallback on earlier versions
-                fileURL = URL(fileURLWithPath: filePath)
-            }
+            let fileURL = URL(filePath: filePath)
             return loadTexture(url: fileURL)
         }
         return nil

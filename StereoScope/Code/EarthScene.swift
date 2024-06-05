@@ -27,6 +27,8 @@ var colorType = ColorType.none
 
 class EarthScene: GraphicsDelegate {
     
+    
+    
     var graphics: Graphics!
     
     let width: Float
@@ -114,7 +116,7 @@ class EarthScene: GraphicsDelegate {
         earth.updateStereo(radians: earthRotation, stereoSpreadBase: stereoSpreadBase, stereoSpreadMax: stereoSpreadMax)
     }
     
-    func draw2D(renderEncoder: MTLRenderCommandEncoder) {
+    func predraw() {
         
     }
     
@@ -388,4 +390,9 @@ class EarthScene: GraphicsDelegate {
         
         graphics.set(depthState: .disabled, renderEncoder: renderEncoder)
     }
+    
+    func draw2D(renderEncoder: MTLRenderCommandEncoder) {
+        
+    }
+    
 }
