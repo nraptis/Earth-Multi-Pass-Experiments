@@ -38,13 +38,6 @@ class Earth {
         }
     }
     
-    func update(deltaTime: Float, stereoSpreadBase: Float, stereoSpreadMax: Float) {
-        for earthModelDataStrip in earthModelDataStrips {
-            earthModelDataStrip.update(deltaTime: deltaTime)
-        }
-        
-    }
-    
     func updateStereo(radians: Float, stereoSpreadBase: Float, stereoSpreadMax: Float) {
         for earthModelDataStrip in earthModelDataStrips {
             earthModelDataStrip.updateStereo(radians: radians,

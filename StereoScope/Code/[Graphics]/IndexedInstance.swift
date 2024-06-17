@@ -10,7 +10,7 @@ import Metal
 import simd
 
 class IndexedInstance<Node: PositionConforming2D,
-                        VertexUniforms: UniformsVertex,
+                      VertexUniforms: UniformsVertex,
                       FragmentUniforms: UniformsFragment>: IndexedInstanceable {
     
     typealias NodeType = Node

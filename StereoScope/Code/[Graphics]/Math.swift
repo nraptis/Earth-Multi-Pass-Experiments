@@ -13,6 +13,8 @@ struct Math {
     static let pi = Float.pi
     static let pi2 = Float.pi * 2.0
     static let pi_2 = Float.pi / 2.0
+    static let pi_4 = Float.pi / 4.0
+    
     
     static let epsilon: Float = 0.00001
     

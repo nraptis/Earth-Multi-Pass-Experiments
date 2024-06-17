@@ -231,10 +231,6 @@ class EarthModelDataStrip {
         nightBufferStereoscopic.cullMode = .none
     }
     
-    func update(deltaTime: Float) {
-        
-    }
-    
     func updateStereo(radians: Float, width: Float, height: Float, stereoSpreadBase: Float, stereoSpreadMax: Float) {
         
         let radius: Float
