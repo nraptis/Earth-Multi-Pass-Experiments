@@ -16,8 +16,6 @@ class EarthModelDataStrip {
     weak var skinMap: Sprite?
     weak var lightMap: Sprite?
     
-    weak var earthModelData: EarthModelData?
-    
     let indexV: Int
     
     let bloomBuffer = IndexedShapeBuffer3D()
@@ -65,19 +63,12 @@ class EarthModelDataStrip {
                                                      UniformsNightFragment>()
     
     
-    init(earthModelData: EarthModelData,
-         indexV: Int) {
+    init(indexV: Int) {
         
         self.indexV = indexV
-        self.earthModelData = earthModelData
         
-        for indexH in 0...EarthModelData.tileCountH {
-            
-            let u1 = earthModelData.textureCoords[indexH][indexV - 1].x
-            let v1 = earthModelData.textureCoords[indexH][indexV - 1].y
-            let u2 = earthModelData.textureCoords[indexH][indexV].x
-            let v2 = earthModelData.textureCoords[indexH][indexV].y
-            
+        for indexH in 0...Earth.tileCountH {
+
             bloomBuffer.add(index: UInt32(indexH * 2))
             bloomBuffer.add(index: UInt32(indexH * 2 + 1))
             bloomBuffer.add(vertex: Shape3DVertex())
@@ -90,73 +81,73 @@ class EarthModelDataStrip {
             
             noLightBuffer.add(index: UInt32(indexH * 2))
             noLightBuffer.add(index: UInt32(indexH * 2 + 1))
-            noLightBuffer.add(vertex: Sprite3DVertex(u: u1, v: v1))
-            noLightBuffer.add(vertex: Sprite3DVertex(u: u2, v: v2))
+            noLightBuffer.add(vertex: Sprite3DVertex())
+            noLightBuffer.add(vertex: Sprite3DVertex())
             
             noLightBufferColored.add(index: UInt32(indexH * 2))
             noLightBufferColored.add(index: UInt32(indexH * 2 + 1))
-            noLightBufferColored.add(vertex: Sprite3DColoredVertex(u: u1, v: v1))
-            noLightBufferColored.add(vertex: Sprite3DColoredVertex(u: u2, v: v2))
+            noLightBufferColored.add(vertex: Sprite3DColoredVertex())
+            noLightBufferColored.add(vertex: Sprite3DColoredVertex())
             
             noLightBufferStereoscopic.add(index: UInt32(indexH * 2))
             noLightBufferStereoscopic.add(index: UInt32(indexH * 2 + 1))
-            noLightBufferStereoscopic.add(vertex: Sprite3DVertexStereoscopic(u: u1, v: v1))
-            noLightBufferStereoscopic.add(vertex: Sprite3DVertexStereoscopic(u: u2, v: v2))
+            noLightBufferStereoscopic.add(vertex: Sprite3DVertexStereoscopic())
+            noLightBufferStereoscopic.add(vertex: Sprite3DVertexStereoscopic())
             
             noLightBufferColoredStereoscopic.add(index: UInt32(indexH * 2))
             noLightBufferColoredStereoscopic.add(index: UInt32(indexH * 2 + 1))
-            noLightBufferColoredStereoscopic.add(vertex: Sprite3DVertexColoredStereoscopic(u: u1, v: v1))
-            noLightBufferColoredStereoscopic.add(vertex: Sprite3DVertexColoredStereoscopic(u: u2, v: v2))
+            noLightBufferColoredStereoscopic.add(vertex: Sprite3DVertexColoredStereoscopic())
+            noLightBufferColoredStereoscopic.add(vertex: Sprite3DVertexColoredStereoscopic())
             
             diffuseBuffer.add(index: UInt32(indexH * 2))
             diffuseBuffer.add(index: UInt32(indexH * 2 + 1))
-            diffuseBuffer.add(vertex: Sprite3DLightedVertex(u: u1, v: v1))
-            diffuseBuffer.add(vertex: Sprite3DLightedVertex(u: u2, v: v2))
+            diffuseBuffer.add(vertex: Sprite3DLightedVertex())
+            diffuseBuffer.add(vertex: Sprite3DLightedVertex())
             
             diffuseBufferColored.add(index: UInt32(indexH * 2))
             diffuseBufferColored.add(index: UInt32(indexH * 2 + 1))
-            diffuseBufferColored.add(vertex: Sprite3DLightedColoredVertex(u: u1, v: v1))
-            diffuseBufferColored.add(vertex: Sprite3DLightedColoredVertex(u: u2, v: v2))
+            diffuseBufferColored.add(vertex: Sprite3DLightedColoredVertex())
+            diffuseBufferColored.add(vertex: Sprite3DLightedColoredVertex())
             
             diffuseBufferStereoscopic.add(index: UInt32(indexH * 2))
             diffuseBufferStereoscopic.add(index: UInt32(indexH * 2 + 1))
-            diffuseBufferStereoscopic.add(vertex: Sprite3DLightedStereoscopicVertex(u: u1, v: v1))
-            diffuseBufferStereoscopic.add(vertex: Sprite3DLightedStereoscopicVertex(u: u2, v: v2))
+            diffuseBufferStereoscopic.add(vertex: Sprite3DLightedStereoscopicVertex())
+            diffuseBufferStereoscopic.add(vertex: Sprite3DLightedStereoscopicVertex())
             
             diffuseBufferColoredStereoscopic.add(index: UInt32(indexH * 2))
             diffuseBufferColoredStereoscopic.add(index: UInt32(indexH * 2 + 1))
-            diffuseBufferColoredStereoscopic.add(vertex: Sprite3DLightedColoredStereoscopicVertex(u: u1, v: v1))
-            diffuseBufferColoredStereoscopic.add(vertex: Sprite3DLightedColoredStereoscopicVertex(u: u2, v: v2))
+            diffuseBufferColoredStereoscopic.add(vertex: Sprite3DLightedColoredStereoscopicVertex())
+            diffuseBufferColoredStereoscopic.add(vertex: Sprite3DLightedColoredStereoscopicVertex())
             
             phongBuffer.add(index: UInt32(indexH * 2))
             phongBuffer.add(index: UInt32(indexH * 2 + 1))
-            phongBuffer.add(vertex: Sprite3DLightedVertex(u: u1, v: v1))
-            phongBuffer.add(vertex: Sprite3DLightedVertex(u: u2, v: v2))
+            phongBuffer.add(vertex: Sprite3DLightedVertex())
+            phongBuffer.add(vertex: Sprite3DLightedVertex())
 
             phongBufferColored.add(index: UInt32(indexH * 2))
             phongBufferColored.add(index: UInt32(indexH * 2 + 1))
-            phongBufferColored.add(vertex: Sprite3DLightedColoredVertex(u: u1, v: v1))
-            phongBufferColored.add(vertex: Sprite3DLightedColoredVertex(u: u2, v: v2))
+            phongBufferColored.add(vertex: Sprite3DLightedColoredVertex())
+            phongBufferColored.add(vertex: Sprite3DLightedColoredVertex())
 
             phongBufferStereoscopic.add(index: UInt32(indexH * 2))
             phongBufferStereoscopic.add(index: UInt32(indexH * 2 + 1))
-            phongBufferStereoscopic.add(vertex: Sprite3DLightedStereoscopicVertex(u: u1, v: v1))
-            phongBufferStereoscopic.add(vertex: Sprite3DLightedStereoscopicVertex(u: u2, v: v2))
+            phongBufferStereoscopic.add(vertex: Sprite3DLightedStereoscopicVertex())
+            phongBufferStereoscopic.add(vertex: Sprite3DLightedStereoscopicVertex())
 
             phongBufferColoredStereoscopic.add(index: UInt32(indexH * 2))
             phongBufferColoredStereoscopic.add(index: UInt32(indexH * 2 + 1))
-            phongBufferColoredStereoscopic.add(vertex: Sprite3DLightedColoredStereoscopicVertex(u: u1, v: v1))
-            phongBufferColoredStereoscopic.add(vertex: Sprite3DLightedColoredStereoscopicVertex(u: u2, v: v2))
+            phongBufferColoredStereoscopic.add(vertex: Sprite3DLightedColoredStereoscopicVertex())
+            phongBufferColoredStereoscopic.add(vertex: Sprite3DLightedColoredStereoscopicVertex())
             
             nightBuffer.add(index: UInt32(indexH * 2))
             nightBuffer.add(index: UInt32(indexH * 2 + 1))
-            nightBuffer.add(vertex: Sprite3DLightedVertex(u: u1, v: v1))
-            nightBuffer.add(vertex: Sprite3DLightedVertex(u: u2, v: v2))
+            nightBuffer.add(vertex: Sprite3DLightedVertex())
+            nightBuffer.add(vertex: Sprite3DLightedVertex())
 
             nightBufferStereoscopic.add(index: UInt32(indexH * 2))
             nightBufferStereoscopic.add(index: UInt32(indexH * 2 + 1))
-            nightBufferStereoscopic.add(vertex: Sprite3DLightedStereoscopicVertex(u: u1, v: v1))
-            nightBufferStereoscopic.add(vertex: Sprite3DLightedStereoscopicVertex(u: u2, v: v2))
+            nightBufferStereoscopic.add(vertex: Sprite3DLightedStereoscopicVertex())
+            nightBufferStereoscopic.add(vertex: Sprite3DLightedStereoscopicVertex())
         }
     }
     
@@ -245,13 +236,13 @@ class EarthModelDataStrip {
         let startRotationV = Float.pi
         let endRotationV = Float(0.0)
         
-        let percentV1 = (Float(indexV - 1) / Float(EarthModelData.tileCountV))
-        let percentV2 = (Float(indexV) / Float(EarthModelData.tileCountV))
+        let percentV1 = (Float(indexV - 1) / Float(Earth.tileCountV))
+        let percentV2 = (Float(indexV) / Float(Earth.tileCountV))
         let _angleV1 = startRotationV + (endRotationV - startRotationV) * percentV1
         let _angleV2 = startRotationV + (endRotationV - startRotationV) * percentV2
         var indexH = 0
-        while indexH <= EarthModelData.tileCountH {
-            let percentH = (Float(indexH) / Float(EarthModelData.tileCountH))
+        while indexH <= Earth.tileCountH {
+            let percentH = (Float(indexH) / Float(Earth.tileCountH))
             let _angleH = startRotationH + (endRotationH - startRotationH) * percentH - radians
             var point1 = simd_float3(0.0, 1.0, 0.0)
             point1 = Math.rotateX(float3: point1, radians: _angleV1)
@@ -275,6 +266,12 @@ class EarthModelDataStrip {
             let x2 = point2.x * radius
             let y2 = point2.y * radius
             let z2 = point2.z * radius
+            
+            let u1 = percentH
+            let v1 = percentV1
+            
+            let u2 = percentH
+            let v2 = percentV2
             
             let normalX1 = point1.x
             let normalY1 = point1.y
@@ -324,16 +321,23 @@ class EarthModelDataStrip {
             noLightBuffer.vertices[vertexIndex1].x = x1
             noLightBuffer.vertices[vertexIndex1].y = y1
             noLightBuffer.vertices[vertexIndex1].z = z1
+            noLightBuffer.vertices[vertexIndex1].u = u1
+            noLightBuffer.vertices[vertexIndex1].v = v1
+            
             //
             noLightBuffer.vertices[vertexIndex2].x = x2
             noLightBuffer.vertices[vertexIndex2].y = y2
             noLightBuffer.vertices[vertexIndex2].z = z2
+            noLightBuffer.vertices[vertexIndex2].u = u2
+            noLightBuffer.vertices[vertexIndex2].v = v2
             //
             //
             //
             noLightBufferColored.vertices[vertexIndex1].x = x1
             noLightBufferColored.vertices[vertexIndex1].y = y1
             noLightBufferColored.vertices[vertexIndex1].z = z1
+            noLightBufferColored.vertices[vertexIndex1].u = u1
+            noLightBufferColored.vertices[vertexIndex1].v = v1
             noLightBufferColored.vertices[vertexIndex1].r = r1
             noLightBufferColored.vertices[vertexIndex1].g = g1
             noLightBufferColored.vertices[vertexIndex1].b = b1
@@ -341,6 +345,8 @@ class EarthModelDataStrip {
             noLightBufferColored.vertices[vertexIndex2].x = x2
             noLightBufferColored.vertices[vertexIndex2].y = y2
             noLightBufferColored.vertices[vertexIndex2].z = z2
+            noLightBufferColored.vertices[vertexIndex2].u = u2
+            noLightBufferColored.vertices[vertexIndex2].v = v2
             noLightBufferColored.vertices[vertexIndex2].r = r2
             noLightBufferColored.vertices[vertexIndex2].g = g2
             noLightBufferColored.vertices[vertexIndex2].b = b2
@@ -350,11 +356,15 @@ class EarthModelDataStrip {
             noLightBufferStereoscopic.vertices[vertexIndex1].x = x1
             noLightBufferStereoscopic.vertices[vertexIndex1].y = y1
             noLightBufferStereoscopic.vertices[vertexIndex1].z = z1
+            noLightBufferStereoscopic.vertices[vertexIndex1].u = u1
+            noLightBufferStereoscopic.vertices[vertexIndex1].v = v1
             noLightBufferStereoscopic.vertices[vertexIndex1].shift = shift1
             //
             noLightBufferStereoscopic.vertices[vertexIndex2].x = x2
             noLightBufferStereoscopic.vertices[vertexIndex2].y = y2
             noLightBufferStereoscopic.vertices[vertexIndex2].z = z2
+            noLightBufferStereoscopic.vertices[vertexIndex2].u = u2
+            noLightBufferStereoscopic.vertices[vertexIndex2].v = v2
             noLightBufferStereoscopic.vertices[vertexIndex2].shift = shift2
             //
             //
@@ -362,6 +372,8 @@ class EarthModelDataStrip {
             noLightBufferColoredStereoscopic.vertices[vertexIndex1].x = x1
             noLightBufferColoredStereoscopic.vertices[vertexIndex1].y = y1
             noLightBufferColoredStereoscopic.vertices[vertexIndex1].z = z1
+            noLightBufferColoredStereoscopic.vertices[vertexIndex1].u = u1
+            noLightBufferColoredStereoscopic.vertices[vertexIndex1].v = v1
             noLightBufferColoredStereoscopic.vertices[vertexIndex1].r = r1
             noLightBufferColoredStereoscopic.vertices[vertexIndex1].g = g1
             noLightBufferColoredStereoscopic.vertices[vertexIndex1].b = b1
@@ -370,6 +382,8 @@ class EarthModelDataStrip {
             noLightBufferColoredStereoscopic.vertices[vertexIndex2].x = x2
             noLightBufferColoredStereoscopic.vertices[vertexIndex2].y = y2
             noLightBufferColoredStereoscopic.vertices[vertexIndex2].z = z2
+            noLightBufferColoredStereoscopic.vertices[vertexIndex2].u = u2
+            noLightBufferColoredStereoscopic.vertices[vertexIndex2].v = v2
             noLightBufferColoredStereoscopic.vertices[vertexIndex2].r = r2
             noLightBufferColoredStereoscopic.vertices[vertexIndex2].g = g2
             noLightBufferColoredStereoscopic.vertices[vertexIndex2].b = b2
@@ -380,6 +394,8 @@ class EarthModelDataStrip {
             diffuseBuffer.vertices[vertexIndex1].x = x1
             diffuseBuffer.vertices[vertexIndex1].y = y1
             diffuseBuffer.vertices[vertexIndex1].z = z1
+            diffuseBuffer.vertices[vertexIndex1].u = u1
+            diffuseBuffer.vertices[vertexIndex1].v = v1
             diffuseBuffer.vertices[vertexIndex1].normalX = normalX1
             diffuseBuffer.vertices[vertexIndex1].normalY = normalY1
             diffuseBuffer.vertices[vertexIndex1].normalZ = normalZ1
@@ -387,6 +403,8 @@ class EarthModelDataStrip {
             diffuseBuffer.vertices[vertexIndex2].x = x2
             diffuseBuffer.vertices[vertexIndex2].y = y2
             diffuseBuffer.vertices[vertexIndex2].z = z2
+            diffuseBuffer.vertices[vertexIndex2].u = u2
+            diffuseBuffer.vertices[vertexIndex2].v = v2
             diffuseBuffer.vertices[vertexIndex2].normalX = normalX2
             diffuseBuffer.vertices[vertexIndex2].normalY = normalY2
             diffuseBuffer.vertices[vertexIndex2].normalZ = normalZ2
@@ -396,6 +414,8 @@ class EarthModelDataStrip {
             diffuseBufferColored.vertices[vertexIndex1].x = x1
             diffuseBufferColored.vertices[vertexIndex1].y = y1
             diffuseBufferColored.vertices[vertexIndex1].z = z1
+            diffuseBufferColored.vertices[vertexIndex1].u = u1
+            diffuseBufferColored.vertices[vertexIndex1].v = v1
             diffuseBufferColored.vertices[vertexIndex1].normalX = normalX1
             diffuseBufferColored.vertices[vertexIndex1].normalY = normalY1
             diffuseBufferColored.vertices[vertexIndex1].normalZ = normalZ1
@@ -406,6 +426,8 @@ class EarthModelDataStrip {
             diffuseBufferColored.vertices[vertexIndex2].x = x2
             diffuseBufferColored.vertices[vertexIndex2].y = y2
             diffuseBufferColored.vertices[vertexIndex2].z = z2
+            diffuseBufferColored.vertices[vertexIndex2].u = u2
+            diffuseBufferColored.vertices[vertexIndex2].v = v2
             diffuseBufferColored.vertices[vertexIndex2].normalX = normalX2
             diffuseBufferColored.vertices[vertexIndex2].normalY = normalY2
             diffuseBufferColored.vertices[vertexIndex2].normalZ = normalZ2
@@ -418,6 +440,8 @@ class EarthModelDataStrip {
             diffuseBufferStereoscopic.vertices[vertexIndex1].x = x1
             diffuseBufferStereoscopic.vertices[vertexIndex1].y = y1
             diffuseBufferStereoscopic.vertices[vertexIndex1].z = z1
+            diffuseBufferStereoscopic.vertices[vertexIndex1].u = u1
+            diffuseBufferStereoscopic.vertices[vertexIndex1].v = v1
             diffuseBufferStereoscopic.vertices[vertexIndex1].normalX = normalX1
             diffuseBufferStereoscopic.vertices[vertexIndex1].normalY = normalY1
             diffuseBufferStereoscopic.vertices[vertexIndex1].normalZ = normalZ1
@@ -426,6 +450,8 @@ class EarthModelDataStrip {
             diffuseBufferStereoscopic.vertices[vertexIndex2].x = x2
             diffuseBufferStereoscopic.vertices[vertexIndex2].y = y2
             diffuseBufferStereoscopic.vertices[vertexIndex2].z = z2
+            diffuseBufferStereoscopic.vertices[vertexIndex2].u = u2
+            diffuseBufferStereoscopic.vertices[vertexIndex2].v = v2
             diffuseBufferStereoscopic.vertices[vertexIndex2].normalX = normalX2
             diffuseBufferStereoscopic.vertices[vertexIndex2].normalY = normalY2
             diffuseBufferStereoscopic.vertices[vertexIndex2].normalZ = normalZ2
@@ -436,6 +462,8 @@ class EarthModelDataStrip {
             diffuseBufferColoredStereoscopic.vertices[vertexIndex1].x = x1
             diffuseBufferColoredStereoscopic.vertices[vertexIndex1].y = y1
             diffuseBufferColoredStereoscopic.vertices[vertexIndex1].z = z1
+            diffuseBufferColoredStereoscopic.vertices[vertexIndex1].u = u1
+            diffuseBufferColoredStereoscopic.vertices[vertexIndex1].v = v1
             diffuseBufferColoredStereoscopic.vertices[vertexIndex1].normalX = normalX1
             diffuseBufferColoredStereoscopic.vertices[vertexIndex1].normalY = normalY1
             diffuseBufferColoredStereoscopic.vertices[vertexIndex1].normalZ = normalZ1
@@ -447,6 +475,8 @@ class EarthModelDataStrip {
             diffuseBufferColoredStereoscopic.vertices[vertexIndex2].x = x2
             diffuseBufferColoredStereoscopic.vertices[vertexIndex2].y = y2
             diffuseBufferColoredStereoscopic.vertices[vertexIndex2].z = z2
+            diffuseBufferColoredStereoscopic.vertices[vertexIndex2].u = u2
+            diffuseBufferColoredStereoscopic.vertices[vertexIndex2].v = v2
             diffuseBufferColoredStereoscopic.vertices[vertexIndex2].normalX = normalX2
             diffuseBufferColoredStereoscopic.vertices[vertexIndex2].normalY = normalY2
             diffuseBufferColoredStereoscopic.vertices[vertexIndex2].normalZ = normalZ2
@@ -460,6 +490,8 @@ class EarthModelDataStrip {
             phongBuffer.vertices[vertexIndex1].x = x1
             phongBuffer.vertices[vertexIndex1].y = y1
             phongBuffer.vertices[vertexIndex1].z = z1
+            phongBuffer.vertices[vertexIndex1].u = u1
+            phongBuffer.vertices[vertexIndex1].v = v1
             phongBuffer.vertices[vertexIndex1].normalX = normalX1
             phongBuffer.vertices[vertexIndex1].normalY = normalY1
             phongBuffer.vertices[vertexIndex1].normalZ = normalZ1
@@ -467,6 +499,8 @@ class EarthModelDataStrip {
             phongBuffer.vertices[vertexIndex2].x = x2
             phongBuffer.vertices[vertexIndex2].y = y2
             phongBuffer.vertices[vertexIndex2].z = z2
+            phongBuffer.vertices[vertexIndex2].u = u2
+            phongBuffer.vertices[vertexIndex2].v = v2
             phongBuffer.vertices[vertexIndex2].normalX = normalX2
             phongBuffer.vertices[vertexIndex2].normalY = normalY2
             phongBuffer.vertices[vertexIndex2].normalZ = normalZ2
@@ -476,6 +510,8 @@ class EarthModelDataStrip {
             phongBufferColored.vertices[vertexIndex1].x = x1
             phongBufferColored.vertices[vertexIndex1].y = y1
             phongBufferColored.vertices[vertexIndex1].z = z1
+            phongBufferColored.vertices[vertexIndex1].u = u1
+            phongBufferColored.vertices[vertexIndex1].v = v1
             phongBufferColored.vertices[vertexIndex1].normalX = normalX1
             phongBufferColored.vertices[vertexIndex1].normalY = normalY1
             phongBufferColored.vertices[vertexIndex1].normalZ = normalZ1
@@ -486,6 +522,8 @@ class EarthModelDataStrip {
             phongBufferColored.vertices[vertexIndex2].x = x2
             phongBufferColored.vertices[vertexIndex2].y = y2
             phongBufferColored.vertices[vertexIndex2].z = z2
+            phongBufferColored.vertices[vertexIndex2].u = u2
+            phongBufferColored.vertices[vertexIndex2].v = v2
             phongBufferColored.vertices[vertexIndex2].normalX = normalX2
             phongBufferColored.vertices[vertexIndex2].normalY = normalY2
             phongBufferColored.vertices[vertexIndex2].normalZ = normalZ2
@@ -498,6 +536,8 @@ class EarthModelDataStrip {
             phongBufferStereoscopic.vertices[vertexIndex1].x = x1
             phongBufferStereoscopic.vertices[vertexIndex1].y = y1
             phongBufferStereoscopic.vertices[vertexIndex1].z = z1
+            phongBufferStereoscopic.vertices[vertexIndex1].u = u1
+            phongBufferStereoscopic.vertices[vertexIndex1].v = v1
             phongBufferStereoscopic.vertices[vertexIndex1].normalX = normalX1
             phongBufferStereoscopic.vertices[vertexIndex1].normalY = normalY1
             phongBufferStereoscopic.vertices[vertexIndex1].normalZ = normalZ1
@@ -506,6 +546,8 @@ class EarthModelDataStrip {
             phongBufferStereoscopic.vertices[vertexIndex2].x = x2
             phongBufferStereoscopic.vertices[vertexIndex2].y = y2
             phongBufferStereoscopic.vertices[vertexIndex2].z = z2
+            phongBufferStereoscopic.vertices[vertexIndex2].u = u2
+            phongBufferStereoscopic.vertices[vertexIndex2].v = v2
             phongBufferStereoscopic.vertices[vertexIndex2].normalX = normalX2
             phongBufferStereoscopic.vertices[vertexIndex2].normalY = normalY2
             phongBufferStereoscopic.vertices[vertexIndex2].normalZ = normalZ2
@@ -516,6 +558,8 @@ class EarthModelDataStrip {
             phongBufferColoredStereoscopic.vertices[vertexIndex1].x = x1
             phongBufferColoredStereoscopic.vertices[vertexIndex1].y = y1
             phongBufferColoredStereoscopic.vertices[vertexIndex1].z = z1
+            phongBufferColoredStereoscopic.vertices[vertexIndex1].u = u1
+            phongBufferColoredStereoscopic.vertices[vertexIndex1].v = v1
             phongBufferColoredStereoscopic.vertices[vertexIndex1].normalX = normalX1
             phongBufferColoredStereoscopic.vertices[vertexIndex1].normalY = normalY1
             phongBufferColoredStereoscopic.vertices[vertexIndex1].normalZ = normalZ1
@@ -527,6 +571,8 @@ class EarthModelDataStrip {
             phongBufferColoredStereoscopic.vertices[vertexIndex2].x = x2
             phongBufferColoredStereoscopic.vertices[vertexIndex2].y = y2
             phongBufferColoredStereoscopic.vertices[vertexIndex2].z = z2
+            phongBufferColoredStereoscopic.vertices[vertexIndex2].u = u2
+            phongBufferColoredStereoscopic.vertices[vertexIndex2].v = v2
             phongBufferColoredStereoscopic.vertices[vertexIndex2].normalX = normalX2
             phongBufferColoredStereoscopic.vertices[vertexIndex2].normalY = normalY2
             phongBufferColoredStereoscopic.vertices[vertexIndex2].normalZ = normalZ2
@@ -540,6 +586,8 @@ class EarthModelDataStrip {
             nightBuffer.vertices[vertexIndex1].x = x1
             nightBuffer.vertices[vertexIndex1].y = y1
             nightBuffer.vertices[vertexIndex1].z = z1
+            nightBuffer.vertices[vertexIndex1].u = u1
+            nightBuffer.vertices[vertexIndex1].v = v1
             nightBuffer.vertices[vertexIndex1].normalX = normalX1
             nightBuffer.vertices[vertexIndex1].normalY = normalY1
             nightBuffer.vertices[vertexIndex1].normalZ = normalZ1
@@ -547,6 +595,8 @@ class EarthModelDataStrip {
             nightBuffer.vertices[vertexIndex2].x = x2
             nightBuffer.vertices[vertexIndex2].y = y2
             nightBuffer.vertices[vertexIndex2].z = z2
+            nightBuffer.vertices[vertexIndex2].u = u2
+            nightBuffer.vertices[vertexIndex2].v = v2
             nightBuffer.vertices[vertexIndex2].normalX = normalX2
             nightBuffer.vertices[vertexIndex2].normalY = normalY2
             nightBuffer.vertices[vertexIndex2].normalZ = normalZ2
@@ -556,6 +606,8 @@ class EarthModelDataStrip {
             nightBufferStereoscopic.vertices[vertexIndex1].x = x1
             nightBufferStereoscopic.vertices[vertexIndex1].y = y1
             nightBufferStereoscopic.vertices[vertexIndex1].z = z1
+            nightBufferStereoscopic.vertices[vertexIndex1].u = u1
+            nightBufferStereoscopic.vertices[vertexIndex1].v = v1
             nightBufferStereoscopic.vertices[vertexIndex1].normalX = normalX1
             nightBufferStereoscopic.vertices[vertexIndex1].normalY = normalY1
             nightBufferStereoscopic.vertices[vertexIndex1].normalZ = normalZ1
@@ -564,6 +616,8 @@ class EarthModelDataStrip {
             nightBufferStereoscopic.vertices[vertexIndex2].x = x2
             nightBufferStereoscopic.vertices[vertexIndex2].y = y2
             nightBufferStereoscopic.vertices[vertexIndex2].z = z2
+            nightBufferStereoscopic.vertices[vertexIndex2].u = u2
+            nightBufferStereoscopic.vertices[vertexIndex2].v = v2
             nightBufferStereoscopic.vertices[vertexIndex2].normalX = normalX2
             nightBufferStereoscopic.vertices[vertexIndex2].normalY = normalY2
             nightBufferStereoscopic.vertices[vertexIndex2].normalZ = normalZ2

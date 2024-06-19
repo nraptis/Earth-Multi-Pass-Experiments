@@ -11,7 +11,9 @@ import simd
 
 class Earth {
     
-    let earthModelData: EarthModelData
+    static let tileCountV = 48
+    static let tileCountH = 96
+    
     let earthModelDataStrips: [EarthModelDataStrip]
     
     let width: Float
@@ -21,10 +23,9 @@ class Earth {
         self.width = width
         self.height = height
         
-        earthModelData = EarthModelData(width: width, height: height)
         var _earthModelDataStrips = [EarthModelDataStrip]()
-        for indexV in 1...EarthModelData.tileCountV {
-            let earthModelDataStrip = EarthModelDataStrip(earthModelData: earthModelData, indexV: indexV)
+        for indexV in 1...Earth.tileCountV {
+            let earthModelDataStrip = EarthModelDataStrip(indexV: indexV)
             _earthModelDataStrips.append(earthModelDataStrip)
         }
         self.earthModelDataStrips = _earthModelDataStrips

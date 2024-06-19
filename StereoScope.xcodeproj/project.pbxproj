@@ -33,7 +33,6 @@
 		E8A29FD62C0D349500AADDC5 /* UniformsSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A29FB12C0D349500AADDC5 /* UniformsSprite.swift */; };
 		E8A29FD72C0D349500AADDC5 /* UniformsSpriteNodeIndexed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A29FB22C0D349500AADDC5 /* UniformsSpriteNodeIndexed.swift */; };
 		E8A29FD82C0D349500AADDC5 /* Earth.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A29FB42C0D349500AADDC5 /* Earth.swift */; };
-		E8A29FD92C0D349500AADDC5 /* EarthModelData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A29FB52C0D349500AADDC5 /* EarthModelData.swift */; };
 		E8A29FDA2C0D349500AADDC5 /* EarthModelDataStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A29FB62C0D349500AADDC5 /* EarthModelDataStrip.swift */; };
 		E8A29FDB2C0D349500AADDC5 /* EarthScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A29FB72C0D349500AADDC5 /* EarthScene.swift */; };
 		E8A29FDC2C0D349500AADDC5 /* EarthSceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A29FB82C0D349500AADDC5 /* EarthSceneView.swift */; };
@@ -71,7 +70,6 @@
 		E8A29FB12C0D349500AADDC5 /* UniformsSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniformsSprite.swift; sourceTree = "<group>"; };
 		E8A29FB22C0D349500AADDC5 /* UniformsSpriteNodeIndexed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniformsSpriteNodeIndexed.swift; sourceTree = "<group>"; };
 		E8A29FB42C0D349500AADDC5 /* Earth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Earth.swift; sourceTree = "<group>"; };
-		E8A29FB52C0D349500AADDC5 /* EarthModelData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EarthModelData.swift; sourceTree = "<group>"; };
 		E8A29FB62C0D349500AADDC5 /* EarthModelDataStrip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EarthModelDataStrip.swift; sourceTree = "<group>"; };
 		E8A29FB72C0D349500AADDC5 /* EarthScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EarthScene.swift; sourceTree = "<group>"; };
 		E8A29FB82C0D349500AADDC5 /* EarthSceneView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EarthSceneView.swift; sourceTree = "<group>"; };
@@ -157,7 +155,6 @@
 				E8A29FAD2C0D349500AADDC5 /* [Shaders] */,
 				E8A29FB32C0D349500AADDC5 /* [Uniforms] */,
 				E8A29FB42C0D349500AADDC5 /* Earth.swift */,
-				E8A29FB52C0D349500AADDC5 /* EarthModelData.swift */,
 				E8A29FB62C0D349500AADDC5 /* EarthModelDataStrip.swift */,
 				E8A29FB72C0D349500AADDC5 /* EarthScene.swift */,
 				E8A29FB82C0D349500AADDC5 /* EarthSceneView.swift */,
@@ -286,7 +283,6 @@
 				E8A29FD52C0D349500AADDC5 /* UniformsShapeNodeIndexed.swift in Sources */,
 				E8A29FCD2C0D349500AADDC5 /* MetalPipeline.swift in Sources */,
 				E8A29FC22C0D349500AADDC5 /* IndexedInstance.swift in Sources */,
-				E8A29FD92C0D349500AADDC5 /* EarthModelData.swift in Sources */,
 				E8A29FCE2C0D349500AADDC5 /* MetalView.swift in Sources */,
 				E8A29FC72C0D349500AADDC5 /* IndexedSpriteBuffer.swift in Sources */,
 				E8A29FC62C0D349500AADDC5 /* IndexedShapeInstance.swift in Sources */,

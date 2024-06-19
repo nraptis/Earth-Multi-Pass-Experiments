@@ -102,13 +102,13 @@ class EarthScene: GraphicsDelegate {
     func update(deltaTime: Float, stereoSpreadBase: Float, stereoSpreadMax: Float) {
         
         earthRotation += deltaTime * 0.4
-        if earthRotation >= (Float.pi * 2.0) {
-            earthRotation -= (Float.pi * 2.0)
+        if earthRotation >= Math.pi2 {
+            earthRotation -= Math.pi2
         }
         
         lightRotation -= deltaTime * 0.2
         if lightRotation < 0.0 {
-            lightRotation += (Float.pi * 2.0)
+            lightRotation += Math.pi2
         }
         
         earth.updateStereo(radians: earthRotation, stereoSpreadBase: stereoSpreadBase, stereoSpreadMax: stereoSpreadMax)

@@ -49,35 +49,6 @@ class IndexedSpriteInstance<NodeType: PositionConforming2D & TextureCoordinateCo
             //
             self.sprite = sprite
         }
-        
-        /*
-        else {
-            //
-            // This isn't 100% necessary, but let's
-            // keep it in-case we're dealing with new types...
-            //
-            vertices[0].u = 0.0
-            vertices[0].v = 0.0
-            vertices[1].u = 1.0
-            vertices[1].v = 0.0
-            vertices[2].u = 0.0
-            vertices[2].v = 1.0
-            vertices[3].u = 1.0
-            vertices[3].v = 1.0
-            //
-            vertices[0].x = -128.0
-            vertices[0].y = -128.0
-            vertices[1].x = 128.0
-            vertices[1].y = -128.0
-            vertices[2].x = -128.0
-            vertices[2].y = 128.0
-            vertices[3].x = 128.0
-            vertices[3].y = 128.0
-            //
-            self.sprite = nil
-        }
-        */
-        
         super.load(graphics: graphics)
     }
     
