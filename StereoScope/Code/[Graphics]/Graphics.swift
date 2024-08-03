@@ -269,16 +269,55 @@ class Graphics {
     }
     
     func loadTexture(url: URL) -> MTLTexture? {
-        let loader = MTKTextureLoader(device: metalDevice)
-        return try? loader.newTexture(URL: url, options: nil)
+        guard let uiImage = UIImage(contentsOfFile: url.path) else {
+            return nil
+        }
+        return loadTexture(cgImage: uiImage.cgImage)
     }
     
     func loadTexture(cgImage: CGImage?) -> MTLTexture? {
-        if let cgImage = cgImage {
-            let loader = MTKTextureLoader(device: metalDevice)
-            return try? loader.newTexture(cgImage: cgImage)
+        
+        guard let cgImage = cgImage else {
+            return nil
         }
-        return nil
+        
+        let width = cgImage.width
+        let height = cgImage.height
+        
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let bytesPerPixel = 4
+        let bytesPerRow = bytesPerPixel * width
+        let bitsPerComponent = 8
+        let bitmapData = UnsafeMutablePointer<UInt8>.allocate(capacity: width * height * bytesPerPixel)
+        
+        guard let context = CGContext(data: bitmapData,
+                                      width: width,
+                                      height: height,
+                                      bitsPerComponent: bitsPerComponent,
+                                      bytesPerRow: bytesPerRow,
+                                      space: colorSpace,
+                                      bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else {
+            bitmapData.deallocate()
+            return nil
+        }
+        
+        context.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
+        
+        let textureDescriptor = MTLTextureDescriptor()
+        textureDescriptor.pixelFormat = .rgba8Unorm
+        textureDescriptor.width = width
+        textureDescriptor.height = height
+        textureDescriptor.usage = [.shaderRead]
+        
+        guard let texture = metalDevice.makeTexture(descriptor: textureDescriptor) else {
+            bitmapData.deallocate()
+            return nil
+        }
+        
+        let region = MTLRegionMake2D(0, 0, width, height)
+        texture.replace(region: region, mipmapLevel: 0, withBytes: bitmapData, bytesPerRow: bytesPerRow)
+        
+        return texture
     }
     
     func loadTexture(uiImage: UIImage?) -> MTLTexture? {
