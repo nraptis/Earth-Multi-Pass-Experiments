@@ -41,6 +41,7 @@
 		E8A29FE72C0D3D1D00AADDC5 /* Primitives.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A29FE62C0D3D1D00AADDC5 /* Primitives.swift */; };
 		E8CD72B42C00E59E00D13962 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8CD72B32C00E59E00D13962 /* Assets.xcassets */; };
 		E8CD72B72C00E59E00D13962 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8CD72B62C00E59E00D13962 /* Preview Assets.xcassets */; };
+		E8F1DD402CE01F1A00EF831D /* StereoScopeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F1DD3F2CE01F1A00EF831D /* StereoScopeApp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -79,6 +80,7 @@
 		E8CD72AC2C00E59D00D13962 /* StereoScope.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StereoScope.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8CD72B32C00E59E00D13962 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E8CD72B62C00E59E00D13962 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		E8F1DD3F2CE01F1A00EF831D /* StereoScopeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoScopeApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +158,7 @@
 				E8A29FB32C0D349500AADDC5 /* [Uniforms] */,
 				E8A29FB42C0D349500AADDC5 /* Earth.swift */,
 				E8A29FB62C0D349500AADDC5 /* EarthModelDataStrip.swift */,
+				E8F1DD3F2CE01F1A00EF831D /* StereoScopeApp.swift */,
 				E8A29FB72C0D349500AADDC5 /* EarthScene.swift */,
 				E8A29FB82C0D349500AADDC5 /* EarthSceneView.swift */,
 				E8A29FBD2C0D349500AADDC5 /* StereoScopeApp.swift */,
@@ -283,6 +286,7 @@
 				E8A29FD52C0D349500AADDC5 /* UniformsShapeNodeIndexed.swift in Sources */,
 				E8A29FCD2C0D349500AADDC5 /* MetalPipeline.swift in Sources */,
 				E8A29FC22C0D349500AADDC5 /* IndexedInstance.swift in Sources */,
+				E8F1DD402CE01F1A00EF831D /* StereoScopeApp.swift in Sources */,
 				E8A29FCE2C0D349500AADDC5 /* MetalView.swift in Sources */,
 				E8A29FC72C0D349500AADDC5 /* IndexedSpriteBuffer.swift in Sources */,
 				E8A29FC62C0D349500AADDC5 /* IndexedShapeInstance.swift in Sources */,
@@ -441,7 +445,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -451,7 +455,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -473,7 +477,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -483,7 +487,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

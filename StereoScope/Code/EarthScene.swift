@@ -22,8 +22,8 @@ enum ColorType: CaseIterable {
     case colored
 }
 
-var lightType = LightType.night
-var colorType = ColorType.none
+@MainActor var lightType = LightType.night
+@MainActor var colorType = ColorType.none
 
 class EarthScene: GraphicsDelegate {
     var graphics: Graphics?

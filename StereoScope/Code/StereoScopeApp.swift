@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-var overshoot = Float(0.1)
+@MainActor var overshoot = Float(0.1)
 
 @main struct StereoScopeApp: App {
     

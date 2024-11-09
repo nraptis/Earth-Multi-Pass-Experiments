@@ -222,7 +222,7 @@ class EarthModelDataStrip {
         nightBufferStereoscopic.cullMode = .none
     }
     
-    func updateStereo(radians: Float, width: Float, height: Float, stereoSpreadBase: Float, stereoSpreadMax: Float) {
+    @MainActor func updateStereo(radians: Float, width: Float, height: Float, stereoSpreadBase: Float, stereoSpreadMax: Float) {
         
         let radius: Float
         if UIDevice.current.userInterfaceIdiom == .pad {

@@ -39,7 +39,7 @@ class Earth {
         }
     }
     
-    func updateStereo(radians: Float, stereoSpreadBase: Float, stereoSpreadMax: Float) {
+    @MainActor func updateStereo(radians: Float, stereoSpreadBase: Float, stereoSpreadMax: Float) {
         for earthModelDataStrip in earthModelDataStrips {
             earthModelDataStrip.updateStereo(radians: radians,
                                              width: width,
