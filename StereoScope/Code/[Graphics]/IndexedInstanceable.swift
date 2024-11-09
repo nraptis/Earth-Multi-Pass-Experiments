@@ -4,6 +4,8 @@
 //
 //  Created by Nicky Taylor on 6/2/24.
 //
+//  Verified on 11/9/2024 by Nick Raptis
+//
 
 import Foundation
 import Metal
@@ -95,5 +97,79 @@ extension IndexedInstanceable {
                                             indexType: .uint32,
                                             indexBuffer: indexBuffer,
                                             indexBufferOffset: 0)
+    }
+}
+
+extension IndexedInstanceable {
+    var projectionMatrix: matrix_float4x4 {
+        get {
+            uniformsVertex.projectionMatrix
+        }
+        set {
+            if uniformsVertex.projectionMatrix != newValue {
+                uniformsVertex.projectionMatrix = newValue
+                isUniformsVertexBufferDirty = true
+            }
+        }
+    }
+    
+    var modelViewMatrix: matrix_float4x4 {
+        get {
+            uniformsVertex.modelViewMatrix
+        }
+        set {
+            if uniformsVertex.modelViewMatrix != newValue {
+                uniformsVertex.modelViewMatrix = newValue
+                isUniformsVertexBufferDirty = true
+            }
+        }
+    }
+    
+    var red: Float {
+        get {
+            uniformsFragment.red
+        }
+        set {
+            if uniformsFragment.red != newValue {
+                uniformsFragment.red = newValue
+                isUniformsFragmentBufferDirty = true
+            }
+        }
+    }
+    
+    var green: Float {
+        get {
+            uniformsFragment.green
+        }
+        set {
+            if uniformsFragment.green != newValue {
+                uniformsFragment.green = newValue
+                isUniformsFragmentBufferDirty = true
+            }
+        }
+    }
+    
+    var blue: Float {
+        get {
+            uniformsFragment.blue
+        }
+        set {
+            if uniformsFragment.blue != newValue {
+                uniformsFragment.blue = newValue
+                isUniformsFragmentBufferDirty = true
+            }
+        }
+    }
+    
+    var alpha: Float {
+        get {
+            uniformsFragment.alpha
+        }
+        set {
+            if uniformsFragment.alpha != newValue {
+                uniformsFragment.alpha = newValue
+                isUniformsFragmentBufferDirty = true
+            }
+        }
     }
 }

@@ -4,6 +4,8 @@
 //
 //  Created by Nicky Taylor on 2/10/23.
 //
+//  Verified on 11/9/2024 by Nick Raptis
+//
 
 import Foundation
 import simd
@@ -15,22 +17,18 @@ extension matrix_float4x4 {
                        m10: Float, m11: Float, m12: Float, m13: Float,
                        m20: Float, m21: Float, m22: Float, m23: Float,
                        m30: Float, m31: Float, m32: Float, m33: Float) {
-        
         columns.0.x = m00 // 0
         columns.1.x = m10 // 1
         columns.2.x = m20 // 2
         columns.3.x = m30 // 3
-        
         columns.0.y = m01 // 4
         columns.1.y = m11 // 5
         columns.2.y = m21 // 6
         columns.3.y = m31 // 7
-        
         columns.0.z = m02 // 8
         columns.1.z = m12 // 9
         columns.2.z = m22 // 10
         columns.3.z = m32 // 11
-        
         columns.0.w = m03 // 12
         columns.1.w = m13 // 13
         columns.2.w = m23 // 14
@@ -55,9 +53,21 @@ extension matrix_float4x4 {
         self = self.inverse
     }
     
+    mutating func offsetPerspectiveCenter(x: Float, y: Float, width2: Float, height2: Float) {
+        var x = x
+        if width2 > Math.epsilon {
+            x = (x / width2)
+        }
+        var y = y
+        if height2 > Math.epsilon {
+            y = (y / height2)
+        }
+        columns.2.x = x
+        columns.2.y = y
+    }
+    
     mutating func ortho(left: Float, right: Float, bottom: Float, top: Float,
                         nearZ: Float, farZ: Float) {
-        
         let ral = right + left
         let rsl = right - left
         let tab = top + bottom
@@ -74,6 +84,54 @@ extension matrix_float4x4 {
         ortho(left: 0.0, right: width,
               bottom: height, top: 0.0,
               nearZ: -2048.0, farZ: 0.0)
+    }
+    
+    mutating func perspective(fovy: Float, aspect: Float, nearZ: Float, farZ: Float) {
+        let cotan = 1.0 / tanf(fovy / 2.0)
+        make(m00: cotan / aspect, m01: 0.0, m02: 0.0, m03: 0.0,
+             m10: 0.0, m11: cotan, m12: 0.0, m13: 0.0,
+             m20: 0.0, m21: 0.0, m22: (farZ + nearZ) / (nearZ - farZ), m23: -1.0,
+             m30: 0.0, m31: 0.0, m32: (2.0 * farZ * nearZ) / (nearZ - farZ), m33: 0.0)
+    }
+    
+    mutating func lookAt(eyeX: Float, eyeY: Float, eyeZ: Float,
+                         centerX: Float, centerY: Float, centerZ: Float,
+                         upX: Float, upY: Float, upZ: Float) {
+        var nx = eyeX - centerX
+        var ny = eyeY - centerY
+        var nz = eyeZ - centerZ
+        
+        var dist = nx * nx + ny * ny + nz * nz
+        if dist > Math.epsilon {
+            dist = sqrtf(dist)
+            nx /= dist
+            ny /= dist
+            nz /= dist
+        }
+        
+        var ux = upY * nz - upZ * ny
+        var uy = upZ * nx - upX * nz
+        var uz = upX * ny - upY * nx
+        
+        dist = ux * ux + uy * uy + uz * uz
+        if dist > Math.epsilon {
+            dist = sqrtf(dist)
+            ux /= dist
+            uy /= dist
+            uz /= dist
+        }
+        
+        let vx = ny * uz - nz * uy
+        let vy = nz * ux - nx * uz
+        let vz = nx * uy - ny * ux
+        
+        make(m00: ux, m01: vx, m02: nx, m03: 0.0,
+             m10: uy, m11: vy, m12: ny, m13: 0.0,
+             m20: uz, m21: vz, m22: nz, m23: 0.0,
+             m30: -ux * eyeX - uy * eyeY - uz * eyeZ,
+             m31: -vx * eyeX - vy * eyeY - vz * eyeZ,
+             m32: -nx * eyeX - ny * eyeY - nz * eyeZ,
+             m33: 1.0)
     }
     
     mutating func translate(x: Float, y: Float, z: Float) {
@@ -249,7 +307,7 @@ extension matrix_float4x4 {
         }
     }
     
-    func processRotationOnly(point3: simd_float3) -> simd_float3 {
+    func processRotationOnly(point3: simd_float3) -> SIMD3<Float> {
         let x = columns.0.x * point3.x + columns.1.x * point3.y + columns.2.x * point3.z
         let y = columns.0.y * point3.x + columns.1.y * point3.y + columns.2.y * point3.z
         let z = columns.0.z * point3.x + columns.1.z * point3.y + columns.2.z * point3.z

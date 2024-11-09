@@ -29,15 +29,9 @@ class MetalPipeline {
     init(metalEngine: MetalEngine) {
         self.metalEngine = metalEngine
         metalLibrary = metalEngine.metalLibrary
-        metalLayer = metalEngine.metalLayer
+        metalLayer = metalEngine.metalLayer ?? CAMetalLayer()
         metalDevice = metalEngine.metalDevice
-        print("[++] MetalPipeline")
     }
-    
-    deinit {
-        print("[--] MetalPipeline")
-    }
-    
     
     private var shapeNodeIndexed2DVertexProgram: MTLFunction!
     private var shapeNodeIndexed2DFragmentProgram: MTLFunction!

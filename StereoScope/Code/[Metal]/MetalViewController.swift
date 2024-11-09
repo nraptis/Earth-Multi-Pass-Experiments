@@ -25,7 +25,8 @@ class MetalViewController: UIViewController {
     
     var isStereoscopicEnabled = false
     var isBloomEnabled = true
-    var bloomPasses = ((UIDevice.current.userInterfaceIdiom == .pad) ? 6 : 4)
+    
+    var bloomPasses = 2//((UIDevice.current.userInterfaceIdiom == .pad) ? 3 : 2)
     var stereoSpreadBase = Float((UIDevice.current.userInterfaceIdiom == .pad) ? 4.0 : 3.0)
     var stereoSpreadMax = Float((UIDevice.current.userInterfaceIdiom == .pad) ? 12.0 : 9.0)
     
@@ -64,7 +65,7 @@ class MetalViewController: UIViewController {
         
         super.init(nibName: nil, bundle: nil)
         
-        NotificationCenter.default.addObserver(self, 
+        NotificationCenter.default.addObserver(self,
                                                selector: #selector(applicationWillResignActive(notification:)),
                                                name: UIApplication.willResignActiveNotification,
                                                object: nil)
@@ -121,6 +122,8 @@ class MetalViewController: UIViewController {
         metalEngine.load()
         metalPipeline.load()
         
+        graphics.buildPipelineStateTable(metalPipeline: metalPipeline)
+        
         _isMetalEngineLoaded = true
         
         delegate.load()
@@ -154,7 +157,9 @@ class MetalViewController: UIViewController {
             _isInitialized = true
             delegate.initialize()
         }
-        delegate.update(deltaTime: deltaTime, stereoSpreadBase: stereoSpreadBase, stereoSpreadMax: stereoSpreadMax)
+        delegate.update(deltaTime: deltaTime,
+                        stereoSpreadBase: stereoSpreadBase,
+                        stereoSpreadMax: stereoSpreadMax,
+                        isStereoscopicEnabled: isStereoscopicEnabled)
     }
-    
 }

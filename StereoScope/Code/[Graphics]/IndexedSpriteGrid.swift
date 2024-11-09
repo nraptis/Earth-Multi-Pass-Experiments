@@ -4,6 +4,8 @@
 //
 //  Created by Nicky Taylor on 6/3/24.
 //
+//  Verified on 11/9/2024 by Nick Raptis
+//
 
 import Foundation
 
@@ -22,7 +24,6 @@ class IndexedSpriteGrid<NodeType: PositionConforming2D & TextureCoordinateConfor
               vertex: NodeType) {
         
         if _x == x && _y == y && _width == width && _height == height {
-            print("same size, exi")
             return
         }
         
@@ -85,12 +86,10 @@ class IndexedSpriteGrid<NodeType: PositionConforming2D & TextureCoordinateConfor
                 vertex3.u = startU
                 vertex3.v = endV
                 
-                
                 vertex4.x = Float(left)
                 vertex4.y = Float(top)
                 vertex4.u = endU
                 vertex4.v = endV
-                
                 
                 index = addTriangleQuad(startingAt: index,
                                         vertex1: vertex1,

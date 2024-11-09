@@ -4,6 +4,8 @@
 //
 //  Created by Nicky Taylor on 5/25/24.
 //
+//  Verified on 11/9/2024 by Nick Raptis
+//
 
 import Foundation
 import Metal

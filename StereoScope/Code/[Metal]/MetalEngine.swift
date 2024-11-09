@@ -12,9 +12,9 @@ import simd
 
 class MetalEngine {
     
-    unowned var metalLayer: CAMetalLayer!
-    unowned var graphics: Graphics!
-    unowned var delegate: GraphicsDelegate!
+    weak var metalLayer: CAMetalLayer?
+    weak var graphics: Graphics?
+    weak var delegate: GraphicsDelegate?
     
     var scale: Float
     var metalDevice: MTLDevice
@@ -30,7 +30,6 @@ class MetalEngine {
     var depthStateDisabled: MTLDepthStencilState!
     var depthStateLessThan: MTLDepthStencilState!
     var depthStateLessThanEqual: MTLDepthStencilState!
-    
     
     var storageTexture: MTLTexture!
     let storageSprite = Sprite()
@@ -56,7 +55,7 @@ class MetalEngine {
     private var bloomSprite2D = IndexedSpriteInstance2D()
     private var bloomCombineSprite3D = IndexedSpriteInstance3D()
     
-    required init(metalLayer: CAMetalLayer,
+    @MainActor required init(metalLayer: CAMetalLayer,
                   width: Float,
                   height: Float) {
         
@@ -73,35 +72,29 @@ class MetalEngine {
                                   y: 0.0,
                                   width: CGFloat(width),
                                   height: CGFloat(height))
-        
-        print("[++] MetalEngine")
     }
     
-    deinit {
-        print("[--] MetalEngine")
-    }
-    
-    func load() {
+    @MainActor func load() {
         buildSamplerStates()
         buildDepthStates()
         
-        tileSprite.load(graphics: graphics, sprite: nil)
-        
-        stereoscopicSprite3D.load(graphics: graphics, sprite: nil)
-        
-        bloomSprite2D.load(graphics: graphics, sprite: nil)
-        //bloomSprite3D.load(graphics: graphics, texture: nil)
-        
-        bloomCombineSprite3D.load(graphics: graphics, sprite: nil)
-        
+        if let graphics {
+            tileSprite.load(graphics: graphics, sprite: nil)
+            stereoscopicSprite3D.load(graphics: graphics, sprite: nil)
+            bloomSprite2D.load(graphics: graphics, sprite: nil)
+            bloomCombineSprite3D.load(graphics: graphics, sprite: nil)
+        }
     }
     
-    func draw(isStereoscopicEnabled: Bool,
+    @MainActor func draw(isStereoscopicEnabled: Bool,
               isBloomEnabled: Bool,
               bloomPasses: Int,
               stereoSpreadBase: Float,
               stereoSpreadMax: Float) {
         
+        guard let metalLayer = metalLayer else { return }
+        guard let delegate = delegate else { return }
+        guard let graphics = graphics else { return }
         guard let drawable = metalLayer.nextDrawable() else { return }
         guard let commandBuffer = commandQueue.makeCommandBuffer() else { return }
         
@@ -121,7 +114,7 @@ class MetalEngine {
             bloomSprite2.load(graphics: graphics, texture: bloomTexture2, scaleFactor: scale)
         }
         
-        delegate.predraw()
+        delegate.predraw(isStereoscopicEnabled: isStereoscopicEnabled)
         
         let renderPassDescriptorPrebloom = MTLRenderPassDescriptor()
         renderPassDescriptorPrebloom.colorAttachments[0].texture = storageTexturePrebloom
@@ -166,10 +159,10 @@ class MetalEngine {
         
         if isStereoscopicEnabled {
             
-            stereoscopicSprite3D.vertices[0].shift = stereoSpreadBase
-            stereoscopicSprite3D.vertices[1].shift = stereoSpreadBase
-            stereoscopicSprite3D.vertices[2].shift = stereoSpreadBase
-            stereoscopicSprite3D.vertices[3].shift = stereoSpreadBase
+            stereoscopicSprite3D.vertices[0].shift = stereoSpreadBase * 2.0
+            stereoscopicSprite3D.vertices[1].shift = stereoSpreadBase * 2.0
+            stereoscopicSprite3D.vertices[2].shift = stereoSpreadBase * 2.0
+            stereoscopicSprite3D.vertices[3].shift = stereoSpreadBase * 2.0
             
             // We then combine the pre-bloom and bloom into the "storageTextureBloom" texture....
             let renderPassDescriptor3DBlue = MTLRenderPassDescriptor()
@@ -277,7 +270,10 @@ class MetalEngine {
     //       removed it. It makes no sense to do 0 passes of
     //       bloom since an equivalent effect can be achieved with
     //       the main 3D draw pass. OR pre-bloom pass.
-    func drawBloom(commandBuffer: MTLCommandBuffer, passes: Int) {
+    @MainActor func drawBloom(commandBuffer: MTLCommandBuffer, passes: Int) {
+        
+        guard let graphics = graphics else { return }
+        guard let delegate = delegate else { return }
         
         let renderPassDescriptorBloom = MTLRenderPassDescriptor()
         renderPassDescriptorBloom.colorAttachments[0].texture = storageTexture
@@ -299,7 +295,6 @@ class MetalEngine {
         bloomSprite2D.uniformsVertex.projectionMatrix.ortho(width: bloomWidth, height: bloomHeight)
         bloomSprite2D.uniformsVertex.modelViewMatrix = matrix_identity_float4x4
         bloomSprite2D.setPositionQuad(x1: 0.0, y1: 0.0, x2: bloomWidth, y2: bloomHeight)
-        
         
         let renderPassDescriptorHorizontal1 = MTLRenderPassDescriptor()
         renderPassDescriptorHorizontal1.colorAttachments[0].texture = bloomTexture1
@@ -352,7 +347,7 @@ class MetalEngine {
         }
     }
     
-    func drawTile(renderEncoder: MTLRenderCommandEncoder) {
+    @MainActor func drawTile(renderEncoder: MTLRenderCommandEncoder) {
         let width = Float(storageTexture.width)
         let height =  Float(storageTexture.height)
         tileSprite.uniformsVertex.projectionMatrix.ortho(width: width, height: height)
@@ -362,7 +357,7 @@ class MetalEngine {
         tileSprite.render(renderEncoder: renderEncoder, pipelineState: .spriteNodeIndexed2DNoBlending)
     }
     
-    func drawTilesStereoscopic(renderEncoder: MTLRenderCommandEncoder) {
+    @MainActor func drawTilesStereoscopic(renderEncoder: MTLRenderCommandEncoder) {
         let width = Float(storageTexture.width)
         let height =  Float(storageTexture.height)
         tileSprite.uniformsVertex.projectionMatrix.ortho(width: width, height: height)
@@ -379,7 +374,7 @@ class MetalEngine {
         tileSprite.render(renderEncoder: renderEncoder, pipelineState: .spriteNodeIndexed2DAdditiveBlending)
     }
     
-    private func buildSamplerStates() {
+    @MainActor private func buildSamplerStates() {
         let samplerDescriptorLinearClamp = MTLSamplerDescriptor()
         samplerDescriptorLinearClamp.minFilter = .linear
         samplerDescriptorLinearClamp.magFilter = .linear
@@ -409,7 +404,7 @@ class MetalEngine {
         samplerStateNearestRepeat = metalDevice.makeSamplerState(descriptor: samplerDescriptorNearestRepeat)
     }
     
-    private func buildDepthStates() {
+    @MainActor private func buildDepthStates() {
         let depthDescriptorDisabled = MTLDepthStencilDescriptor()
         depthDescriptorDisabled.depthCompareFunction = .always
         depthDescriptorDisabled.isDepthWriteEnabled = false
@@ -426,10 +421,12 @@ class MetalEngine {
         depthStateLessThanEqual = metalDevice.makeDepthStencilState(descriptor: depthDescriptorLessThanEqual)
     }
     
-    func createAntialiasingTexture(width: Int, height: Int) -> MTLTexture {
+    @MainActor func createAntialiasingTexture(width: Int, height: Int) -> MTLTexture {
         let textureDescriptor = MTLTextureDescriptor()
         textureDescriptor.sampleCount = 4
-        textureDescriptor.pixelFormat = metalLayer.pixelFormat
+        if let metalLayer {
+            textureDescriptor.pixelFormat = metalLayer.pixelFormat
+        }
         textureDescriptor.width = width
         textureDescriptor.height = height
         textureDescriptor.textureType = .type2DMultisample
@@ -438,9 +435,11 @@ class MetalEngine {
         return metalDevice.makeTexture(descriptor: textureDescriptor)!
     }
     
-    func createStorageTexture(width: Int, height: Int) -> MTLTexture {
+    @MainActor func createStorageTexture(width: Int, height: Int) -> MTLTexture {
         let textureDescriptor = MTLTextureDescriptor()
-        textureDescriptor.pixelFormat = metalLayer.pixelFormat
+        if let metalLayer {
+            textureDescriptor.pixelFormat = metalLayer.pixelFormat
+        }
         textureDescriptor.width = width
         textureDescriptor.height = height
         textureDescriptor.textureType = .type2D
@@ -448,7 +447,7 @@ class MetalEngine {
         return metalDevice.makeTexture(descriptor: textureDescriptor)!
     }
     
-    func createDepthTexture(width: Int, height: Int) -> MTLTexture {
+    @MainActor func createDepthTexture(width: Int, height: Int) -> MTLTexture {
         let textureDescriptor = MTLTextureDescriptor()
         textureDescriptor.pixelFormat = .depth32Float
         textureDescriptor.width = width

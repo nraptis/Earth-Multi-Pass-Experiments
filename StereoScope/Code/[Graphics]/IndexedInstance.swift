@@ -4,13 +4,15 @@
 //
 //  Created by Nicky Taylor on 6/2/24.
 //
+//  Verified on 11/9/2024 by Nick Raptis
+//
 
 import Foundation
 import Metal
 import simd
 
 class IndexedInstance<Node: PositionConforming2D,
-                      VertexUniforms: UniformsVertex,
+                        VertexUniforms: UniformsVertex,
                       FragmentUniforms: UniformsFragment>: IndexedInstanceable {
     
     typealias NodeType = Node

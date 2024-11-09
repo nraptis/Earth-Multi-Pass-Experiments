@@ -1,8 +1,10 @@
 //
 //  Sprite.swift
-//  StereoScope
+//  RebuildEarth
 //
-//  Created by Nicky Taylor on 6/2/24.
+//  Created by Nicky Taylor on 2/12/23.
+//
+//  Verified on 11/9/2024 by Nick Raptis
 //
 
 import Foundation
@@ -34,12 +36,22 @@ class Sprite {
         
     }
     
-    func loadScaled(graphics: Graphics, name: String, `extension`: String) {
+    @MainActor func loadScaled(graphics: Graphics, name: String, `extension`: String) {
         let texture = graphics.loadTextureScaled(name: name, extension: `extension`)
         load(graphics: graphics, texture: texture, scaleFactor: graphics.scaleFactor)
     }
     
-    func load(graphics: Graphics, texture: MTLTexture?, scaleFactor: Float) {
+    @MainActor func load(graphics: Graphics, name: String, `extension`: String) {
+        let texture = graphics.loadTexture(name: name, extension: `extension`)
+        load(graphics: graphics, texture: texture, scaleFactor: graphics.scaleFactor)
+    }
+    
+    @MainActor func load(graphics: Graphics, nameWithExtension: String) {
+        let texture = graphics.loadTexture(nameWithExtension: nameWithExtension)
+        load(graphics: graphics, texture: texture, scaleFactor: graphics.scaleFactor)
+    }
+    
+    @MainActor func load(graphics: Graphics, texture: MTLTexture?, scaleFactor: Float) {
         if let texture = texture {
             self.texture = texture
             self.scaleFactor = scaleFactor
